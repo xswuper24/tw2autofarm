@@ -1,0 +1,490 @@
+/*!
+ * Tribal Wars 2 Auto Farm v@@version
+ * https://gitlab.com/mafrazzrafael/tw2autofarm
+ *
+ * Copyright Rafael Mafra
+ * MIT License
+ *
+ * @@date
+ */
+
+$rootScope = angular.element(document).scope()
+modelDataService = injector.get('modelDataService')
+socketService = injector.get('socketService')
+routeProvider = injector.get('routeProvider')
+eventTypeProvider = injector.get('eventTypeProvider')
+
+/**
+ * @class
+ * @param {Object} [settings] - Configurações básicas.
+ * @param {Number} settings.radius - Distáncia máxima que os alvos podem estar. 
+ * @param {Number} settings.interval - Intervalo entre cada comando (segundos).
+ * @param {Number} settings.presetName - Nome do preset usado para os comandos.
+ * @param {Number} settings.groupIgnore - Nome do grupo usado nas aldeias a
+ *     serem ignoradas.
+ */
+function AutoFarm (settings) {
+    settings = settings || {}
+
+    /**
+     * Objeto com todas as configurações padrões.
+     * @type {Object}
+     */
+    this.defaults = {
+        radius: 10,
+        interval: 3,
+        presetName: '.farm',
+        groupIgnore: '.farmignore'
+    }
+
+    /**
+     * Objeto com todas as configurações.
+     * @type {Object}
+     */
+    this.settings = {}
+
+    for (let item in this.defaults) {
+        this.settings[item] = settings[item]
+            ? settings[item]
+            : this.defaults[item]
+    }
+
+    /**
+     * Objeto com todos os dados do jogador.
+     * @type {Object}
+     */
+    this.player = modelDataService.getSelectedCharacter()
+    this.player.villages = []
+
+    let playerVillages = this.player.getVillages()
+
+    for (let id in playerVillages) {
+        this.player.villages.push(playerVillages[id])
+    }
+
+    /**
+     * Identifica o status do script.
+     * @type {Boolean}
+     */
+    this.paused = true
+    /**
+     * Identifica se o jogador possui apenas uma aldeia.
+     * @type {Boolean}
+     */
+    this.uniqueVillage = this.player.villages.length === 1
+
+    /**
+     * Aldeia atualmente seleciona.
+     * @type {Object}
+     */
+    this.selectedVillage = modelDataService.getSelectedVillage()
+
+    /**
+     * Lista de todos aldeias alvos possíveis para cada aldeia do jogador.
+     * @type {Object}
+     */
+    this.targetList = {}
+
+    /**
+     * Lista com todas aldeias que estão com limite de 50 comandos.
+     * Os valores são o tempo em que o comando mais proximo retornará.
+     * Nota: tempo em milisegundos.
+     * @type {Object}
+     */
+    this.villagesNextReturn = {}
+
+    /**
+     * Armazena o id do comando que está sendo enviado
+     * no momento pelo script.
+     * @type {Object}
+     */
+    this.commandProgressId = null
+    
+    /**
+     * Armazena o callback do comando que está sendo enviado
+     * no momento pelo script.
+     * @type {Object}
+     */
+    this.commandProgressCallback = null
+
+    // Detecta todos comandos enviados no jogo (não apenas pelo script)
+    // e identifica os que foram enviados pelo script.
+    $rootScope.$on(eventTypeProvider.COMMAND_SENT, ($event, data) => {
+        if (this.commandProgressId === data.target.id) {
+            this.commandProgressCallback(data)
+            this.commandProgressCallback = null
+            this.commandProgressId = null
+        }
+    })
+
+    /**
+     * Callbacks usados pelos eventos que são disparados no
+     * decorrer do script.
+     * @type {Object}
+     */
+    this.eventListeners = {}
+
+    /**
+     * Preset usado para enviar os comandos
+     * @type {Object}
+     */
+    this.presetId = null
+
+    /**
+     * Preset usado para enviar os comandos
+     * @type {Object}
+     */
+    this.ignoredVillages = this.getIgnoredVillages()
+
+    return this
+}
+
+/**
+ * Inicia os comandos.
+ * @return {Boolean}
+ */
+AutoFarm.prototype.start = function () {
+    this.paused = false
+    this.commandInit()
+
+    return true
+}
+
+/**
+ * Pausa os comandos.
+ * @return {Boolean}
+ */
+AutoFarm.prototype.pause = function () {
+    this.paused = true
+    clearTimeout(this.timerId)
+
+    return true
+}
+
+/**
+ * Carrega todos todas necessários antes de iniciar os comandos.
+ * @param {Function} callback
+ * @return {Boolean}
+ */
+AutoFarm.prototype.ready = function (callback) {
+    this.getPreset((preset) => {
+        if (preset) {
+            this.presetId = preset
+        } else {
+            return this.event('noPreset')
+        }
+
+        this.prepareVillage(callback)
+    })
+}
+
+/**
+ * Prepara a lista de alvos da aldeia atualmente selecionada.
+ * @param {Function} callback - Chamado ao finalizar a atualização de alvos.
+ * @param {Number} _lastVillage - Argumento interno para detectar aldeias
+ *     que não possuem alvos.
+ */
+AutoFarm.prototype.prepareVillage = function (callback, _lastVillage) {
+    _lastVillage = _lastVillage || 0
+
+    let sid = this.selectedVillage.getId()
+
+    // Caso nenhum aldeia do jogador esteja disponível.
+    // Causas: sem alvos ou ignoradas.
+    if (_lastVillage === this.player.villages.length) {
+        return this.event('noVillages')
+    }
+
+    if (this.ignoredVillages.includes(sid)) {
+        this.nextVillage()
+        this.prepareVillage(callback, ++_lastVillage)
+        
+        return
+    }
+
+    this.getTargets(function () {
+        let hasTargets = this.nextTarget(true)
+
+        if (!hasTargets) {
+            this.nextVillage()
+            this.prepareVillage(callback, ++_lastVillage)
+        } else {
+            callback()
+        }
+    })
+}
+
+/**
+ * Seleciona o próximo alvo da aldeia.
+ * @param {Boolean} _firstRun - Parametro interno usado na primeira execução
+ *     para selecionar o primeiro alvo e ignora-lo corretamente caso estiver
+       na lista de alvos ignorados.
+ * @return {Boolean}
+ */
+AutoFarm.prototype.nextTarget = function (_firstRun, _noTargets) {
+    _noTargets = _noTargets || 0
+
+    let sid = this.selectedVillage.getId()
+
+    // Se aldeia ainda não tiver obtido a lista de alvos, obtem
+    // os alvos e executa o método novamente para dar continuidade.
+    if (!this.targetList.hasOwnProperty(sid)) {
+        return this.getTargets(function () {
+            this.nextTarget(_firstRun, _noTargets)
+        })
+    }
+
+    let targets = this.targetList[sid]
+
+    if (!_firstRun) {
+        targets.index++
+    }
+
+    let i = targets.index
+
+    if (typeof targets[i] !== 'undefined') {
+        this.selectedTarget = targets[i]
+    } else {
+        this.selectedTarget = targets[0]
+        targets.index = 0
+    }
+
+    let target = this.selectedTarget
+
+    if (this.ignoredVillages.includes(target.id)) {
+        if (_noTargets === targets.length) {
+            this.event('villageNoTargets')
+
+            return false
+        }
+
+        this.event('ignoredTarget', [target])
+
+        return this.nextTarget(false, ++_noTargets)
+    }
+
+    if (!_firstRun) {
+        this.event('nextTarget')
+    }
+
+    return true
+}
+
+/**
+ * Obtem a lista de alvos para a aldeia selecionada.
+ * @param {Function} callback
+ * @return {Boolean}
+ */
+AutoFarm.prototype.getTargets = function (callback) {
+    let sx = this.selectedVillage.getX()
+    let sy = this.selectedVillage.getY()
+    let sid = this.selectedVillage.getId()
+
+    if (sid in this.targetList) {
+        return callback()
+    }
+
+    socketService.emit(routeProvider.MAP_GETVILLAGES, {
+        x: sx - (sx % 25) - 25,
+        y: sy - (sy % 25) - 25,
+        width: 50,
+        height: 50
+    }, (data) => {
+        let villages = data.villages
+        let nearby = []
+        let i = villages.length
+
+        while (i--) {
+            let village = villages[i]
+
+            if (village.id === sid || village.character_id) {
+                continue
+            }
+
+            let distance = distanceXY(sx, village.x, sy, village.y)
+
+            if (distance <= this.settings.radius) {
+                nearby.push({
+                    coords: [village.x, village.y],
+                    distance: distance,
+                    id: village.id,
+                    name: village.name
+                })
+            }
+        }
+
+        if (nearby.length === 0) {
+            if (this.nextVillage()) {
+                this.getTargets(callback)
+            } else {
+                this.event('noTargets')
+            }
+
+            return false
+        }
+
+        this.targetList[sid] = nearby.sort((a, b) => a.distance - b.distance)
+        this.targetList[sid].index = 0
+        this.selectedTarget = this.targetList[sid][0]
+
+        callback.call(this)
+    })
+
+    return false
+}
+
+/**
+ * Seleciona a próxima aldeia do jogador.
+ * @return {Boolean}
+ */
+AutoFarm.prototype.nextVillage = function () {
+    if (this.uniqueVillage) {
+        return false
+    }
+
+    let nextIndex = this.player.villages.indexOf(this.selectedVillage) + 1
+
+    this.selectedVillage =
+        typeof this.player.villages[nextIndex] !== 'undefined'
+            ? this.player.villages[nextIndex]
+            : this.selectedVillage = this.player.villages[0]
+
+    if (this.ignoredVillages.includes(this.selectedVillage.getId())) {
+        return this.nextVillage()
+    }
+
+    this.event('nextVillage')
+
+    return true
+}
+
+/**
+ * Seleciona uma aldeia específica do jogador.
+ * @param {Number} vid - ID da aldeia à ser selecionada.
+ * @return {Boolean}
+ */
+AutoFarm.prototype.selectVillage = function (vid) {
+    for (let i = 0; i < this.player.villages.length; i++) {
+        if (this.player.villages[i].getId() === vid) {
+            this.selectedVillage = this.player.villages[i]
+            
+            return true
+        }
+    }
+
+    return false
+}
+
+/**
+ * Seleciona um dos modelos especificados de acordo com a
+ * quantidade de tropas presentes na aldeia.
+ * @param {Object} villageUnits - Quantidade de cada unidade
+ * presente na aldeia.
+ * @return {Object|Boolean}
+ */
+AutoFarm.prototype.selectModel = function (villageUnits) {
+    let model
+    let unit
+
+    for (let i = 0; i < this.settings.models.length; i++) {
+        model = this.settings.models[i]
+
+        for (unit in villageUnits) {
+            if (villageUnits[unit].in_town < model[unit]) {
+                model = false
+                break
+            }
+        }
+
+        if (model) {
+            return model
+        }
+    }
+
+    return false
+}
+
+/**
+ * Verifica se a aldeia que está tentando enviar um comando possui
+ *     a quantidade de unidades minimas especificadas no preset.
+ * @param {Function} villageUnits - Quantidade de unidades disponíveis
+ *     na aldeia.
+ */
+AutoFarm.prototype.presetAvail = function (villageUnits) {
+    let preset = modelDataService.getPresetList().presets[this.presetId]
+
+    for (let unit in preset.units) {
+        
+        if (villageUnits[unit].in_town < preset.units[unit]) {
+            return false
+        }
+    }
+
+    return true
+}
+
+/**
+ * Carrega todos os comandos de uma aldeia.
+ * @param {Function} callback
+ */
+AutoFarm.prototype.getVillageCommands = function (callback) {
+    socketService.emit(routeProvider.GET_OWN_COMMANDS, {
+        village_id: this.selectedVillage.getId()
+    }, (data) => {
+        callback(data.commands)
+    })
+}
+
+/**
+ * Carrega as unidades de uma aldeia.
+ * @param {Function} callback
+ */
+AutoFarm.prototype.getVillageUnits = function (callback) {
+    socketService.emit(routeProvider.VILLAGE_UNIT_INFO, {
+        village_id: this.selectedVillage.getId()
+    }, (data) => {
+        callback(data.available_units)
+    })
+}
+
+/**
+ * Obtem preset apropriado para o script
+ * @param {Function} callback
+ */
+AutoFarm.prototype.getPreset = function (callback, presets) {
+    if (presets) {
+        for (let id in presets) {
+            if (presets[id].name === this.settings.presetName) {
+                return callback(presets[id].id)
+            }
+        }
+
+        return callback(false)
+    }
+
+    if (modelDataService.getPresetList().isLoaded()) {
+        return this.getPreset(callback,
+            modelDataService.getPresetList().presets)
+    }
+
+    socketService.emit(routeProvider.GET_PRESETS, {}, (data) => {
+        this.getPreset(callback, data.presets)
+    })
+}
+
+/**
+ * Obtem a lista de aldeias pertencentes ao grupo de aldeias que serão
+ *     ignoradas tanta para enviar quanto para receber comandos.
+ * @return {Array}
+ */
+AutoFarm.prototype.getIgnoredVillages = function () {
+    let groups = modelDataService.getGroupList().getGroups()
+
+    for (let id in groups) {
+        if (groups[id].name === this.settings.groupIgnore) {
+            return modelDataService.getGroupList().getGroupVillageIds(id)
+        }
+    }
+
+    return []
+}

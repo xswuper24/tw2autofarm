@@ -1,0 +1,21 @@
+{
+  "name": "tw2autofarm",
+  "title": "TW2 Auto Farm",
+  "description": "AutoFarm Script para Tribal Wars 2.",
+  "homepage": "",
+  "author": "Rafael Mafra <mafrazzrafael@gmail.com>",
+  "version": "0.1.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.com:mafrazzrafael/tw2autofarm.git"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-uglify": "^2.2.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-eslint": "^19.0.0",
+    "grunt-replace": "^1.0.1"
+  }
+}
