@@ -3,8 +3,9 @@ if (typeof autofarm !== 'undefined') {
 }
 
 autofarm = new AutoFarm({
-    radius: 2,
-    interval: 1
+    radius: 5,
+    interval: 60,
+    currentOnly: true
 })
 
 autofarm.on('noVillages', function () {

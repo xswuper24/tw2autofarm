@@ -34,7 +34,8 @@ function AutoFarm (settings) {
         radius: 10,
         interval: 3,
         presetName: '.farm',
-        groupIgnore: '.farmignore'
+        groupIgnore: '.farmignore',
+        currentOnly: false
     }
 
     /**
@@ -196,6 +197,10 @@ AutoFarm.prototype.prepareVillage = function (callback, _lastVillage) {
     }
 
     if (this.ignoredVillages.includes(sid)) {
+        if (this.settings.currentOnly) {
+            return this.event('noVillages')
+        }
+
         this.nextVillage()
         this.prepareVillage(callback, ++_lastVillage)
         
@@ -206,6 +211,10 @@ AutoFarm.prototype.prepareVillage = function (callback, _lastVillage) {
         let hasTargets = this.nextTarget(true)
 
         if (!hasTargets) {
+            if (this.settings.currentOnly) {
+                return this.event('noVillages')
+            }
+
             this.nextVillage()
             this.prepareVillage(callback, ++_lastVillage)
         } else {
@@ -338,7 +347,7 @@ AutoFarm.prototype.getTargets = function (callback) {
  * @return {Boolean}
  */
 AutoFarm.prototype.nextVillage = function () {
-    if (this.uniqueVillage) {
+    if (this.uniqueVillage || this.settings.currentOnly) {
         return false
     }
 

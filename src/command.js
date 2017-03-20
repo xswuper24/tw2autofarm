@@ -38,7 +38,7 @@ AutoFarm.prototype.commandInit = function (_commandAttempt) {
             this.event('commandLimit')
             this.getNextReturn(commands)
 
-            if (this.uniqueVillage) {
+            if (this.uniqueVillage || this.settings.currentOnly) {
                 let backTime = this.villagesNextReturn[sid]
 
                 this.timerId = setTimeout(() => {
