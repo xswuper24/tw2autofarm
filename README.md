@@ -44,6 +44,7 @@ especifique-os nas configurações *in-line* como demonstrado abaixo.
 - **interval** intervalo entre cada comando (segundos). *padrão: 3*
 - **presetName** nome da predefinição que será utilizada para enviar os comandos. *padrão: .farm*
 - **groupIgnore** nome do grupo que será usado para identificar as aldeias não serão utilizadas pelo script. *padrão: .farmignore*
+- **currentOnly** faz com que o script utilize apenas a aldeia selecionada para enviar os comandos. *padrão: false*
 
 ## Como rodar o script
 
