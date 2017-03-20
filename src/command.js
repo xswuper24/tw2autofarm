@@ -63,9 +63,13 @@ AutoFarm.prototype.commandInit = function (_commandAttempt) {
                     this.event('sendCommand')
                     this.nextTarget()
 
+                    let time = this.settings.interval * 1000
+
                     this.timerId = setTimeout(() => {
                         this.commandInit()
-                    }, this.settings.interval * 1000)
+                    }, time)
+
+                    this.event('nextCommandIn', [time])
                 })
             } else {
                 this.event('villageNoUnits')

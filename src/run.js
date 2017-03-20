@@ -56,6 +56,10 @@ autofarm.on('noPreset', function () {
     console.info('noPreset: Predefinição não foi criada.')
 })
 
+autofarm.on('nextCommandIn', function (time) {
+    console.info(`nextCommandIn: Próximo comando em ${time}ms.`)
+})
+
 autofarm.ready(function () {
     autofarm.start()
 })
