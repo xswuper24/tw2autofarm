@@ -394,35 +394,6 @@ AutoFarm.prototype.selectVillage = function (vid) {
 }
 
 /**
- * Seleciona um dos modelos especificados de acordo com a
- * quantidade de tropas presentes na aldeia.
- * @param {Object} villageUnits - Quantidade de cada unidade
- * presente na aldeia.
- * @return {Object|Boolean}
- */
-AutoFarm.prototype.selectModel = function (villageUnits) {
-    let model
-    let unit
-
-    for (let i = 0; i < this.settings.models.length; i++) {
-        model = this.settings.models[i]
-
-        for (unit in villageUnits) {
-            if (villageUnits[unit].in_town < model[unit]) {
-                model = false
-                break
-            }
-        }
-
-        if (model) {
-            return model
-        }
-    }
-
-    return false
-}
-
-/**
  * Verifica se a aldeia que está tentando enviar um comando possui
  *     a quantidade de unidades minimas especificadas no preset.
  * @param {Function} villageUnits - Quantidade de unidades disponíveis
