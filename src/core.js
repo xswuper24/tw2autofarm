@@ -224,27 +224,26 @@ AutoFarm.prototype.prepareVillage = function (callback, _lastVillage = 0) {
 
 /**
  * Seleciona o próximo alvo da aldeia.
- * @param {Boolean} _firstRun - Parametro interno usado na primeira execução
- *     para selecionar o primeiro alvo e ignora-lo corretamente caso estiver
- *     na lista de alvos ignorados.
+ * @param {Boolean} _initial - Parametro interno usado na primeira execução
+ *     e do script e após cada alteração entre as aldeias do jogador.
  * @param {Number} _noTargets - Parametro interno para identificar aldeias
  *     que não possuem nenhum alvo.
  * @return {Boolean}
  */
-AutoFarm.prototype.nextTarget = function (_firstRun, _noTargets = 0) {
+AutoFarm.prototype.nextTarget = function (_initial, _noTargets = 0) {
     let sid = this.selectedVillage.getId()
 
     // Se aldeia ainda não tiver obtido a lista de alvos, obtem
     // os alvos e executa o método novamente para dar continuidade.
     if (!this.targetList.hasOwnProperty(sid)) {
         return this.getTargets(function () {
-            this.nextTarget(_firstRun, _noTargets)
+            this.nextTarget(_initial, _noTargets)
         })
     }
 
     let targets = this.targetList[sid]
 
-    if (!_firstRun) {
+    if (!_initial) {
         targets.index++
     }
 
@@ -271,7 +270,7 @@ AutoFarm.prototype.nextTarget = function (_firstRun, _noTargets = 0) {
         return this.nextTarget(false, ++_noTargets)
     }
 
-    if (!_firstRun) {
+    if (!_initial) {
         this.event('nextTarget')
     }
 
@@ -369,6 +368,10 @@ AutoFarm.prototype.nextVillage = function (_loop = 0) {
         return this.nextVillage(++_loop)
     }
 
+    // Atualiza o alvo assim que é alterado a aldeia do jogador
+    // para evitar comandos em alvos que não pertencem a aldeia.
+    this.nextTarget(true)
+
     this.event('nextVillage')
 
     return true
@@ -383,6 +386,7 @@ AutoFarm.prototype.selectVillage = function (vid) {
     for (let i = 0; i < this.player.villages.length; i++) {
         if (this.player.villages[i].getId() === vid) {
             this.selectedVillage = this.player.villages[i]
+            this.nextTarget(true)
             
             return true
         }

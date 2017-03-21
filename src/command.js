@@ -50,7 +50,6 @@ AutoFarm.prototype.commandInit = function (_commandAttempt = 0) {
                 }, backTime)
             } else {
                 this.nextVillage()
-
                 this.getTargets(() => {
                     this.commandInit()
                 })
