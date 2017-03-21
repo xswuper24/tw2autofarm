@@ -28,6 +28,12 @@ AutoFarm.prototype.commandInit = function (_commandAttempt) {
         return false
     }
 
+    // Caso a aldeia selecionada seja adicionada na lista
+    // de aldeias ignoradas no meio da execução.
+    if (this.ignoredVillages.includes(sid)) {
+        return this.nextVillage()
+    }
+
     this.getVillageCommands((commands) => {
         // Quando o limite de comandos for atingido...
         // 1: Se o jogador tiver apenas uma aldeia, o script

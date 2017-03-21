@@ -68,6 +68,7 @@ function AutoFarm (settings) {
      * @type {Boolean}
      */
     this.paused = true
+
     /**
      * Identifica se o jogador possui apenas uma aldeia.
      * @type {Boolean}
@@ -346,8 +347,14 @@ AutoFarm.prototype.getTargets = function (callback) {
  * Seleciona a próxima aldeia do jogador.
  * @return {Boolean}
  */
-AutoFarm.prototype.nextVillage = function () {
+AutoFarm.prototype.nextVillage = function (_loop = 0) {
     if (this.uniqueVillage || this.settings.currentOnly) {
+        return false
+    }
+
+    if (_loop === this.player.villages.length) {
+        this.event('noVillages')
+
         return false
     }
 
@@ -359,7 +366,7 @@ AutoFarm.prototype.nextVillage = function () {
             : this.selectedVillage = this.player.villages[0]
 
     if (this.ignoredVillages.includes(this.selectedVillage.getId())) {
-        return this.nextVillage()
+        return this.nextVillage(++_loop)
     }
 
     this.event('nextVillage')
