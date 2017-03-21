@@ -124,7 +124,7 @@ AutoFarm.prototype.sendCommand = function (callback) {
  * @return {Boolean}
  */
 AutoFarm.prototype.commandVillageNoUnits = function (commands) {
-    if (this.uniqueVillage) {
+    if (this.uniqueVillage || this.settings.currentOnly) {
         if (!commands.length) {
             this.event('noUnitsNoCommands')
 

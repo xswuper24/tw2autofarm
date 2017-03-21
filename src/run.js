@@ -4,7 +4,7 @@ if (typeof autofarm !== 'undefined') {
 
 autofarm = new AutoFarm({
     radius: 5,
-    interval: 60,
+    interval: 15,
     currentOnly: true
 })
 
