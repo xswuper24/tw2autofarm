@@ -22,6 +22,8 @@ eventTypeProvider = injector.get('eventTypeProvider')
  * @param {Number} settings.presetName - Nome do preset usado para os comandos.
  * @param {Number} settings.groupIgnore - Nome do grupo usado nas aldeias a
  *     serem ignoradas.
+ * @param {Boolean} settings.currentOnly - Apenas a aldeia selecionada será
+ *     usada para enviar comandos.
  */
 function AutoFarm (settings) {
     settings = settings || {}
@@ -183,7 +185,7 @@ AutoFarm.prototype.ready = function (callback) {
 /**
  * Prepara a lista de alvos da aldeia atualmente selecionada.
  * @param {Function} callback - Chamado ao finalizar a atualização de alvos.
- * @param {Number} _lastVillage - Argumento interno para detectar aldeias
+ * @param {Number} _lastVillage - Parametro interno para detectar aldeias
  *     que não possuem alvos.
  */
 AutoFarm.prototype.prepareVillage = function (callback, _lastVillage) {
@@ -228,12 +230,14 @@ AutoFarm.prototype.prepareVillage = function (callback, _lastVillage) {
  * Seleciona o próximo alvo da aldeia.
  * @param {Boolean} _firstRun - Parametro interno usado na primeira execução
  *     para selecionar o primeiro alvo e ignora-lo corretamente caso estiver
-       na lista de alvos ignorados.
+ *     na lista de alvos ignorados.
+ * @param {Number} _noTargets - Parametro interno para identificar aldeias
+ *     que não possuem nenhum alvo.
  * @return {Boolean}
  */
 AutoFarm.prototype.nextTarget = function (_firstRun, _noTargets) {
     _noTargets = _noTargets || 0
-
+    
     let sid = this.selectedVillage.getId()
 
     // Se aldeia ainda não tiver obtido a lista de alvos, obtem
@@ -345,6 +349,8 @@ AutoFarm.prototype.getTargets = function (callback) {
 
 /**
  * Seleciona a próxima aldeia do jogador.
+ * @param {Number} _loop - Parametro interno usado para identificar quando
+ *     todas aldeias do jogador foram ignoradas.
  * @return {Boolean}
  */
 AutoFarm.prototype.nextVillage = function (_loop = 0) {
@@ -463,6 +469,8 @@ AutoFarm.prototype.getVillageUnits = function (callback) {
 /**
  * Obtem preset apropriado para o script
  * @param {Function} callback
+ * @param {Object} presets - Parametro interno usado para evitar
+ *     repetição de código.
  */
 AutoFarm.prototype.getPreset = function (callback, presets) {
     if (presets) {
