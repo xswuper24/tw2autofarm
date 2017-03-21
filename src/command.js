@@ -3,9 +3,7 @@
  * @param {Number} _commandAttempt - Uso interno, conta quantas tentativas
  *      sem sucesso de enviar comandos o script teve.
  */
-AutoFarm.prototype.commandInit = function (_commandAttempt) {
-    _commandAttempt = _commandAttempt || 0
-
+AutoFarm.prototype.commandInit = function (_commandAttempt = 0) {
     if (this.paused) {
         return false
     }

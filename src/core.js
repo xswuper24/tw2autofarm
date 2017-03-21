@@ -188,9 +188,7 @@ AutoFarm.prototype.ready = function (callback) {
  * @param {Number} _lastVillage - Parametro interno para detectar aldeias
  *     que não possuem alvos.
  */
-AutoFarm.prototype.prepareVillage = function (callback, _lastVillage) {
-    _lastVillage = _lastVillage || 0
-
+AutoFarm.prototype.prepareVillage = function (callback, _lastVillage = 0) {
     let sid = this.selectedVillage.getId()
 
     // Caso nenhum aldeia do jogador esteja disponível.
@@ -235,9 +233,7 @@ AutoFarm.prototype.prepareVillage = function (callback, _lastVillage) {
  *     que não possuem nenhum alvo.
  * @return {Boolean}
  */
-AutoFarm.prototype.nextTarget = function (_firstRun, _noTargets) {
-    _noTargets = _noTargets || 0
-    
+AutoFarm.prototype.nextTarget = function (_firstRun, _noTargets = 0) {
     let sid = this.selectedVillage.getId()
 
     // Se aldeia ainda não tiver obtido a lista de alvos, obtem
