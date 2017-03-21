@@ -25,9 +25,7 @@ eventTypeProvider = injector.get('eventTypeProvider')
  * @param {Boolean} settings.currentOnly - Apenas a aldeia selecionada será
  *     usada para enviar comandos.
  */
-function AutoFarm (settings) {
-    settings = settings || {}
-
+function AutoFarm (settings = {}) {
     /**
      * Objeto com todas as configurações padrões.
      * @type {Object}
