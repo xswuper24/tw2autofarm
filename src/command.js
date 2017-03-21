@@ -19,8 +19,8 @@ AutoFarm.prototype.commandInit = function (_commandAttempt) {
 
     let sid = this.selectedVillage.getId()
 
-    // Se a aldeia estiver no limite de 50 comandos...
-    // Seleciona a próxima aldeia e tenta novamente.
+    // Se a aldeia estiver no limite de 50 comandos ou não tem unidades
+    // sulficientes para enviar o comando.
     if (sid in this.villagesNextReturn) {
         this.nextVillage()
         this.getTargets(() => this.commandInit(++_commandAttempt))
@@ -73,6 +73,7 @@ AutoFarm.prototype.commandInit = function (_commandAttempt) {
                 })
             } else {
                 this.event('villageNoUnits')
+                this.getNextReturn(commands)
                 this.commandVillageNoUnits(commands)
             }
         })
@@ -140,8 +141,9 @@ AutoFarm.prototype.commandVillageNoUnits = function (commands) {
             this.timerId = setTimeout(() => {
                 this.commandInit()
             }, backTime)
-        } else
+        } else {
             this.event('noUnitsNoCommands')
+        }
     } else {
         this.nextVillage()
         this.getTargets(() => this.commandInit())
