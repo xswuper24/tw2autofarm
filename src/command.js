@@ -104,11 +104,14 @@ AutoFarm.prototype.getNextReturn = function (commands) {
  * @return {Boolean}
  */
 AutoFarm.prototype.sendCommand = function (callback) {
-    socketService.emit(routeProvider.SEND_PRESET, {
+    socketService.emit(routeProvider.SEND_CUSTOM_ARMY, {
         start_village: this.selectedVillage.getId(),
         target_village: this.selectedTarget.id,
-        army_preset_id: this.presetId,
-        type: 'attack'
+        type: 'attack',
+        units: this.preset.units,
+        catapult_target: '',
+        officers: {},
+        icon: 0
     })
 
     this.commandProgressId = this.selectedTarget.id

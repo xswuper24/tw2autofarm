@@ -126,10 +126,10 @@ function AutoFarm (settings) {
     this.eventListeners = {}
 
     /**
-     * Preset usado para enviar os comandos
+     * Preset usado como referência para enviar os comandos
      * @type {Object}
      */
-    this.presetId = null
+    this.preset = null
 
     /**
      * Preset usado para enviar os comandos
@@ -170,7 +170,7 @@ AutoFarm.prototype.pause = function () {
 AutoFarm.prototype.ready = function (callback) {
     this.getPreset((preset) => {
         if (preset) {
-            this.presetId = preset
+            this.preset = preset
         } else {
             return this.event('noPreset')
         }
@@ -420,11 +420,8 @@ AutoFarm.prototype.selectModel = function (villageUnits) {
  *     na aldeia.
  */
 AutoFarm.prototype.presetAvail = function (villageUnits) {
-    let preset = modelDataService.getPresetList().presets[this.presetId]
-
-    for (let unit in preset.units) {
-        
-        if (villageUnits[unit].in_town < preset.units[unit]) {
+    for (let unit in this.preset.units) {
+        if (villageUnits[unit].in_town < this.preset.units[unit]) {
             return false
         }
     }
@@ -464,7 +461,7 @@ AutoFarm.prototype.getPreset = function (callback, presets) {
     if (presets) {
         for (let id in presets) {
             if (presets[id].name === this.settings.presetName) {
-                return callback(presets[id].id)
+                return callback(presets[id])
             }
         }
 
