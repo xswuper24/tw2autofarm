@@ -60,6 +60,10 @@ autofarm.on('nextCommandIn', function (time) {
     console.info(`nextCommandIn: Próximo comando em ${time}ms.`)
 })
 
+autofarm.on('commandReturn', function (vid) {
+    // console.info(`nextCommandIn: Próximo comando em ${time}ms.`)
+})
+
 autofarm.ready(function () {
     autofarm.start()
 })

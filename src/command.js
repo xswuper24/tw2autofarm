@@ -94,6 +94,8 @@ AutoFarm.prototype.getNextReturn = function (commands) {
 
     setTimeout(() => {
         delete this.villagesNextReturn[vid]
+
+        this.event('commandReturn', [vid])
     }, backIn)
 
     return true
