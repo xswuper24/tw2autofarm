@@ -157,6 +157,12 @@ function AutoFarm (settings = {}) {
  * @return {Boolean}
  */
 AutoFarm.prototype.start = function () {
+    if (!this.preset) {
+        this.event('noPreset')
+
+        return false
+    }
+
     this.paused = false
     this.commandInit()
 
