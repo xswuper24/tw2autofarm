@@ -19,4 +19,7 @@ if (typeof autofarm === 'undefined') {
             }
         })
     })
+
+    ga('create', 'UA-92130203-3', 'auto');
+    ga('send', 'pageview');
 }
