@@ -4,7 +4,7 @@ AutoFarm.prototype.interface = function () {
         '#autofarm-modal {visibility: hidden}' +
         '#autofarm-modal .inner-wrapper {width: 500px}' +
         '#autofarm-modal input {background: #b89064;width: 150px}' +
-        '#autofarm-modal .box-paper {color: black; text-align: center; max-height: 250px}'
+        '#autofarm-modal .box-paper {color: black; max-height: 250px}'
 
     let button = '<div class="btn-border chat-wrapper btn-green" id="autofarm-button">' +
         '<div class="top-left"></div>' +
