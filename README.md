@@ -26,9 +26,9 @@ O script utiliza **predefinições** e **grupos** como configurações.
 Crie uma predefinição nomeada **.farm**, especifique a quantidade de
 unidades. Essa predefinição será usada para enviar todos comandos pelo script.
 
-### Grupo .farmignore
+### Grupo .ignore
 
-Crie um grupo nomeado **.farmignore** e o adicione em todas aldeias que você
+Crie um grupo nomeado **.ignore** e o adicione em todas aldeias que você
 não quer se seja usada pelo script.
 
 Funciona tanto nas aldeias alvos (abandonadas) quanto nas suas próprias aldeias.
@@ -43,7 +43,7 @@ especifique-os nas configurações *in-line* como demonstrado abaixo.
 - **radius** distância máxima dos alvos (campos). *padrão: 10*
 - **interval** intervalo entre cada comando (segundos). *padrão: 3*
 - **presetName** nome da predefinição que será utilizada para enviar os comandos. *padrão: .farm*
-- **groupIgnore** nome do grupo que será usado para identificar as aldeias não serão utilizadas pelo script. *padrão: .farmignore*
+- **groupIgnore** nome do grupo que será usado para identificar as aldeias não serão utilizadas pelo script. *padrão: .ignore*
 - **currentOnly** faz com que o script utilize apenas a aldeia selecionada para enviar os comandos. *padrão: false*
 
 ## Como rodar o script
