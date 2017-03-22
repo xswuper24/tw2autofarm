@@ -45,9 +45,9 @@ function AutoFarm (settings = {}) {
     this.settings = {}
 
     for (let item in this.defaults) {
-        this.settings[item] = settings[item]
-            ? settings[item]
-            : this.defaults[item]
+        this.settings[item] = settings[item] === void 0
+            ? this.defaults[item]
+            : settings[item]
     }
 
     /**
