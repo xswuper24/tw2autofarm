@@ -7,6 +7,8 @@ AutoFarm.prototype.event = function (type, data) {
     if (type in this.eventListeners) {
         this.eventListeners[type].apply(this, data)
     }
+
+    return this
 }
 
 /**
@@ -18,4 +20,6 @@ AutoFarm.prototype.on = function (type, handler) {
     if (typeof handler === 'function') {
         this.eventListeners[type] = handler
     }
+
+    return this
 }

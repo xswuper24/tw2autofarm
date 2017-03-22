@@ -1,69 +1,55 @@
-if (typeof autofarm !== 'undefined') {
-    autofarm.pause()
+if (typeof af !== 'undefined') {
+    af.pause()
 }
 
-autofarm = new AutoFarm({
+af = new AutoFarm({
     radius: 3,
     interval: 4,
     currentOnly: false
 })
 
-autofarm.on('noVillages', function () {
-    console.info('noVillages: Nenhuma aldeia disponível para atacar.')
+af.on('noVillages', function () {
+    console.info('noVillages')
 })
-
-autofarm.on('villageNoTargets', function () {
-    console.info('villageNoTargets: A aldeia atual não tem nenhum alvo disponível.')
+.on('villageNoTargets', function () {
+    console.info('villageNoTargets')
 })
-
-autofarm.on('noTargets', function () {
-    console.info('noTargets: Nenhum alvo disponível.')
+.on('noTargets', function () {
+    console.info('noTargets')
 })
-
-autofarm.on('nextTarget', function () {
-    console.info('nextTarget: Alterando para o próximo alvo.')
+.on('nextTarget', function () {
+    console.info('nextTarget')
 })
-
-autofarm.on('nextVillage', function () {
-    console.info('nextVillage: Alterando para a próxima aldeia.')
+.on('nextVillage', function () {
+    console.info('nextVillage')
 })
-
-autofarm.on('ignoredTarget', function (village) {
-    console.info('ignoredTarget: Alvo ignorado.')
+.on('ignoredTarget', function (village) {
+    console.info('ignoredTarget')
 })
-
-autofarm.on('allVillageNoUnits', function () {
-    console.info('allVillageNoUnits: Sem tropas em nenhuma aldeia para atacar.')
+.on('allVillageNoUnits', function () {
+    console.info('allVillageNoUnits')
 })
-
-autofarm.on('commandLimit', function () {
-    console.info('commandLimit: Limite de 50 ataques por aldeia atingido.')
+.on('commandLimit', function () {
+    console.info('commandLimit')
 })
-
-autofarm.on('sendCommand', function () {
-    console.info('sendCommand: Comand enviado.')
+.on('sendCommand', function () {
+    console.info('sendCommand')
 })
-
-autofarm.on('villageNoUnits', function () {
-    console.info('villageNoUnits: Sem tropas na aldeia')
+.on('villageNoUnits', function () {
+    console.info('villageNoUnits')
 })
-
-autofarm.on('noUnitsNoCommands', function () {
-    console.info('noUnitsNoCommands: Sem tropas nem comandos retornando.')
+.on('noUnitsNoCommands', function () {
+    console.info('noUnitsNoCommands')
 })
-
-autofarm.on('noPreset', function () {
-    console.info('noPreset: Predefinição não foi criada.')
+.on('noPreset', function () {
+    console.info('noPreset')
 })
-
-autofarm.on('nextCommandIn', function (time) {
-    console.info(`nextCommandIn: Próximo comando em ${time}ms.`)
+.on('nextCommandIn', function (time) {
+    console.info(`nextCommandIn ${time}`)
 })
-
-autofarm.on('commandReturn', function (vid) {
-    // console.info(`nextCommandIn: Próximo comando em ${time}ms.`)
+.on('commandReturn', function (vid) {
+    // console.info(`commandReturn`)
 })
-
-autofarm.ready(function () {
-    autofarm.start()
+.ready(function () {
+    af.start()
 })
