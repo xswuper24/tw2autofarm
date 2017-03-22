@@ -1,10 +1,11 @@
 AutoFarm.prototype.interface = function () {
     let css = '#autofarm-button {position: relative;top: 0px;' +
         'left: 0px;font-size: 11px;margin-bottom: 10px}' +
-        '#autofarm-modal {display: none}' +
+        '#autofarm-modal {visibility: hidden}' +
         '#autofarm-modal td {text-align: center}' +
         '#autofarm-modal .inner-wrapper {width: 500px}' +
-        '#autofarm-modal input {background: #b89064;width: 150px}'
+        '#autofarm-modal input {background: #b89064;width: 150px}' +
+        '#autofarm-modal .box-paper {color: black; text-align: center; max-height: 250px}'
 
     let button = '<div class="btn-border chat-wrapper btn-green" id="autofarm-button">' +
         '<div class="top-left"></div>' +
@@ -31,6 +32,19 @@ AutoFarm.prototype.interface = function () {
         '</li>' +
         '</ul>' +
         '</header>' +
+        '<div class="win-main">' +
+        '<div class="box-paper">' +
+        '<h3>Prédefinição</h3>' +
+        '<p>O AutoFarm utiliza uma prédefinição para enviar os comandos, então é preciso que a conta tenha uma prédefinição nomeada <b>.farm</b> para que os farms iniciem.</p>' +
+        '<p>Não é preciso ter a prédefinição ativada nas aldeias para funcionar.</p>' +
+        '<p>Serão usados apenas o número de tropas especificados na prédefinição, <b>oficiais</b> não serão utilizados.</p>' +
+        '<p>É possível alterar a quantidade de tropas na prédefinição enquanto o AutoFarm estiver ativado enviando os comandos. Os novos comandos serão enviandos com a nova quantidade de tropas especificada.</p>' +
+        '<h3>Ignorando aldeias</h3>' +
+        '<p>Qualquer aldeia que houver atribuido um grupo chamado <b>.ignore</b> serão ignorados pelo AutoFarm. O grupo serve tanto os alvos quanto para suas aldeias.</p>' +
+        '<h3>Observações</h3>' +
+        '<p>Os ataques iniciarão a partir da aldeia que estava selecionada no momento da execução do script.</p>' +
+        '</div>' +
+        '</div>' +
         '<footer class="win-foot sprite-fill">' +
         '<ul class="list-btn list-center">' +
         '<li><a class="btn-red btn-border" id="autofarm-start">Iniciar</a></li>' +
@@ -51,16 +65,17 @@ AutoFarm.prototype.interface = function () {
     let $modal = document.createElement('div')
     $modal.innerHTML = modal
     document.body.appendChild($modal)
+    jsScrollbar($modal.querySelector('.win-main'))
 
     // events
 
     $button.addEventListener('click', function () {
-        $modal.firstChild.style.display = 'block'
+        $modal.firstChild.style.visibility = 'visible'
     })
 
     let $close = document.querySelector('#autofarm-close')
 
     $close.addEventListener('click', function () {
-        $modal.firstChild.style.display = 'none'
+        $modal.firstChild.style.visibility = 'hidden'
     })
 }
