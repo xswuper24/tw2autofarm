@@ -43,6 +43,7 @@ AutoFarm.prototype.interface = function () {
         '<h3>Observações</h3>' +
         '<p>Os ataques iniciarão a partir da aldeia que estava selecionada no momento da execução do script.</p>' +
         '<p>A ordem das aldeias no ciclo é seguida em ordem alfabética.</p>' +
+        '<p>A distáncia máxima que uma aldeia envia um ataque é de 10 campos.</p>' +
         '<h3>Sobre</h3>' +
         '<p>Esse script é desenvolvido por Rafael Mafra e é um projeto de código aberto e pode ser visto <a href="https://gitlab.com/mafrazz/tw2autofarm">aqui</a>.</p>' +
         '</div>' +
