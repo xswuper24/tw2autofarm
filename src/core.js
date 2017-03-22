@@ -190,7 +190,7 @@ AutoFarm.prototype.ready = function (callback) {
         if (preset) {
             this.preset = preset
         } else {
-            return this.event('noPreset')
+            this.event('noPreset')
         }
 
         this.prepareVillage(callback)
