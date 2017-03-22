@@ -2,7 +2,6 @@ AutoFarm.prototype.interface = function () {
     let css = '#autofarm-button {position: relative;top: 0px;' +
         'left: 0px;font-size: 11px;margin-bottom: 10px}' +
         '#autofarm-modal {visibility: hidden}' +
-        '#autofarm-modal td {text-align: center}' +
         '#autofarm-modal .inner-wrapper {width: 500px}' +
         '#autofarm-modal input {background: #b89064;width: 150px}' +
         '#autofarm-modal .box-paper {color: black; text-align: center; max-height: 250px}'
