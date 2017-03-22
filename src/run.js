@@ -13,9 +13,13 @@ if (typeof autofarm === 'undefined') {
 
                 autofarm.start()
                 $start.innerHTML = 'Pausar'
+                $start.classList.remove('btn-green')
+                $start.classList.add('btn-red')
             } else {
                 autofarm.pause()
                 $start.innerHTML = 'Iniciar'
+                $start.classList.remove('btn-red')
+                $start.classList.add('btn-green')
             }
         })
     })

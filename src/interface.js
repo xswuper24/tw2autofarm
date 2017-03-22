@@ -49,7 +49,7 @@ AutoFarm.prototype.interface = function () {
         '</div>' +
         '<footer class="win-foot sprite-fill">' +
         '<ul class="list-btn list-center">' +
-        '<li><a class="btn-red btn-border" id="autofarm-start">Iniciar</a></li>' +
+        '<li><a class="btn-green btn-border" id="autofarm-start">Iniciar</a></li>' +
         '</ul>' +
         '</footer>' +
         '</div></div></div></div></div>'
