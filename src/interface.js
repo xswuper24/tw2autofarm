@@ -29,7 +29,7 @@ AutoFarm.prototype.interface = function () {
         '<li>' +
         '<a href="#" class="btn-red icon-26x26-close" id="autofarm-close"></a>' +
         '</li>' +
-        '</ul>' +
+        '</ul>' +   
         '</header>' +
         '<div class="win-main">' +
         '<div class="box-paper">' +
@@ -42,6 +42,9 @@ AutoFarm.prototype.interface = function () {
         '<p>Qualquer aldeia que houver atribuido um grupo chamado <b>.ignore</b> serão ignorados pelo AutoFarm. O grupo serve tanto os alvos quanto para suas aldeias.</p>' +
         '<h3>Observações</h3>' +
         '<p>Os ataques iniciarão a partir da aldeia que estava selecionada no momento da execução do script.</p>' +
+        '<p>A ordem das aldeias no ciclo é seguida em ordem alfabética.</p>' +
+        '<h3>Sobre</h3>' +
+        '<p>Esse script é desenvolvido por Rafael Mafra e é um projeto de código aberto e pode ser visto <a href="https://gitlab.com/mafrazz/tw2autofarm">aqui</a>.</p>' +
         '</div>' +
         '</div>' +
         '<footer class="win-foot sprite-fill">' +
