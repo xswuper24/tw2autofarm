@@ -6,6 +6,11 @@ if (typeof autofarm === 'undefined') {
 
         $start.addEventListener('click', function () {
             if (autofarm.paused) {
+                if (!autofarm.preset) {
+                    alert('Configure uma predefinição antes de iniciar')
+                    return false
+                }
+
                 autofarm.start()
                 $start.innerHTML = 'Pausar'
             } else {
