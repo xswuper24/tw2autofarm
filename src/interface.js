@@ -25,7 +25,7 @@ AutoFarm.prototype.interface = function () {
         '<div class="inner-wrapper">' +
         '<div class="win-content">' +
         '<header class="win-head">' +
-        '<h3>Farmador Automático</h3>' +
+        '<h3>Farmador Automático <span class="small">v' + this.version + '</span></h3>' +
         '<ul class="list-btn sprite">' +
         '<li>' +
         '<a href="#" class="btn-red icon-26x26-close" id="autofarm-close"></a>' +

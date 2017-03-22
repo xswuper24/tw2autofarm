@@ -27,6 +27,12 @@ eventTypeProvider = injector.get('eventTypeProvider')
  */
 function AutoFarm (settings = {}) {
     /**
+     * Versão do script.
+     * @type {String}
+     */
+    this.version = '@@version'
+
+    /**
      * Objeto com todas as configurações padrões.
      * @type {Object}
      */
