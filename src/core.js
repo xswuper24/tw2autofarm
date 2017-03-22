@@ -119,6 +119,17 @@ function AutoFarm (settings = {}) {
         }
     })
 
+    $rootScope.$on(eventTypeProvider.ARMY_PRESET_UPDATE, () => {
+        socketService.emit(routeProvider.GET_PRESETS, {}, (data) => {
+            this.preset = this.getPreset(false, data.presets)
+
+            if (!this.preset) {
+                this.event('noPreset')
+                this.pause()
+            }
+        })
+    })
+
     /**
      * Callbacks usados pelos eventos que são disparados no
      * decorrer do script.
@@ -445,11 +456,19 @@ AutoFarm.prototype.getPreset = function (callback, presets) {
     if (presets) {
         for (let id in presets) {
             if (presets[id].name === this.settings.presetName) {
-                return callback(presets[id])
+                if (callback) {
+                    callback(presets[id])
+                }
+
+                return presets[id]
             }
         }
 
-        return callback(false)
+        if (callback) {
+            callback(false)
+        }
+
+        return false
     }
 
     if (modelDataService.getPresetList().isLoaded()) {
