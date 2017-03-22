@@ -32,7 +32,7 @@ function AutoFarm (settings = {}) {
      */
     this.defaults = {
         radius: 10,
-        interval: 3,
+        interval: 1,
         presetName: '.farm',
         groupIgnore: '.farmignore',
         currentOnly: false
