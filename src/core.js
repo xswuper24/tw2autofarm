@@ -34,7 +34,7 @@ function AutoFarm (settings = {}) {
         radius: 10,
         interval: 1,
         presetName: '.farm',
-        groupIgnore: '.farmignore',
+        groupIgnore: '.ignore',
         currentOnly: false
     }
 
