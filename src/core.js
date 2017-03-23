@@ -314,11 +314,13 @@ AutoFarm.prototype.getTargets = function (callback) {
         return callback()
     }
 
+    let size = this.settings.radius
+
     socketService.emit(routeProvider.MAP_GETVILLAGES, {
-        x: sx - (sx % 25) - 25,
-        y: sy - (sy % 25) - 25,
-        width: 50,
-        height: 50
+        x: sx - size,
+        y: sy - size,
+        width: size * 2,
+        height: size * 2
     }, (data) => {
         let villages = data.villages
         let nearby = []
