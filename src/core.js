@@ -144,7 +144,7 @@ function AutoFarm (settings = {}) {
 
     this.updateGroupIgnore()
     this.updateIgnoredVillages()
-    this.coreListeners()
+    this.gameListeners()
 
     return this
 }
@@ -508,7 +508,7 @@ AutoFarm.prototype.updateIgnoredVillages = function () {
  * Detecta todas atualizações de dados do jogo que são importantes
  * para o funcionamento do AutoFarm.
  */
-AutoFarm.prototype.coreListeners = function () {
+AutoFarm.prototype.gameListeners = function () {
     // Detecta todos comandos enviados no jogo (não apenas pelo script)
     // e identifica os que foram enviados pelo script.
     $rootScope.$on(eventTypeProvider.COMMAND_SENT, ($event, data) => {
