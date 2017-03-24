@@ -130,11 +130,20 @@ function AutoFarm (settings = {}) {
     this.preset = null
 
     /**
+     * Objeto do group de referência para ignorar aldeias/alvos.
+     * Contém ID e nome do grupo.
+     * @type {Object}
+     */
+    this.groupIgnore = null
+
+    /**
      * Preset usado para enviar os comandos
      * @type {Object}
      */
-    this.ignoredVillages = this.getIgnoredVillages()
+    this.ignoredVillages = null
 
+    this.updateGroupIgnore()
+    this.updateIgnoredVillages()
     this.coreListeners()
 
     return this
@@ -463,21 +472,35 @@ AutoFarm.prototype.getPreset = function (callback, presets) {
     })
 }
 
-/**
- * Obtem a lista de aldeias pertencentes ao grupo de aldeias que serão
- *     ignoradas tanta para enviar quanto para receber comandos.
- * @return {Array}
- */
-AutoFarm.prototype.getIgnoredVillages = function () {
+AutoFarm.prototype.updateGroupIgnore = function () {
     let groups = modelDataService.getGroupList().getGroups()
 
     for (let id in groups) {
         if (groups[id].name === this.settings.groupIgnore) {
-            return modelDataService.getGroupList().getGroupVillageIds(id)
+            this.groupIgnore = {
+                id: id,
+                name: groups[id].name
+            }
+
+            return
         }
     }
 
-    return []
+    this.groupIgnore = null
+}
+
+/**
+ * #Obtem a lista de aldeias pertencentes ao grupo de aldeias que serão
+ *     ignoradas tanta para enviar quanto para receber comandos.
+ * @return {Array}
+ */
+AutoFarm.prototype.updateIgnoredVillages = function () {
+    if (!this.groupIgnore) {
+        return this.ignoredVillages = []
+    }
+
+    this.ignoredVillages =
+        modelDataService.getGroupList().getGroupVillageIds(this.groupIgnore.id)
 }
 
 AutoFarm.prototype.coreListeners = function () {
@@ -500,5 +523,10 @@ AutoFarm.prototype.coreListeners = function () {
                 this.pause()
             }
         })
+    })
+
+    $rootScope.$on(eventTypeProvider.GROUPS_UPDATED, ($event, data) => {
+        this.updateGroupIgnore()
+        this.updateIgnoredVillages()
     })
 }
