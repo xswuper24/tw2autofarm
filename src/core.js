@@ -255,15 +255,6 @@ AutoFarm.prototype.prepareVillage = function (callback, _lastVillage = 0) {
  */
 AutoFarm.prototype.nextTarget = function (_initial, _noTargets = 0) {
     let sid = this.selectedVillage.getId()
-
-    // Se aldeia ainda não tiver obtido a lista de alvos, obtem
-    // os alvos e executa o método novamente para dar continuidade.
-    if (!this.targetList.hasOwnProperty(sid)) {
-        return this.getTargets(function () {
-            this.nextTarget(_initial, _noTargets)
-        })
-    }
-
     let targets = this.targetList[sid]
 
     if (!_initial) {
@@ -392,10 +383,6 @@ AutoFarm.prototype.nextVillage = function (_loop = 0) {
     if (this.ignoredVillages.includes(this.selectedVillage.getId())) {
         return this.nextVillage(++_loop)
     }
-
-    // Atualiza o alvo assim que é alterado a aldeia do jogador
-    // para evitar comandos em alvos que não pertencem a aldeia.
-    this.nextTarget(true)
 
     this.event('nextVillage')
 

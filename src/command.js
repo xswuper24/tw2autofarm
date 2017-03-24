@@ -17,17 +17,35 @@ AutoFarm.prototype.commandInit = function (_commandAttempt = 0) {
 
     let sid = this.selectedVillage.getId()
 
+    // Se aldeia ainda não tiver obtido a lista de alvos, obtem
+    // os alvos e executa o comando novamente para dar continuidade.
+    if (!this.targetList[sid]) {
+        return this.getTargets(function () {
+            // Apenas seleciona o primeiro alvo da lista
+            let hasTargets = this.nextTarget(true)
+
+            if (hasTargets) {
+                this.commandInit(_commandAttempt)
+            } else {
+                this.nextVillage()
+                this.commandInit(_commandAttempt)
+            }
+        })
+    }
+
     // Se a aldeia estiver no limite de 50 comandos ou não tem unidades
     // sulficientes para enviar o comando.
     if (sid in this.villagesNextReturn) {
         this.nextVillage()
-        this.getTargets(() => this.commandInit(++_commandAttempt))
+        this.commandInit(++_commandAttempt)
 
         return false
     }
 
     // Caso a aldeia selecionada seja adicionada na lista
     // de aldeias ignoradas no meio da execução.
+
+    // TODO: verificar se o script continua funcionando depois disso
     if (this.ignoredVillages.includes(sid)) {
         return this.nextVillage()
     }
@@ -69,6 +87,7 @@ AutoFarm.prototype.commandInit = function (_commandAttempt = 0) {
                     let time = this.settings.interval * 1000
 
                     this.timerId = setTimeout(() => {
+
                         this.commandInit()
                     }, time)
 
@@ -151,7 +170,7 @@ AutoFarm.prototype.commandVillageNoUnits = function (commands) {
         }
     } else {
         this.nextVillage()
-        this.getTargets(() => this.commandInit())
+        this.commandInit()
     }
 
     return true
