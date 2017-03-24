@@ -1,0 +1,53 @@
+<div class="win-content message-list-wrapper searchable-list ng-scope">
+    <header class="win-head">
+        <h2 class="ng-binding">Farmador Automático <span class="small ng-binding">(v{{ version }})</span></h2>
+        <ul class="list-btn">
+            <li><a href="#" id="autofarm-close" class="size-34x34 btn-red icon-26x26-close"></a></li>
+        </ul>
+    </header>
+    <div class="win-main">
+        <div class="tabs tabs-bg">
+            <div class="tabs-three-col">
+                <div class="tab" tab="info">
+                    <div class="tab-inner">
+                        <div><a href="#" class="btn-icon btn-orange">Informações</a></div>
+                    </div>
+                </div>
+                <div class="tab" tab="settings">
+                    <div class="tab-inner">
+                        <div><a href="#" class="btn-icon btn-orange">Configurações</a></div>
+                    </div>
+                </div>
+                <div class="tab" tab="log">
+                    <div class="tab-inner">
+                        <div><a href="#" class="btn-icon btn-orange">Registros</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-paper footer has-footer-upper autofarm-content-info">
+            <h3>Prédefinição</h3>
+            <p>O AutoFarm utiliza uma prédefinição para enviar os comandos, então é preciso que a conta tenha uma prédefinição nomeada <b>.farm</b> para que os farms iniciem.</p>
+            <p>Não é preciso ter a prédefinição ativada nas aldeias para funcionar.</p>
+            <p>Serão usados apenas o número de tropas especificados na prédefinição, <b>oficiais</b> não serão utilizados.</p>
+            <p>É possível alterar a quantidade de tropas na prédefinição enquanto o AutoFarm estiver ativado enviando os comandos. Os novos comandos serão enviandos com a nova quantidade de tropas especificada.</p>
+            <h3>Ignorando aldeias</h3>
+            <p>Qualquer aldeia que houver atribuido um grupo chamado <b>.ignore</b> serão ignorados pelo AutoFarm. O grupo serve tanto os alvos quanto para suas aldeias.</p>
+            <h3>Observações</h3>
+            <p>Os ataques iniciarão a partir da aldeia que estava selecionada no momento da execução do script.</p>
+            <p>A ordem das aldeias no ciclo é seguida em ordem alfabética.</p>
+            <p>A distáncia máxima que uma aldeia envia um ataque é de 10 campos.</p>
+        </div>
+        <div class="box-paper footer has-footer-upper autofarm-content-settings">
+            <p>settings</p>
+        </div>
+        <div class="box-paper footer has-footer-upper autofarm-content-log">
+            <p>logs</p>
+        </div>
+    </div>
+    <footer class="win-foot">
+        <ul class="list-btn list-center">
+            <li><a class="btn-orange btn-border" id="autofarm-start">Iniciar</a></li>
+        </ul>
+    </footer>
+</div>

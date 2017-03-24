@@ -16,6 +16,7 @@
     "grunt-contrib-uglify": "^2.2.0",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-eslint": "^19.0.0",
+    "grunt-html-convert": "0.0.2",
     "grunt-replace": "^1.0.1"
   }
 }

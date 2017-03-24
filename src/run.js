@@ -1,4 +1,4 @@
-if (typeof autofarm === 'undefined') {
+// if (typeof autofarm === 'undefined') {
     autofarm = new AutoFarm()
     autofarm.interface()
     autofarm.ready(function () {
@@ -23,4 +23,4 @@ if (typeof autofarm === 'undefined') {
             }
         })
     })
-}
+// }

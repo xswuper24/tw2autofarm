@@ -18,6 +18,18 @@ module.exports = function (grunt) {
             },
             build: ['src/*.js']
         },
+        htmlConvert: {
+            options: {
+                quoteChar: "'",
+                indentString: '    ',
+                indentGlobal: '    ',
+                module: 'strings'
+            },
+            build: {
+                src: 'src/interface/*.*',
+                dest: 'dist/templates.js'
+            }
+        },
         replace: {
             build: {
                 options: {
@@ -26,6 +38,9 @@ module.exports = function (grunt) {
                             version: '<%= pkg.version %>',
                             date: '<%= new Date() %>'
                         }
+                    }, {
+                        match: /\/\/ \@\@templates/,
+                        replacement: '<%= grunt.file.read("dist/templates.js") %>'
                     }]
                 },
                 files: [{
@@ -59,10 +74,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-html-convert');
 
     grunt.registerTask('default', [
         'eslint',
         'concat',
+        'htmlConvert',
         'replace',
         'uglify'
     ]);
