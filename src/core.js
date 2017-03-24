@@ -472,6 +472,9 @@ AutoFarm.prototype.getPreset = function (callback, presets) {
     })
 }
 
+/**
+ * Atualiza o grupo de referência para ignorar aldeias
+ */
 AutoFarm.prototype.updateGroupIgnore = function () {
     let groups = modelDataService.getGroupList().getGroups()
 
@@ -490,9 +493,7 @@ AutoFarm.prototype.updateGroupIgnore = function () {
 }
 
 /**
- * #Obtem a lista de aldeias pertencentes ao grupo de aldeias que serão
- *     ignoradas tanta para enviar quanto para receber comandos.
- * @return {Array}
+ * Atualiza a lista de aldeias ignoradas
  */
 AutoFarm.prototype.updateIgnoredVillages = function () {
     if (!this.groupIgnore) {
@@ -503,6 +504,10 @@ AutoFarm.prototype.updateIgnoredVillages = function () {
         modelDataService.getGroupList().getGroupVillageIds(this.groupIgnore.id)
 }
 
+/**
+ * Detecta todas atualizações de dados do jogo que são importantes
+ * para o funcionamento do AutoFarm.
+ */
 AutoFarm.prototype.coreListeners = function () {
     // Detecta todos comandos enviados no jogo (não apenas pelo script)
     // e identifica os que foram enviados pelo script.
@@ -514,6 +519,7 @@ AutoFarm.prototype.coreListeners = function () {
         }
     })
 
+    // Deteca alterações nas prédefinições
     $rootScope.$on(eventTypeProvider.ARMY_PRESET_UPDATE, () => {
         socketService.emit(routeProvider.GET_PRESETS, {}, (data) => {
             this.preset = this.getPreset(false, data.presets)
@@ -525,6 +531,7 @@ AutoFarm.prototype.coreListeners = function () {
         })
     })
 
+    // Deteca alterações nos grupos de aldeias
     $rootScope.$on(eventTypeProvider.GROUPS_UPDATED, ($event, data) => {
         this.updateGroupIgnore()
         this.updateIgnoredVillages()
