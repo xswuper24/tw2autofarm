@@ -116,27 +116,6 @@ function AutoFarm (settings = {}) {
      */
     this.commandProgressCallback = null
 
-    // Detecta todos comandos enviados no jogo (não apenas pelo script)
-    // e identifica os que foram enviados pelo script.
-    $rootScope.$on(eventTypeProvider.COMMAND_SENT, ($event, data) => {
-        if (this.commandProgressId === data.target.id) {
-            this.commandProgressCallback(data)
-            this.commandProgressCallback = null
-            this.commandProgressId = null
-        }
-    })
-
-    $rootScope.$on(eventTypeProvider.ARMY_PRESET_UPDATE, () => {
-        socketService.emit(routeProvider.GET_PRESETS, {}, (data) => {
-            this.preset = this.getPreset(false, data.presets)
-
-            if (!this.preset) {
-                this.event('noPreset')
-                this.pause()
-            }
-        })
-    })
-
     /**
      * Callbacks usados pelos eventos que são disparados no
      * decorrer do script.
@@ -155,6 +134,8 @@ function AutoFarm (settings = {}) {
      * @type {Object}
      */
     this.ignoredVillages = this.getIgnoredVillages()
+
+    this.coreListeners()
 
     return this
 }
@@ -497,4 +478,27 @@ AutoFarm.prototype.getIgnoredVillages = function () {
     }
 
     return []
+}
+
+AutoFarm.prototype.coreListeners = function () {
+    // Detecta todos comandos enviados no jogo (não apenas pelo script)
+    // e identifica os que foram enviados pelo script.
+    $rootScope.$on(eventTypeProvider.COMMAND_SENT, ($event, data) => {
+        if (this.commandProgressId === data.target.id) {
+            this.commandProgressCallback(data)
+            this.commandProgressCallback = null
+            this.commandProgressId = null
+        }
+    })
+
+    $rootScope.$on(eventTypeProvider.ARMY_PRESET_UPDATE, () => {
+        socketService.emit(routeProvider.GET_PRESETS, {}, (data) => {
+            this.preset = this.getPreset(false, data.presets)
+
+            if (!this.preset) {
+                this.event('noPreset')
+                this.pause()
+            }
+        })
+    })
 }
