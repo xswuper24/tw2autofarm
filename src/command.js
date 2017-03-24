@@ -31,8 +31,10 @@ AutoFarm.prototype.commandInit = function (_commandAttempt = 0) {
                 this.commandInit(_commandAttempt)
             }
         })
+    } else {
+        this.nextTarget(true)
     }
-
+    
     // Se a aldeia estiver no limite de 50 comandos ou não tem unidades
     // sulficientes para enviar o comando.
     if (sid in this.villagesNextReturn) {
