@@ -5,7 +5,6 @@ module.exports = function (grunt) {
             build: {
                 src: [
                     'src/core.js',
-                    'src/events.js',
                     'src/command.js',
                     'src/interface.js',
                     'src/run.js'
