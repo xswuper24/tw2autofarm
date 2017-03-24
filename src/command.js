@@ -38,8 +38,11 @@ AutoFarm.prototype.commandInit = function (_commandAttempt = 0) {
     // Se a aldeia estiver no limite de 50 comandos ou não tem unidades
     // sulficientes para enviar o comando.
     if (sid in this.villagesNextReturn) {
-        this.nextVillage()
-        this.commandInit(++_commandAttempt)
+        if (!this.nextVillage()) {
+            this.commandNextReturn()
+        } else {
+            this.commandInit(++_commandAttempt)
+        }
 
         return false
     }
@@ -89,7 +92,6 @@ AutoFarm.prototype.commandInit = function (_commandAttempt = 0) {
                     let time = this.settings.interval * 1000
 
                     this.timerId = setTimeout(() => {
-
                         this.commandInit()
                     }, time)
 
@@ -171,7 +173,12 @@ AutoFarm.prototype.commandVillageNoUnits = function (commands) {
             this.event('noUnitsNoCommands')
         }
     } else {
-        this.nextVillage()
+        if(!this.nextVillage()) {
+            this.commandNextReturn()
+
+            return false
+        }
+
         this.commandInit()
     }
 
@@ -187,17 +194,26 @@ AutoFarm.prototype.commandVillageNoUnits = function (commands) {
  */
 AutoFarm.prototype.commandAttemptLimit = function (_commandAttempt) {
     if (this.player.villages.length === _commandAttempt) {
-        let next = this.nextVillageUnits()
-
-        this.timerId = setTimeout(() => {
-            this.selectVillage(next.vid)
-            this.commandInit()
-        }, next.time)
+        this.commandNextReturn()
 
         return true
     }
 
     return false
+}
+
+/**
+ * Recomeça os comandos quando o próximo comando returnar
+ */
+AutoFarm.prototype.commandNextReturn = function () {
+    let next = this.nextVillageUnits()
+
+    this.timerId = setTimeout(() => {
+        this.selectVillage(next.vid)
+        this.commandInit()
+    }, next.time)
+
+    return true
 }
 
 /**

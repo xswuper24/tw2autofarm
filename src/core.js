@@ -374,6 +374,10 @@ AutoFarm.prototype.nextVillage = function (_loop = 0) {
         return this.nextVillage(++_loop)
     }
 
+    if (this.selectedVillage.getId() in this.villagesNextReturn) {
+        return this.nextVillage(++_loop)
+    }
+
     this.event('nextVillage')
 
     return true
