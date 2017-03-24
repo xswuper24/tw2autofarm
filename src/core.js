@@ -13,6 +13,7 @@ modelDataService = injector.get('modelDataService')
 socketService = injector.get('socketService')
 routeProvider = injector.get('routeProvider')
 eventTypeProvider = injector.get('eventTypeProvider')
+math = require('helper/math')
 
 /**
  * @class
@@ -297,8 +298,7 @@ AutoFarm.prototype.nextTarget = function (_initial, _noTargets = 0) {
  * @return {Boolean}
  */
 AutoFarm.prototype.getTargets = function (callback) {
-    let sx = this.selectedVillage.getX()
-    let sy = this.selectedVillage.getY()
+    let coords = this.selectedVillage.getPosition()
     let sid = this.selectedVillage.getId()
 
     if (sid in this.targetList) {
@@ -308,8 +308,8 @@ AutoFarm.prototype.getTargets = function (callback) {
     let size = this.settings.radius
 
     socketService.emit(routeProvider.MAP_GETVILLAGES, {
-        x: sx - size,
-        y: sy - size,
+        x: coords.x - size,
+        y: coords.y - size,
         width: size * 2,
         height: size * 2
     }, (data) => {
@@ -318,20 +318,20 @@ AutoFarm.prototype.getTargets = function (callback) {
         let i = villages.length
 
         while (i--) {
-            let village = villages[i]
+            let target = villages[i]
 
-            if (village.id === sid || village.character_id) {
+            if (target.id === sid || target.character_id) {
                 continue
             }
 
-            let distance = distanceXY(sx, village.x, sy, village.y)
+            let distance = math.actualDistance(coords, target)
 
             if (distance <= this.settings.radius) {
                 nearby.push({
-                    coords: [village.x, village.y],
+                    coords: [target.x, target.y],
                     distance: distance,
-                    id: village.id,
-                    name: village.name
+                    id: target.id,
+                    name: target.name
                 })
             }
         }

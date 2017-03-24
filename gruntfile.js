@@ -8,7 +8,6 @@ module.exports = function (grunt) {
                     'src/events.js',
                     'src/command.js',
                     'src/interface.js',
-                    'src/utils.js',
                     'src/run.js'
                 ],
                 dest: 'dist/<%= pkg.name %>.js'
