@@ -22,7 +22,7 @@ AutoFarm.prototype.commandInit = function (_commandAttempt = 0) {
     if (!this.targetList[sid]) {
         return this.getTargets(function () {
             // Apenas seleciona o primeiro alvo da lista
-            let hasTargets = this.nextTarget(true)
+            let hasTargets = this.selectFirstTarget()
 
             if (hasTargets) {
                 this.commandInit(_commandAttempt)
@@ -31,9 +31,9 @@ AutoFarm.prototype.commandInit = function (_commandAttempt = 0) {
                 this.commandInit(_commandAttempt)
             }
         })
-    } else {
-        this.nextTarget(true)
     }
+
+    this.selectFirstTarget()
     
     // Se a aldeia estiver no limite de 50 comandos ou não tem unidades
     // sulficientes para enviar o comando.

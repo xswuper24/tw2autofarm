@@ -221,7 +221,7 @@ AutoFarm.prototype.prepareVillage = function (callback, _lastVillage = 0) {
     }
 
     this.getTargets(function () {
-        let hasTargets = this.nextTarget(true)
+        let hasTargets = this.selectFirstTarget()
 
         if (!hasTargets) {
             if (this.settings.currentOnly) {
@@ -280,6 +280,13 @@ AutoFarm.prototype.nextTarget = function (_initial, _noTargets = 0) {
     }
 
     return true
+}
+
+/**
+ * Apenas um atalho para facilitar a leitura
+ */
+AutoFarm.prototype.selectFirstTarget = function () {
+    return this.nextTarget(true)
 }
 
 /**
@@ -392,7 +399,7 @@ AutoFarm.prototype.selectVillage = function (vid) {
     for (let i = 0; i < this.player.villages.length; i++) {
         if (this.player.villages[i].getId() === vid) {
             this.selectedVillage = this.player.villages[i]
-            this.nextTarget(true)
+            this.firstFirstTarget()
             
             return true
         }
