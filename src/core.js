@@ -485,7 +485,7 @@ AutoFarm.prototype.getPreset = function (callback, presets) {
             callback(false)
         }
 
-        return false
+        return null
     }
 
     if (modelDataService.getPresetList().isLoaded()) {
