@@ -190,49 +190,7 @@ AutoFarm.prototype.ready = function (callback) {
             this.event('noPreset')
         }
 
-        this.prepareVillage(callback)
-    })
-}
-
-/**
- * Prepara a lista de alvos da aldeia atualmente selecionada.
- * @param {Function} callback - Chamado ao finalizar a atualização de alvos.
- * @param {Number} _lastVillage - Parametro interno para detectar aldeias
- *     que não possuem alvos.
- */
-AutoFarm.prototype.prepareVillage = function (callback, _lastVillage = 0) {
-    let sid = this.selectedVillage.getId()
-
-    // Caso nenhum aldeia do jogador esteja disponível.
-    // Causas: sem alvos ou ignoradas.
-    if (_lastVillage === this.player.villages.length) {
-        return this.event('noVillages')
-    }
-
-    if (this.ignoredVillages.includes(sid)) {
-        if (this.settings.currentOnly) {
-            return this.event('noVillages')
-        }
-
-        this.nextVillage()
-        this.prepareVillage(callback, ++_lastVillage)
-        
-        return
-    }
-
-    this.getTargets(function () {
-        let hasTargets = this.selectFirstTarget()
-
-        if (!hasTargets) {
-            if (this.settings.currentOnly) {
-                return this.event('noVillages')
-            }
-
-            this.nextVillage()
-            this.prepareVillage(callback, ++_lastVillage)
-        } else {
-            callback()
-        }
+        callback()
     })
 }
 
@@ -265,9 +223,7 @@ AutoFarm.prototype.nextTarget = function (_initial, _noTargets = 0) {
 
     if (this.ignoredVillages.includes(target.id)) {
         if (_noTargets === targets.length) {
-            this.event('villageNoTargets')
-
-            return false
+            return this.event('noTargets')
         }
 
         this.event('ignoredTarget', [target])
@@ -347,7 +303,7 @@ AutoFarm.prototype.getTargets = function (callback) {
         this.targetList[sid].index = 0
         this.selectedTarget = this.targetList[sid][0]
 
-        callback.call(this)
+        callback()
     })
 
     return false
@@ -548,6 +504,10 @@ AutoFarm.prototype.updateIgnoredVillages = function () {
 AutoFarm.prototype.gameListeners = function () {
     // Detecta todos comandos enviados no jogo (não apenas pelo script)
     // e identifica os que foram enviados pelo script.
+    // Por que isso?
+    // A livraria do jogo não retorna um callback na mesma função
+    // quando um comano é enviado, então é preciso ler todos e identificar
+    // o que foi enviado pelo script.
     $rootScope.$on(eventTypeProvider.COMMAND_SENT, ($event, data) => {
         if (this.commandProgressId === data.target.id) {
             this.commandProgressCallback(data)

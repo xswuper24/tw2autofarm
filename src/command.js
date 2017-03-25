@@ -1,18 +1,9 @@
 /**
  * Inicia o ciclo de comandos do script
- * @param {Number} _commandAttempt - Uso interno, conta quantas tentativas
- *      sem sucesso de enviar comandos o script teve.
  */
-AutoFarm.prototype.commandInit = function (_commandAttempt = 0) {
+AutoFarm.prototype.commandInit = function () {
     if (this.paused) {
         return false
-    }
-
-    // Se nenhuma aldeia conseguir enviar algum comando, o script
-    // aguardará algum comando de dentre todas aldeias returnar
-    // para dar continuidade.
-    if (this.commandAttemptLimit(_commandAttempt)) {
-        return this.event('allVillageNoUnits')
     }
 
     let sid = this.selectedVillage.getId()
@@ -20,15 +11,12 @@ AutoFarm.prototype.commandInit = function (_commandAttempt = 0) {
     // Se aldeia ainda não tiver obtido a lista de alvos, obtem
     // os alvos e executa o comando novamente para dar continuidade.
     if (!this.targetList[sid]) {
-        return this.getTargets(function () {
-            // Apenas seleciona o primeiro alvo da lista
-            let hasTargets = this.selectFirstTarget()
-
-            if (hasTargets) {
-                this.commandInit(_commandAttempt)
+        return this.getTargets(() => {
+            if (this.selectFirstTarget()) {
+                this.commandInit()
             } else {
                 this.nextVillage()
-                this.commandInit(_commandAttempt)
+                this.commandInit()
             }
         })
     }
@@ -41,7 +29,7 @@ AutoFarm.prototype.commandInit = function (_commandAttempt = 0) {
         if (!this.nextVillage()) {
             this.commandNextReturn()
         } else {
-            this.commandInit(++_commandAttempt)
+            this.commandInit()
         }
 
         return false
@@ -73,9 +61,7 @@ AutoFarm.prototype.commandInit = function (_commandAttempt = 0) {
                 }, backTime)
             } else {
                 this.nextVillage()
-                this.getTargets(() => {
-                    this.commandInit()
-                })
+                this.commandInit()
             }
 
             return false
@@ -98,7 +84,7 @@ AutoFarm.prototype.commandInit = function (_commandAttempt = 0) {
                     this.event('nextCommandIn', [time])
                 })
             } else {
-                this.event('villageNoUnits')
+                this.event('noUnits')
                 this.getNextReturn(commands)
                 this.commandVillageNoUnits(commands)
             }
@@ -128,6 +114,36 @@ AutoFarm.prototype.getNextReturn = function (commands) {
 }
 
 /**
+ * Lida com aldeias que não possuem mais a quantidade
+ * mínima para continuar enviando comandos.
+ * @param {Object} commands - Lista de comandos da aldeia.
+ * @return {Boolean}
+ */
+AutoFarm.prototype.commandVillageNoUnits = function (commands) {
+    if (this.uniqueVillage || this.settings.currentOnly) {
+        if (!commands.length) {
+            return this.event('noUnitsNoCommands')
+        }
+
+        let backTime = this.getNeabyCommand(commands)
+
+        if (backTime) {
+            this.timerId = setTimeout(() => {
+                this.commandInit()
+            }, backTime)
+        } else {
+            this.event('noUnitsNoCommands')
+        }
+    } else {
+        if(!this.nextVillage()) {
+            return this.commandNextReturn()
+        }
+
+        this.commandInit()
+    }
+}
+
+/**
  * Envia um comando
  * @param {function} callback
  * @return {Boolean}
@@ -147,59 +163,6 @@ AutoFarm.prototype.sendCommand = function (callback) {
     this.commandProgressCallback = callback
 
     return true
-}
-
-/**
- * Lida com aldeias que não possuem mais a quantidade
- * mínima para continuar enviando comandos.
- * @param {Object} commands - Lista de comandos da aldeia.
- * @return {Boolean}
- */
-AutoFarm.prototype.commandVillageNoUnits = function (commands) {
-    if (this.uniqueVillage || this.settings.currentOnly) {
-        if (!commands.length) {
-            this.event('noUnitsNoCommands')
-
-            return false
-        }
-
-        let backTime = this.getNeabyCommand(commands)
-
-        if (backTime) {
-            this.timerId = setTimeout(() => {
-                this.commandInit()
-            }, backTime)
-        } else {
-            this.event('noUnitsNoCommands')
-        }
-    } else {
-        if(!this.nextVillage()) {
-            this.commandNextReturn()
-
-            return false
-        }
-
-        this.commandInit()
-    }
-
-    return true
-}
-
-/**
- * Checa se o script tentou enviar comandos de todas aldeias do jogador
- * sem sucesso.
- * @param {Number} _commandAttempt - Uso interno, conta quantas tentativas
- *      sem sucesso de enviar comandos o script teve.
- * @return {Boolean}
- */
-AutoFarm.prototype.commandAttemptLimit = function (_commandAttempt) {
-    if (this.player.villages.length === _commandAttempt) {
-        this.commandNextReturn()
-
-        return true
-    }
-
-    return false
 }
 
 /**

@@ -18,16 +18,27 @@ module.exports = function (grunt) {
             },
             build: ['src/*.js']
         },
-        htmlConvert: {
-            options: {
-                quoteChar: "'",
-                indentString: '    ',
-                indentGlobal: '    ',
-                module: 'strings'
-            },
+        htmlmin: {
             build: {
-                src: 'src/interface/*.*',
-                dest: 'dist/templates.js'
+                options: {
+                    removeComments: true,
+                    collapseWhitespace: true
+                },
+                files: {
+                    'dist/temp/window.html': 'src/interface/window.html',
+                    'dist/temp/button.html': 'src/interface/button.html'
+                }
+            }
+        },
+        cssmin: {
+            options: {
+                mergeIntoShorthands: false,
+                roundingPrecision: -1
+            },
+            target: {
+                files: {
+                    'dist/temp/style.css': 'src/interface/style.css'
+                }
             }
         },
         replace: {
@@ -36,11 +47,11 @@ module.exports = function (grunt) {
                     patterns: [{
                         json: {
                             version: '<%= pkg.version %>',
-                            date: '<%= new Date() %>'
+                            date: '<%= new Date() %>',
+                            window: '<%= grunt.file.read("dist/temp/window.html") %>',
+                            button: '<%= grunt.file.read("dist/temp/button.html") %>',
+                            style: '<%= grunt.file.read("dist/temp/style.css") %>'
                         }
-                    }, {
-                        match: /\/\/ \@\@templates/,
-                        replacement: '<%= grunt.file.read("dist/templates.js") %>'
                     }]
                 },
                 files: [{
@@ -55,7 +66,7 @@ module.exports = function (grunt) {
             options: {
                 sourceMap: true,
                 sourceMapName: 'dist/<%= pkg.name %>.map',
-                banner: '/*! <%= pkg.title %> - v<%= pkg.version %> */'
+                banner: '/*! <%= pkg.name %>.min.js@<%= pkg.version %> */'
             },
             build: {
                 files: {
@@ -63,24 +74,30 @@ module.exports = function (grunt) {
                 }
             }
         },
+        clean: ['dist/temp'],
         watch: {
-            files: ['src/*.js'],
-            tasks: ['eslint', 'concat', 'replace', 'uglify']
+            files: ['src/**'],
+            tasks: ['eslint', 'concat', 'htmlmin', 'cssmin', 'replace', 'clean']
         }
     })
 
     grunt.loadNpmTasks('grunt-eslint');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-htmlmin');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-html-convert');
 
     grunt.registerTask('default', [
         'eslint',
         'concat',
-        'htmlConvert',
+        'htmlmin',
+        'cssmin',
         'replace',
-        'uglify'
+        'uglify',
+        'clean'
     ]);
 }
