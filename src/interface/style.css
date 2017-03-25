@@ -1,21 +1,22 @@
-#autofarm-button {
+#autofarm-button-container {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    margin-bottom: 10px;
+}
+
+#autofarm-button-container > div {
     position: relative;
     top: 0px;
     left: 0px;
     font-size: 11px;
-    margin-bottom: 10px;
 }
 
 #autofarm-window {
     visibility: hidden;
 }
 
-#autofarm-window input {
-    background: #b89064;
-    width: 150px;
-}
-
-#autofarm-window .box-paper {
+#autofarm-window p,
+#autofarm-window h3 {
     color: black;
-    text-align: center;
 }

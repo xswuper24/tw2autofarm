@@ -34,7 +34,8 @@ AutoFarm.prototype.interface = function () {
     function buildButton () {
         let button = document.createElement('div')
         let container = document.querySelector('#toolbar-left')
-        
+
+        button.id = 'autofarm-button-container'
         button.innerHTML = '@@button'
         container.insertBefore(button, container.firstChild)
 
