@@ -28,7 +28,7 @@
         <div class="box-paper footer has-footer-upper autofarm-content-info">
             <h3>Prédefinição</h3>
             <p>O AutoFarm utiliza predefinições para enviar os ataques, então é preciso que a conta tenha pelo menos uma predefinição nomeada <b>.farm</b> (padrão) para que os ataques iniciem.</p>
-            <p>Você pode customizar o nome da predefinição que quer utilizar na aba de configurações do script.</p>
+            <p><b>É recomendável</b> alterar o nome da predefinição na aba de configurações do script.</p>
             <p>Não é preciso ter a predefinição ativada nas aldeias para funcionar.</p>
             <p>Serão usados apenas o número de tropas especificados na predefinição, <b>oficiais</b> não serão utilizados.</p>
             <p>É possível alterar a quantidade de tropas na predefinição enquanto o farmador estiver ativado enviando os ataques. Os novos ataques serão enviandos com a nova quantidade especificada.</p>
@@ -37,10 +37,53 @@
             <p>Assim como a predefinição, você pode customizar o nome do grupo.</p>
             <h3>Observações</h3>
             <p>Os ataques iniciarão a partir da aldeia que estava selecionada no momento da execução do script.</p>
-            <p><i>Farmador Automático é desenvolvido por <a href="https://github.com/mafrazz/">Rafael Mafra</a>. Contato: mafrazzrafael@gmail.com</i></p>
+            <p><i>AutoFarm é desenvolvido por <a href="https://github.com/mafrazz/">Rafael Mafra</a>. Contato: mafrazzrafael@gmail.com</i></p>
         </div>
         <div class="box-paper footer has-footer-upper autofarm-content-settings">
-            <p>settings</p>
+            <form id="autofarm-settings">
+                <table class="tbl-border-light tbl-striped">
+                    <colgroup>
+                        <col width="50%">
+                        <col>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th colspan="2">Configurações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="ff-cell-fix ng-binding">Dintância máxima</span></td>
+                            <td><input name="radius" type="number" class="textfield-border" min="1" max="25" required></td>
+                        </tr>
+                        <tr>
+                            <td><span class="ff-cell-fix ng-binding">Intervalo entre cada ataque</span></td>
+                            <td><input name="interval" type="number" class="textfield-border" min="0" required></td>
+                        </tr>
+                        <tr>
+                            <td><span class="ff-cell-fix ng-binding">Usar apenas aldeia selecionada</span></td>
+                            <td>
+                                <label class="size-34x34 btn-orange icon-26x26-checkbox icon-26x26-checkbox-checked" for="settings-currentOnly">
+                                    <input id="settings-currentOnly" type="checkbox" name="currentOnly">
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span class="ff-cell-fix ng-binding">Nome da predefinição</span></td>
+                            <td><input name="presetName" type="text" class="textfield-border" minlength="1" maxlength="26" required></td>
+                        </tr>
+                        <tr>
+                            <td><span class="ff-cell-fix ng-binding">Nome do grupo de ignorados</span></td>
+                            <td><input name="groupIgnore" type="text" class="textfield-border" minlength="3" maxlength="50" required></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="cell-center">
+                                <input class="btn-orange btn-border" id="autofarm-save" type="submit" value="Salvar configurações"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
         </div>
         <div class="box-paper footer has-footer-upper autofarm-content-log">
             <p>logs</p>

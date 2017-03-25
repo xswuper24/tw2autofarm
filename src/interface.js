@@ -1,7 +1,8 @@
 AutoFarm.prototype.interface = function () {
+    let self = this
     let $window
     let scrollbar
-    let version = this.version
+    let newSettings = {}
     
     function buildStyle () {
         let style = document.createElement('style')
@@ -15,7 +16,7 @@ AutoFarm.prototype.interface = function () {
         $window.id = 'autofarm-window'
         $window.className = 'autofarm-window twx-window screen left'
         $window.innerHTML = replace({
-            version: version
+            version: self.version
         }, '@@window')
 
         let container = document.querySelector('#toolbar-right')
@@ -44,14 +45,53 @@ AutoFarm.prototype.interface = function () {
         })
     }
 
-    function replace (values, template) {
-        let rkey = /\{\{ ([a-zA-Z0-9]+) \}\}/g
+    function bindSettings () {
+        for (let key in self.settings) {
+            newSettings[key] = self.settings[key]
 
-        template = template.replace(rkey, function (match, key) {
-            return values[key]
+            let input = $window.querySelector(`input[name="${key}"]`)
+
+            switch (input.type) {
+            case 'text':
+            case 'number':
+                input.value = self.settings[key]
+
+                input.addEventListener('change', () => {
+                    newSettings[key] = /^\d+$/.test(input.value)
+                        ? parseInt(input.value, 10)
+                        : input.value
+                })
+                break
+            default:
+                let change = input.checked ? 'add' : 'remove'
+
+                input.parentNode.classList[change](
+                    'icon-26x26-checkbox-checked'
+                )
+
+                input.addEventListener('click', () => {
+                    newSettings[key] = input.checked
+                    change = input.checked ? 'add' : 'remove'
+                    input.parentNode.classList[change](
+                        'icon-26x26-checkbox-checked'
+                    )
+                })
+                break
+            }
+        }
+
+        let $save = document.querySelector('#autofarm-save')
+        let $form = document.querySelector('#autofarm-settings')
+
+        $form.addEventListener('submit', function (event) {
+            event.preventDefault()
         })
 
-        return template
+        $save.addEventListener('click', function (event) {
+            if ($form.checkValidity()) {
+                self.updateSettings(newSettings)
+            }
+        })
     }
 
     function setTabs (activeTab = 'info') {
@@ -93,7 +133,18 @@ AutoFarm.prototype.interface = function () {
         setState()
     }
 
+    function replace (values, template) {
+        let rkey = /\{\{ ([a-zA-Z0-9]+) \}\}/g
+
+        template = template.replace(rkey, function (match, key) {
+            return values[key]
+        })
+
+        return template
+    }
+
     buildStyle()
     buildWindow()
     buildButton()
+    bindSettings()
 }

@@ -20,3 +20,16 @@
 #autofarm-window h3 {
     color: black;
 }
+
+#autofarm-window input[type=text],
+#autofarm-window input[type=number] {
+    width: 100%;
+}
+
+#autofarm-save {
+    width: 180px;
+    height: 25px;
+    margin: 6px;
+    line-height: 24px;
+    border: none;
+}
