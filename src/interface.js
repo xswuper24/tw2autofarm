@@ -30,6 +30,10 @@ AutoFarm.prototype.interface = function () {
         $close.addEventListener('click', function () {
             $window.style.visibility = 'hidden'
         })
+
+        document.addEventListener('keydown', function () {
+            $window.style.visibility = 'hidden'
+        })
     }
 
     function buildButton () {
