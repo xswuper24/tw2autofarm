@@ -1,4 +1,6 @@
 AutoFarm.prototype.interface = function () {
+    let eventsLimit = 20
+
     let self = this
     let $window
     let scrollbar
@@ -124,7 +126,7 @@ AutoFarm.prototype.interface = function () {
         let $events = document.querySelector('#autofarm-events')
 
         function addEvent (options) {
-            if (registers >= 10) {
+            if (registers >= eventsLimit) {
                 $events.querySelector('tr:last-child').remove()
             }
 
