@@ -4,7 +4,10 @@ AutoFarm.prototype.interface = function () {
     let scrollbar
     let newSettings = {}
 
-    let $wrapper = document.querySelector('#wrapper')
+    let $gameWrapper = document.querySelector('#wrapper')
+
+    let $filter = injector.get('$filter')
+    let windowDisplayService = injector.get('windowDisplayService')
     
     function buildStyle () {
         let style = document.createElement('style')
@@ -27,19 +30,19 @@ AutoFarm.prototype.interface = function () {
         container.parentNode.insertBefore($window, container.nextSibling)
         scrollbar = jsScrollbar($window.querySelector('.win-main'))
 
-        setTabs()
+        bindTabs()
 
         let $close = document.querySelector('#autofarm-close')
 
         $close.addEventListener('click', function () {
             $window.style.visibility = 'hidden'
-            $wrapper.classList.remove('window-open')
+            $gameWrapper.classList.remove('window-open')
         })
 
         document.addEventListener('keydown', function (event) {
             if (event.keyCode === 27) {
                 $window.style.visibility = 'hidden'
-                $wrapper.classList.remove('window-open')
+                $gameWrapper.classList.remove('window-open')
             }
         })
     }
@@ -54,7 +57,7 @@ AutoFarm.prototype.interface = function () {
 
         button.addEventListener('click', function () {
             $window.style.visibility = 'visible'
-            $wrapper.classList.add('window-open')
+            $gameWrapper.classList.add('window-open')
         })
     }
 
@@ -111,7 +114,134 @@ AutoFarm.prototype.interface = function () {
         })
     }
 
-    function setTabs (activeTab = 'info') {
+    function bindEvents () {
+        let registers = 1
+        let $events = document.querySelector('#autofarm-events')
+
+        function addEvent (options) {
+            if (registers >= 10) {
+                $events.querySelector('tr:last-child').remove()
+            }
+
+            let htmlLinks = []
+
+            if (options.links) {
+                for (let i = 0; i < options.links.length; i++) {
+                    htmlLinks.push(createLinkIcon(
+                        options.links[i].type,
+                        options.links[i].name
+                    ))
+                }
+
+                options.text = sprintf(options.text, htmlLinks)
+            }
+
+            let tr = document.createElement('tr')
+            tr.className = 'list-item'
+
+            tr.innerHTML = replace({
+                date: $filter('readableDateFilter')(Date.now()),
+                icon: options.icon,
+                text: options.text
+            }, '@@event')
+
+            if (options.links) {
+                for (let i = 0; i < htmlLinks.length; i++) {
+                    options.links[i].elem = tr.querySelector('#' + htmlLinks[i].id)
+                    options.links[i].elem.addEventListener('click', function () {
+                        windowDisplayService.openVillageInfo(options.links[i].id)
+                    })
+                }
+            }
+
+            $events.insertBefore(tr, $events.firstChild)
+            registers++
+            scrollbar.recalc()
+        }
+
+        function createLinkIcon (type, text) {
+            let id = Math.round(Math.random() * 1e5)
+            let template = '<a id="l{{ id }}" class="img-link icon-20x20-' + 
+                '{{ type }} btn btn-orange padded">{{ text }}</a>'
+
+            let html = replace({
+                type: type,
+                text: text,
+                id: id
+            }, template)
+
+            return {
+                html: html,
+                id: 'l' + id
+            }
+        }
+
+        function sprintf (format, replaces) {
+            return format.replace(/{(\d+)}/g, function (match, number) {
+                return typeof replaces[number].html !== 'undefined'
+                    ? replaces[number].html
+                    : match
+            })
+        }
+
+        self.on('sendCommand', function (from, to) {
+            addEvent({
+                links: [
+                    { type: 'village', name: from.getName(), id: from.getId() },
+                    { type: 'village', name: to.name, id: to.id }
+                ],
+                text: '{0} ataca {1}',
+                icon: 'attack'
+            })
+        })
+
+        self.on('nextVillage', function (next) {
+            addEvent({
+                links: [
+                    { type: 'village', name: next.getName(), id: next.getId() }
+                ],
+                icon: 'village',
+                text: 'Alternando para a aldeia {0}'
+            })
+        })
+
+        self.on('noUnitsNoCommands', function () {
+            addEvent({
+                icon: 'info',
+                text: 'Nenhuma aldeia tem tropas nem ataques retornando.'
+            })
+        })
+
+        self.on('noPreset', function () {
+            addEvent({
+                icon: 'info',
+                text: 'Nenhuma predefinição foi configurada.'
+            })
+        })
+
+        self.on('start', function () {
+            addEvent({
+                icon: 'info',
+                text: 'AutoFarm iniciado.'
+            })
+        })
+
+        self.on('pause', function () {
+            addEvent({
+                icon: 'info',
+                text: 'AutoFarm pausado.'
+            })
+        })
+
+        self.on('noVillages', function () {
+            addEvent({
+                icon: 'info',
+                text: 'Sem tropas nas aldeias, aguardando comandos retornarem.'
+            })
+        })
+    }
+
+    function bindTabs (activeTab = 'info') {
         let tabs = $window.querySelectorAll('.tab')
 
         function setState () {
@@ -127,6 +257,8 @@ AutoFarm.prototype.interface = function () {
                     tab.classList.add('tab-active')
                     inner.classList.add('box-border-light')
                     a.classList.remove('btn-icon', 'btn-orange')
+
+                    scrollbar.content = content
                 } else {
                     content.style.display = 'none'
                     tab.classList.remove('tab-active')
@@ -164,4 +296,5 @@ AutoFarm.prototype.interface = function () {
     buildWindow()
     buildButton()
     bindSettings()
+    bindEvents()
 }

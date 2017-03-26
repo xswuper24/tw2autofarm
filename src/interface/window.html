@@ -1,6 +1,6 @@
 <div class="win-content message-list-wrapper searchable-list ng-scope">
     <header class="win-head">
-        <h2 class="ng-binding">AutoFarm Premium <span class="small ng-binding">v{{ version }}</span></h2>
+        <h2 class="ng-binding">AutoFarm Premium <span class="small">v{{ version }}</span></h2>
         <ul class="list-btn">
             <li><a href="#" id="autofarm-close" class="size-34x34 btn-red icon-26x26-close"></a></li>
         </ul>
@@ -53,15 +53,15 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><span class="ff-cell-fix ng-binding">Dintância máxima</span></td>
+                            <td><span class="ff-cell-fix">Dintância máxima</span></td>
                             <td><input name="radius" type="number" class="textfield-border" min="1" max="25" required></td>
                         </tr>
                         <tr>
-                            <td><span class="ff-cell-fix ng-binding">Intervalo entre cada ataque</span></td>
+                            <td><span class="ff-cell-fix">Intervalo entre cada ataque</span></td>
                             <td><input name="interval" type="number" class="textfield-border" min="0" required></td>
                         </tr>
                         <tr>
-                            <td><span class="ff-cell-fix ng-binding">Usar apenas aldeia selecionada</span></td>
+                            <td><span class="ff-cell-fix">Usar apenas aldeia selecionada</span></td>
                             <td>
                                 <label class="size-34x34 btn-orange icon-26x26-checkbox icon-26x26-checkbox-checked" for="settings-currentOnly">
                                     <input id="settings-currentOnly" type="checkbox" name="currentOnly">
@@ -69,11 +69,11 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><span class="ff-cell-fix ng-binding">Nome da predefinição</span></td>
+                            <td><span class="ff-cell-fix">Nome da predefinição</span></td>
                             <td><input name="presetName" type="text" class="textfield-border" minlength="1" maxlength="26" required></td>
                         </tr>
                         <tr>
-                            <td><span class="ff-cell-fix ng-binding">Nome do grupo de ignorados</span></td>
+                            <td><span class="ff-cell-fix">Nome do grupo de ignorados</span></td>
                             <td><input name="groupIgnore" type="text" class="textfield-border" minlength="3" maxlength="50" required></td>
                         </tr>
                         <tr>
@@ -86,7 +86,28 @@
             </form>
         </div>
         <div class="box-paper footer has-footer-upper autofarm-content-log">
-            <p>logs</p>
+            <div class="screen-tribe-news rich-text">
+                <table ng-hide="log.length == 0" class="tbl-border-light tbl-news tbl-big-header">
+                    <colgroup>
+                        <col width="140px">
+                        <col width="*">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th colspan="2">Eventos</th>
+                        </tr>
+                    </thead>
+                    <tbody id="autofarm-events">
+                        <tr class="list-item">
+                            <td class="tribe-event-detail" colspan="2">
+                                <div class="text-tribe-news">
+                                    <span>Nada por aqui ainda...</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <footer class="win-foot">

@@ -393,7 +393,7 @@ AutoFarm.prototype.nextVillage = function (_loop = 0) {
         return this.nextVillage(++_loop)
     }
 
-    this.event('nextVillage')
+    this.event('nextVillage', [this.selectedVillage])
 
     return true
 }

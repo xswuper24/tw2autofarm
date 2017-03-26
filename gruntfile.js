@@ -26,7 +26,8 @@ module.exports = function (grunt) {
                 },
                 files: {
                     'dist/temp/window.html': 'src/interface/window.html',
-                    'dist/temp/button.html': 'src/interface/button.html'
+                    'dist/temp/button.html': 'src/interface/button.html',
+                    'dist/temp/event.html': 'src/interface/event.html'
                 }
             }
         },
@@ -50,6 +51,7 @@ module.exports = function (grunt) {
                             date: '<%= new Date() %>',
                             window: '<%= grunt.file.read("dist/temp/window.html") %>',
                             button: '<%= grunt.file.read("dist/temp/button.html") %>',
+                            event: '<%= grunt.file.read("dist/temp/event.html") %>',
                             style: '<%= grunt.file.read("dist/temp/style.css") %>'
                         }
                     }]

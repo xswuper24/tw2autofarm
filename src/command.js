@@ -72,7 +72,11 @@ AutoFarm.prototype.commandInit = function () {
 
             if (presetAvail) {
                 this.sendCommand(() => {
-                    this.event('sendCommand')
+                    this.event('sendCommand', [
+                        this.selectedVillage,
+                        this.selectedTarget
+                    ])
+                    
                     this.nextTarget()
 
                     let time = this.settings.interval * 1000
