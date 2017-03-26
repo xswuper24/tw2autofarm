@@ -3,6 +3,8 @@ AutoFarm.prototype.interface = function () {
     let $window
     let scrollbar
     let newSettings = {}
+
+    let $wrapper = document.querySelector('#wrapper')
     
     function buildStyle () {
         let style = document.createElement('style')
@@ -31,10 +33,14 @@ AutoFarm.prototype.interface = function () {
 
         $close.addEventListener('click', function () {
             $window.style.visibility = 'hidden'
+            $wrapper.classList.remove('window-open')
         })
 
-        document.addEventListener('keydown', function () {
-            $window.style.visibility = 'hidden'
+        document.addEventListener('keydown', function (event) {
+            if (event.keyCode === 27) {
+                $window.style.visibility = 'hidden'
+                $wrapper.classList.remove('window-open')
+            }
         })
     }
 
@@ -48,6 +54,7 @@ AutoFarm.prototype.interface = function () {
 
         button.addEventListener('click', function () {
             $window.style.visibility = 'visible'
+            $wrapper.classList.add('window-open')
         })
     }
 
