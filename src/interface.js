@@ -90,6 +90,10 @@ AutoFarm.prototype.interface = function () {
         $save.addEventListener('click', function (event) {
             if ($form.checkValidity()) {
                 self.updateSettings(newSettings)
+
+                $rootScope.$broadcast(eventTypeProvider.MESSAGE_SUCCESS, {
+                    message: 'Configurações salvas!'
+                })
             }
         })
     }
