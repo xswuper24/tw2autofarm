@@ -1,9 +1,8 @@
 if (typeof autofarm === 'undefined') {
     autofarm = new AutoFarm()
     autofarm.interface()
-    autofarm.ready(function () {
-        let $start = document.querySelector('#autofarm-start')
 
+    autofarm.ready(function () {
         $start.addEventListener('click', function () {
             if (autofarm.paused) {
                 if (!autofarm.preset) {
@@ -12,15 +11,21 @@ if (typeof autofarm === 'undefined') {
                 }
 
                 autofarm.start()
-                $start.innerHTML = 'Pausar'
-                $start.classList.remove('btn-green')
-                $start.classList.add('btn-red')
             } else {
                 autofarm.pause()
-                $start.innerHTML = 'Iniciar'
-                $start.classList.remove('btn-red')
-                $start.classList.add('btn-green')
             }
         })
+    })
+
+    let $start = document.querySelector('#autofarm-start')
+
+    autofarm.on('start', function () {
+        $start.innerHTML = 'Pausar'
+        $start.classList.remove('btn-green')
+        $start.classList.add('btn-red')
+    }).on('pause', function () {
+        $start.innerHTML = 'Iniciar'
+        $start.classList.remove('btn-red')
+        $start.classList.add('btn-green')
     })
 }

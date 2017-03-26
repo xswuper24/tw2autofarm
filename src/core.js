@@ -161,6 +161,7 @@ AutoFarm.prototype.start = function () {
     }
 
     this.paused = false
+    this.event('start')
     this.commandInit()
 
     return true
@@ -172,6 +173,7 @@ AutoFarm.prototype.start = function () {
  */
 AutoFarm.prototype.pause = function () {
     this.paused = true
+    this.event('pause')
     clearTimeout(this.timerId)
 
     return true
