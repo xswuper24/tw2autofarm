@@ -71,7 +71,7 @@ AutoFarm.prototype.commandInit = function () {
             let presetAvail = this.presetAvail(villageUnits)
 
             if (presetAvail) {
-                this.sendCommand(() => {
+                this.sendCommand(presetAvail, () => {
                     this.event('sendCommand', [
                         this.selectedVillage,
                         this.selectedTarget
@@ -152,12 +152,12 @@ AutoFarm.prototype.commandVillageNoUnits = function (commands) {
  * @param {function} callback
  * @return {Boolean}
  */
-AutoFarm.prototype.sendCommand = function (callback) {
+AutoFarm.prototype.sendCommand = function (preset, callback) {
     socketService.emit(routeProvider.SEND_CUSTOM_ARMY, {
         start_village: this.selectedVillage.getId(),
         target_village: this.selectedTarget.id,
         type: 'attack',
-        units: this.preset.units,
+        units: preset.units,
         catapult_target: '',
         officers: {},
         icon: 0

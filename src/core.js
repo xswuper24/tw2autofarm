@@ -125,9 +125,9 @@ function AutoFarm (settings = {}) {
 
     /**
      * Preset usado como referência para enviar os comandos
-     * @type {Object}
+     * @type {Array}
      */
-    this.preset = null
+    this.presets = []
 
     /**
      * Objeto do group de referência para ignorar aldeias/alvos.
@@ -137,8 +137,8 @@ function AutoFarm (settings = {}) {
     this.groupIgnore = null
 
     /**
-     * Preset usado para enviar os comandos
-     * @type {Object}
+     * Lista de aldeias ignoradas
+     * @type {Array}
      */
     this.ignoredVillages = null
 
@@ -154,7 +154,7 @@ function AutoFarm (settings = {}) {
  * @return {Boolean}
  */
 AutoFarm.prototype.start = function () {
-    if (!this.preset) {
+    if (!this.presets.length) {
         this.event('noPreset')
 
         return false
@@ -197,15 +197,11 @@ AutoFarm.prototype.updateSettings = function (newSettings) {
             this.settings.presetName = newSettings.presetName
 
             if (this.paused) {
-                this.getPreset((preset) => {
-                    this.preset = preset
-                })
+                this.getPresets()
             } else {
                 this.pause()
-                this.getPreset((preset) => {
-                    this.preset = preset
-
-                    if (preset) {
+                this.getPresets(() => {
+                    if (this.presets.length) {
                         this.start()
                     }
                 })
@@ -235,10 +231,8 @@ AutoFarm.prototype.updateSettings = function (newSettings) {
  * @return {Boolean}
  */
 AutoFarm.prototype.ready = function (callback) {
-    this.getPreset((preset) => {
-        if (preset) {
-            this.preset = preset
-        } else {
+    this.getPresets(() => {
+        if (!this.presets.length) {
             this.event('noPreset')
         }
 
@@ -457,13 +451,21 @@ AutoFarm.prototype.on = function (type, handler) {
  *     na aldeia.
  */
 AutoFarm.prototype.presetAvail = function (villageUnits) {
-    for (let unit in this.preset.units) {
-        if (villageUnits[unit].in_town < this.preset.units[unit]) {
-            return false
+    for (let preset of autofarm.presets) {
+        let avail = true
+
+        for (let unit in preset.units) {
+            if (villageUnits[unit].in_town < preset.units[unit]) {
+                avail = false
+            }
+        }
+
+        if (avail) {
+            return preset
         }
     }
 
-    return true
+    return false
 }
 
 /**
@@ -496,32 +498,30 @@ AutoFarm.prototype.getVillageUnits = function (callback) {
  * @param {Object} presets - Parametro interno usado para evitar
  *     repetição de código.
  */
-AutoFarm.prototype.getPreset = function (callback, presets) {
+AutoFarm.prototype.getPresets = function (callback, presets) {
     if (presets) {
+        this.presets = []
+
         for (let id in presets) {
             if (presets[id].name === this.settings.presetName) {
-                if (callback) {
-                    callback(presets[id])
-                }
-
-                return presets[id]
+                this.presets.push(presets[id])
             }
         }
 
         if (callback) {
-            callback(null)
+            callback()
         }
 
-        return null
+        return true
     }
 
     if (modelDataService.getPresetList().isLoaded()) {
-        return this.getPreset(callback,
+        return this.getPresets(callback,
             modelDataService.getPresetList().presets)
     }
 
     socketService.emit(routeProvider.GET_PRESETS, {}, (data) => {
-        this.getPreset(callback, data.presets)
+        this.getPresets(callback, data.presets)
     })
 }
 
@@ -579,9 +579,9 @@ AutoFarm.prototype.gameListeners = function () {
     // Deteca alterações nas prédefinições
     $rootScope.$on(eventTypeProvider.ARMY_PRESET_UPDATE, () => {
         socketService.emit(routeProvider.GET_PRESETS, {}, (data) => {
-            this.preset = this.getPreset(false, data.presets)
+            this.getPresets(false, data.presets)
 
-            if (!this.preset) {
+            if (!this.presets.length) {
                 this.event('noPreset')
                 this.pause()
             }

@@ -29,7 +29,7 @@ if (typeof autofarm === 'undefined') {
     autofarm.ready(function () {
         $start.addEventListener('click', function () {
             if (autofarm.paused) {
-                if (!autofarm.preset) {
+                if (!autofarm.presets.length) {
 
                     $rootScope.$broadcast(eventTypeProvider.MESSAGE_ERROR, {
                         message: 'Configure uma predefinição primeiro!'
