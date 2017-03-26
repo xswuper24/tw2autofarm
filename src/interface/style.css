@@ -1,15 +1,19 @@
-#autofarm-button-container {
+#interface-autofarm {
     position: relative;
     top: 0px;
     left: 0px;
     margin-bottom: 10px;
 }
 
-#autofarm-button-container > div {
+#interface-autofarm > div {
     position: relative;
     top: 0px;
     left: 0px;
     font-size: 11px;
+}
+
+#wrapper.window-open #interface-autofarm > div {
+    left: 720px;
 }
 
 #autofarm-window {

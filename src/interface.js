@@ -6,6 +6,8 @@ AutoFarm.prototype.interface = function () {
     
     function buildStyle () {
         let style = document.createElement('style')
+        style.type = 'text/css'
+        style.id = 'autofarm-style'
         style.innerHTML = '@@style'
 
         document.querySelector('head').appendChild(style)
@@ -40,7 +42,7 @@ AutoFarm.prototype.interface = function () {
         let button = document.createElement('div')
         let container = document.querySelector('#toolbar-left')
 
-        button.id = 'autofarm-button-container'
+        button.id = 'interface-autofarm'
         button.innerHTML = '@@button'
         container.insertBefore(button, container.firstChild)
 
