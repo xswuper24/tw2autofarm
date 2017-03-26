@@ -178,6 +178,56 @@ AutoFarm.prototype.pause = function () {
 }
 
 /**
+ * Atualiza as novas configurações passados pelo usuário e as fazem
+ *     ter efeito caso o farm esteja em funcionamento.
+ * @param {Object} newSettings - Novas configurações.
+ */
+AutoFarm.prototype.updateSettings = function (newSettings) {
+    for (let key in newSettings) {
+        switch (key) {
+        case 'groupIgnore':
+            this.settings.groupIgnore = newSettings.groupIgnore
+            this.updateGroupIgnore()
+            this.updateIgnoredVillages()
+
+            break
+        case 'presetName':
+            this.settings.presetName = newSettings.presetName
+
+            if (this.paused) {
+                this.getPreset((preset) => {
+                    this.preset = preset
+                })
+            } else {
+                this.pause()
+                this.getPreset((preset) => {
+                    this.preset = preset
+
+                    if (preset) {
+                        this.start()
+                    }
+                })
+            }
+
+            break
+        case 'currentOnly':
+            this.settings.currentOnly = newSettings.currentOnly
+
+            if (!this.paused) {
+                this.pause()
+                this.start()
+            }
+
+            break
+        default:
+            this.settings[key] = newSettings[key]
+
+            break
+        }
+    }
+}
+
+/**
  * Carrega todos todas necessários antes de iniciar os comandos.
  * @param {Function} callback
  * @return {Boolean}
@@ -449,7 +499,7 @@ AutoFarm.prototype.getPreset = function (callback, presets) {
         }
 
         if (callback) {
-            callback(false)
+            callback(null)
         }
 
         return null
@@ -528,7 +578,7 @@ AutoFarm.prototype.gameListeners = function () {
         })
     })
 
-    // Deteca alterações nos grupos de aldeias
+    // Detecta alterações nos grupos de aldeias
     $rootScope.$on(eventTypeProvider.GROUPS_UPDATED, ($event, data) => {
         this.updateGroupIgnore()
         this.updateIgnoredVillages()
