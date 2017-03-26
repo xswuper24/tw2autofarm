@@ -1,5 +1,9 @@
 if (typeof autofarm === 'undefined') {
-    autofarm = new AutoFarm()
+    let pid = modelDataService.getSelectedCharacter().getId()
+    let settings = localStorage.getItem(`${pid}_autofarm`)
+    settings = settings ? JSON.parse(settings) : {}
+
+    autofarm = new AutoFarm(settings)
     autofarm.interface()
 
     autofarm.ready(function () {

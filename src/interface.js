@@ -79,7 +79,7 @@ AutoFarm.prototype.interface = function () {
                 })
                 break
             default:
-                let change = input.checked ? 'add' : 'remove'
+                let change = self.settings[key] ? 'add' : 'remove'
 
                 input.parentNode.classList[change](
                     'icon-26x26-checkbox-checked'
@@ -96,6 +96,8 @@ AutoFarm.prototype.interface = function () {
             }
         }
 
+        let pid = modelDataService.getSelectedCharacter().getId()
+
         let $save = document.querySelector('#autofarm-save')
         let $form = document.querySelector('#autofarm-settings')
 
@@ -106,6 +108,9 @@ AutoFarm.prototype.interface = function () {
         $save.addEventListener('click', function (event) {
             if ($form.checkValidity()) {
                 self.updateSettings(newSettings)
+
+                let json = JSON.stringify(newSettings)
+                localStorage.setItem(`${pid}_autofarm`, json)
 
                 $rootScope.$broadcast(eventTypeProvider.MESSAGE_SUCCESS, {
                     message: 'Configurações salvas!'
