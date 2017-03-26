@@ -423,7 +423,11 @@ AutoFarm.prototype.selectVillage = function (vid) {
  */
 AutoFarm.prototype.event = function (type, data) {
     if (type in this.eventListeners) {
-        this.eventListeners[type].apply(this, data)
+        let listeners = this.eventListeners[type]
+
+        for (let i = 0; i < listeners.length; i++) {
+            listeners[i].apply(this, data)
+        }
     }
 
     return this
@@ -436,7 +440,11 @@ AutoFarm.prototype.event = function (type, data) {
  */
 AutoFarm.prototype.on = function (type, handler) {
     if (typeof handler === 'function') {
-        this.eventListeners[type] = handler
+        if (!(type in this.eventListeners)) {
+            this.eventListeners[type] = []
+        }
+
+        this.eventListeners[type].push(handler)
     }
 
     return this
