@@ -47,7 +47,7 @@ AutoFarm.prototype.commandInit = function () {
         // Quando o limite de comandos for atingido, a aldeia será colocada
         // na lista de de espera (villagesNextReturn)
         if (commands.length >= 50) {
-            this.event('commandLimit')
+            this.event('commandLimit', [this.selectedVillage])
             this.getNextReturn(commands)
 
             // Se o jogador tiver apenas uma aldeia, o script

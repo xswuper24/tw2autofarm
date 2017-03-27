@@ -243,7 +243,15 @@ AutoFarm.prototype.interface = function () {
         self.on('noVillages', function () {
             addEvent({
                 icon: 'info',
-                text: 'Sem tropas nas aldeias, aguardando comandos retornarem.'
+                text: 'Nenhuma aldeia disponível, aguardando ataques' +
+                ' retornarem.'
+            })
+        })
+
+        self.on('commandLimit', function (village) {
+            addEvent({
+                icon: 'info',
+                text: 'Limite de 50 ataques atingido, aguardando retorno.'
             })
         })
     }

@@ -185,44 +185,25 @@ AutoFarm.prototype.pause = function () {
  * @param {Object} newSettings - Novas configurações.
  */
 AutoFarm.prototype.updateSettings = function (newSettings) {
-    for (let key in newSettings) {
-        switch (key) {
-        case 'groupIgnore':
-            this.settings.groupIgnore = newSettings.groupIgnore
-            this.updateGroupIgnore()
-            this.updateIgnoredVillages()
+    let restart = false
 
-            break
-        case 'presetName':
-            this.settings.presetName = newSettings.presetName
-
-            if (this.paused) {
-                this.getPresets()
-            } else {
-                this.pause()
-                this.getPresets(() => {
-                    if (this.presets.length) {
-                        this.start()
-                    }
-                })
-            }
-
-            break
-        case 'currentOnly':
-            this.settings.currentOnly = newSettings.currentOnly
-
-            if (!this.paused) {
-                this.pause()
-                this.start()
-            }
-
-            break
-        default:
-            this.settings[key] = newSettings[key]
-
-            break
-        }
+    if (!this.paused) {
+        restart = true
+        this.pause()
     }
+
+    for (let key in newSettings) {
+        this.settings[key] = newSettings[key]
+    }
+
+    this.updateGroupIgnore()
+    this.updateIgnoredVillages()
+
+    this.getPresets(() => {
+        if (this.presets.length && restart) {
+            this.start()
+        }
+    })
 }
 
 /**
