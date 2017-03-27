@@ -44,15 +44,15 @@ AutoFarm.prototype.commandInit = function () {
     }
 
     this.getVillageCommands((commands) => {
-        // Quando o limite de comandos for atingido...
-        // 1: Se o jogador tiver apenas uma aldeia, o script
-        // aguardará o retorno do comando mais próximo e
-        // reinicia a função.
-        // 2: Vai para a próxima a aldeia e reinicia a função.
+        // Quando o limite de comandos for atingido, a aldeia será colocada
+        // na lista de de espera (villagesNextReturn)
         if (commands.length >= 50) {
             this.event('commandLimit')
             this.getNextReturn(commands)
 
+            // Se o jogador tiver apenas uma aldeia, o script
+            // aguardará o retorno do comando mais próximo e
+            // reinicia a função.
             if (this.uniqueVillage || this.settings.currentOnly) {
                 let backTime = this.villagesNextReturn[sid]
 
@@ -60,7 +60,6 @@ AutoFarm.prototype.commandInit = function () {
                     this.commandInit()
                 }, backTime)
             } else {
-                this.nextVillage()
                 this.commandInit()
             }
 
