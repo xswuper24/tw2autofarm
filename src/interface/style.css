@@ -5,14 +5,19 @@
     margin-bottom: 10px;
 }
 
-#interface-autofarm > div {
+#interface-autofarm .button {
     position: relative;
     top: 0px;
     left: 0px;
-    font-size: 11px;
+    width: 60px;
 }
 
-#wrapper.window-open #interface-autofarm > div {
+#interface-autofarm .text {
+    margin: 5px 0;
+    font-size: 12px;
+}
+
+#wrapper.window-open #interface-autofarm .button {
     left: 720px;
 }
 
