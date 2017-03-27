@@ -18,6 +18,17 @@ module.exports = function (grunt) {
             },
             build: ['src/*.js']
         },
+        less: {
+            build: {
+                options: {
+                    compress: true,
+                    ieCompat: false
+                },
+                files: {
+                    'dist/temp/style.css': 'src/interface/style.less'
+                }
+            }
+        },
         htmlmin: {
             build: {
                 options: {
@@ -28,17 +39,6 @@ module.exports = function (grunt) {
                     'dist/temp/window.html': 'src/interface/window.html',
                     'dist/temp/button.html': 'src/interface/button.html',
                     'dist/temp/event.html': 'src/interface/event.html'
-                }
-            }
-        },
-        cssmin: {
-            options: {
-                mergeIntoShorthands: false,
-                roundingPrecision: -1
-            },
-            target: {
-                files: {
-                    'dist/temp/style.css': 'src/interface/style.css'
                 }
             }
         },
@@ -79,25 +79,26 @@ module.exports = function (grunt) {
         clean: ['dist/temp'],
         watch: {
             files: ['src/**'],
-            tasks: ['eslint', 'concat', 'htmlmin', 'cssmin', 'replace', 'clean']
+            tasks: ['eslint', 'concat', 'htmlmin', 'replace', 'clean']
         }
     })
 
     grunt.loadNpmTasks('grunt-eslint');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-replace');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-clean');
+
 
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.registerTask('default', [
         'eslint',
         'concat',
+        'less:build',
         'htmlmin',
-        'cssmin',
         'replace',
         'uglify',
         'clean'
