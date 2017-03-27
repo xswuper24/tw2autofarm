@@ -79,7 +79,7 @@ module.exports = function (grunt) {
         clean: ['dist/temp'],
         watch: {
             files: ['src/**'],
-            tasks: ['eslint', 'concat', 'htmlmin', 'replace', 'clean']
+            tasks: ['eslint', 'concat', 'less', 'htmlmin', 'replace', 'clean']
         }
     })
 
