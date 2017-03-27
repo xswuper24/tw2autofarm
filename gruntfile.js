@@ -49,6 +49,7 @@ module.exports = function (grunt) {
                         json: {
                             version: '<%= pkg.version %>',
                             date: '<%= new Date() %>',
+                            repository: '<%= pkg.repository.url %>',
                             window: '<%= grunt.file.read("dist/temp/window.html") %>',
                             button: '<%= grunt.file.read("dist/temp/button.html") %>',
                             event: '<%= grunt.file.read("dist/temp/event.html") %>',

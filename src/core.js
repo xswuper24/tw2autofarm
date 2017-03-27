@@ -1,6 +1,6 @@
 /*!
  * Tribal Wars 2 Auto Farm v@@version
- * https://gitlab.com/mafrazzrafael/tw2autofarm
+ * @@repository
  *
  * Copyright Rafael Mafra
  * MIT License
