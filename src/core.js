@@ -283,7 +283,7 @@ AutoFarm.prototype.nextTarget = function (_initial, _noTargets = 0) {
     }
 
     if (!_initial) {
-        this.event('nextTarget')
+        this.event('nextTarget', [this.selectedTarget])
     }
 
     return true

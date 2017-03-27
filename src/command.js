@@ -87,7 +87,7 @@ AutoFarm.prototype.commandInit = function () {
                     this.event('nextCommandIn', [time])
                 })
             } else {
-                this.event('noUnits')
+                this.event('noUnits', [this.selectedVillage])
                 this.getNextReturn(commands)
                 this.commandVillageNoUnits(commands)
             }
