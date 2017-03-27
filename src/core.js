@@ -124,6 +124,12 @@ function AutoFarm (settings = {}) {
     this.eventListeners = {}
 
     /**
+     * Propriedade usada para permitir ou não o disparo de eventos
+     * @type {Boolean}
+     */
+    this.eventsEnabled = true
+
+    /**
      * Preset usado como referência para enviar os comandos
      * @type {Array}
      */
@@ -185,6 +191,8 @@ AutoFarm.prototype.pause = function () {
  * @param {Object} newSettings - Novas configurações.
  */
 AutoFarm.prototype.updateSettings = function (newSettings) {
+    this.disableEvents()
+
     let restart = false
 
     if (!this.paused) {
@@ -204,6 +212,22 @@ AutoFarm.prototype.updateSettings = function (newSettings) {
             this.start()
         }
     })
+
+    this.enableEvents()
+}
+
+/**
+ * Desativa o disparo de eventos
+ */
+AutoFarm.prototype.disableEvents = function () {
+    this.eventsEnabled = false
+}
+
+/**
+ * Ativa o disparo de eventos
+ */
+AutoFarm.prototype.enableEvents = function () {
+    this.eventsEnabled = true
 }
 
 /**
@@ -397,6 +421,10 @@ AutoFarm.prototype.selectVillage = function (vid) {
  * @param {Array} data - Lista de dados.
  */
 AutoFarm.prototype.event = function (type, data) {
+    if (!this.eventsEnabled) {
+        return this
+    }
+
     if (type in this.eventListeners) {
         let listeners = this.eventListeners[type]
 
