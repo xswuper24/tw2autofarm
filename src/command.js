@@ -130,13 +130,9 @@ AutoFarm.prototype.commandVillageNoUnits = function (commands) {
 
         let backTime = this.getNeabyCommand(commands)
 
-        if (backTime) {
-            this.timerId = setTimeout(() => {
-                this.commandInit()
-            }, backTime)
-        } else {
-            this.event('noUnitsNoCommands')
-        }
+        this.timerId = setTimeout(() => {
+            this.commandInit()
+        }, backTime)
     } else {
         if(!this.nextVillage()) {
             return this.commandNextReturn()
