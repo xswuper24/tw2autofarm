@@ -10,7 +10,7 @@ AutoFarm.prototype.interface = function () {
 
     let $filter = injector.get('$filter')
     let windowDisplayService = injector.get('windowDisplayService')
-    
+        
     function buildStyle () {
         let style = document.createElement('style')
         style.type = 'text/css'
@@ -82,6 +82,10 @@ AutoFarm.prototype.interface = function () {
                 break
             default:
                 let change = self.settings[key] ? 'add' : 'remove'
+
+                if (self.settings[key]) {
+                    input.setAttribute('checked', true)
+                }
 
                 input.parentNode.classList[change](
                     'icon-26x26-checkbox-checked'
