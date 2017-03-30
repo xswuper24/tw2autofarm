@@ -8,7 +8,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/scriptw/autofarm"
+    "url": "https://github.com/mafrazz/tw2autofarm"
   },
   "devDependencies": {
     "grunt": "^1.0.1",

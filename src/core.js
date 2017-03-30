@@ -151,6 +151,7 @@ function AutoFarm (settings = {}) {
     this.updateGroupIgnore()
     this.updateIgnoredVillages()
     this.gameListeners()
+    this.i18n()
 
     return this
 }

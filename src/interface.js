@@ -24,8 +24,24 @@ AutoFarm.prototype.interface = function () {
         $window = document.createElement('section')
         $window.id = 'autofarm-window'
         $window.className = 'autofarm-window twx-window screen left'
+
         $window.innerHTML = replace({
-            version: self.version
+            version: self.version,
+            title: self.lang.title,
+            info: self.lang.general.info,
+            settings: self.lang.general.settings,
+            events: self.lang.general.events,
+            radius: self.lang.settings.radius,
+            interval: self.lang.settings.interval,
+            currentOnly: self.lang.settings.currentOnly,
+            presetName: self.lang.settings.presetName,
+            groupIgnore: self.lang.settings.groupIgnore,
+            save: self.lang.settings.save,
+            nothingYet: self.lang.events.nothingYet,
+            start: self.lang.general.start,
+            dev: self.lang.info.dev,
+            contact: self.lang.info.contact,
+            about: self.lang.info.about
         }, '@@window')
 
         let container = document.querySelector('#toolbar-right')
@@ -119,7 +135,7 @@ AutoFarm.prototype.interface = function () {
                 localStorage.setItem(`${pid}_autofarm`, json)
 
                 $rootScope.$broadcast(eventTypeProvider.MESSAGE_SUCCESS, {
-                    message: 'Configurações salvas!'
+                    message: self.lang.settings.saved
                 })
             }
         })
@@ -201,7 +217,7 @@ AutoFarm.prototype.interface = function () {
                     { type: 'village', name: from.getName(), id: from.getId() },
                     { type: 'village', name: to.name, id: to.id }
                 ],
-                text: '{0} ataca {1}',
+                text: self.lang.events.sendCommand,
                 icon: 'attack'
             })
         })
@@ -212,50 +228,49 @@ AutoFarm.prototype.interface = function () {
                     { type: 'village', name: next.getName(), id: next.getId() }
                 ],
                 icon: 'village',
-                text: 'Alternando para a aldeia {0}'
+                text: self.lang.events.nextVillage
             })
         })
 
         self.on('noUnitsNoCommands', function () {
             addEvent({
                 icon: 'info',
-                text: 'Nenhuma aldeia tem tropas nem ataques retornando.'
+                text: self.lang.events.noUnitsNoCommands
             })
         })
 
         self.on('noPreset', function () {
             addEvent({
                 icon: 'info',
-                text: 'Nenhuma predefinição foi configurada.'
+                text: self.lang.events.noPreset
             })
         })
 
         self.on('start', function () {
             addEvent({
                 icon: 'info',
-                text: 'AutoFarm iniciado.'
+                text: self.lang.events.start
             })
         })
 
         self.on('pause', function () {
             addEvent({
                 icon: 'info',
-                text: 'AutoFarm pausado.'
+                text: self.lang.events.pause
             })
         })
 
         self.on('noVillages', function () {
             addEvent({
                 icon: 'info',
-                text: 'Nenhuma aldeia disponível, aguardando ataques' +
-                ' retornarem.'
+                text: self.lang.events.noVillages
             })
         })
 
         self.on('commandLimit', function (village) {
             addEvent({
                 icon: 'info',
-                text: 'Limite de 50 ataques atingido, aguardando retorno.'
+                text: self.lang.events.commandLimit
             })
         })
     }

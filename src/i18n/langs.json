@@ -1,0 +1,70 @@
+{
+    "pt_br": {
+        "title": "Farmador Automático",
+        "general": {
+            "info": "Informações",
+            "settings": "Configurações",
+            "events": "Eventos",
+            "start": "Iniciar"
+        },
+        "info": {
+            "about": "Você pode encontrar informações sobre o script e suas configurações nesse link",
+            "dev": "AutoFarm é desenvolvido com ❤ por",
+            "contact": "Contato"
+        },
+        "settings": {
+            "saved": "Configurações salvas!",
+            "save": "Salvar configurações",
+            "radius": "Dintância máxima",
+            "interval": "Intervalo entre cada ataque",
+            "currentOnly": "Usar apenas aldeia selecionada",
+            "presetName": "Nome da predefinição",
+            "groupIgnore": "Nome do grupo de ignorados"
+        },
+        "events": {
+            "nothingYet": "Nada por aqui ainda...",
+            "sendCommand": "{0} ataca {1}",
+            "nextVillage": "Alternando para a aldeia {0}",
+            "noUnitsNoCommands": "Nenhuma aldeia tem tropas nem ataques retornando.",
+            "noPreset": "Nenhuma predefinição foi configurada.",
+            "start": "AutoFarm iniciado.",
+            "pause": "AutoFarm pausado.",
+            "noVillages": "Nenhuma aldeia disponível, aguardando ataques retornarem.",
+            "commandLimit": "Limite de 50 ataques atingido, aguardando retorno."
+        }
+    },
+    "en_us": {
+        "title": "Auto Farm",
+        "general": {
+            "info": "Information",
+            "settings": "Settings",
+            "events": "Events",
+            "start": "Start"
+        },
+        "info": {
+            "about": "You can find more informations about the script and the settings in this link",
+            "dev": "AutoFarm is developed with ❤ by",
+            "contact": "Contact"
+        },
+        "settings": {
+            "saved": "Settings saved!",
+            "save": "Save settings",
+            "radius": "Maximum distance",
+            "interval": "Interval between each attack",
+            "currentOnly": "Use only the selected village",
+            "presetName": "Name of the preset",
+            "groupIgnore": "Name of the ignore group"
+        },
+        "events": {
+            "nothingYet": "Nothing here yet...",
+            "sendCommand": "{0} attack {1}",
+            "nextVillage": "Changing to village {0}",
+            "noUnitsNoCommands": "No villages has units or commands returning.",
+            "noPreset": "No presets have been set.",
+            "start": "AutoFarm started.",
+            "pause": "AutoFarm paused.",
+            "noVillages": "No villages avaliable, waiting attacks return.",
+            "commandLimit": "Limit of 50 attacks reached, waiting return."
+        }
+    }
+}

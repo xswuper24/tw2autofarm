@@ -6,6 +6,7 @@ module.exports = function (grunt) {
                 src: [
                     'src/core.js',
                     'src/command.js',
+                    'src/i18n/lang.js',
                     'src/interface.js',
                     'src/run.js'
                 ],
@@ -53,7 +54,8 @@ module.exports = function (grunt) {
                             window: '<%= grunt.file.read("dist/temp/window.html") %>',
                             button: '<%= grunt.file.read("dist/temp/button.html") %>',
                             event: '<%= grunt.file.read("dist/temp/event.html") %>',
-                            style: '<%= grunt.file.read("dist/temp/style.css") %>'
+                            style: '<%= grunt.file.read("dist/temp/style.css") %>',
+                            langs: '<%= grunt.file.read("src/i18n/langs.json") %>'
                         }
                     }]
                 },
