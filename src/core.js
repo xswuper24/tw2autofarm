@@ -585,14 +585,17 @@ AutoFarm.prototype.gameListeners = function () {
         }
     })
 
-    // Deteca alterações nas prédefinições
+    // Detecta alterações nas prédefinições
     $rootScope.$on(eventTypeProvider.ARMY_PRESET_UPDATE, () => {
         socketService.emit(routeProvider.GET_PRESETS, {}, (data) => {
             this.getPresets(false, data.presets)
 
             if (!this.presets.length) {
                 this.event('noPreset')
-                this.pause()
+                
+                if (!this.paused) {
+                    this.pause()
+                }
             }
         })
     })
