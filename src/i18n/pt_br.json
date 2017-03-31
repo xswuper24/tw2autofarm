@@ -16,6 +16,7 @@
         "saved": "Configurações salvas!",
         "save": "Salvar configurações",
         "radius": "Dintância máxima",
+        "maxTravelTime": "Tempo máximo de viagem (ida)",
         "interval": "Intervalo entre cada ataque",
         "currentOnly": "Usar apenas aldeia selecionada",
         "presetName": "Nome da predefinição",

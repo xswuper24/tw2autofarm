@@ -15,6 +15,7 @@
         "saved": "Settings saved!",
         "save": "Save settings",
         "radius": "Maximum distance",
+        "maxTravelTime": "Maximum travel time (going)",
         "interval": "Interval between each attack",
         "currentOnly": "Use only the selected village",
         "presetName": "Name of the preset",

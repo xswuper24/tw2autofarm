@@ -13,6 +13,7 @@ modelDataService = injector.get('modelDataService')
 socketService = injector.get('socketService')
 routeProvider = injector.get('routeProvider')
 eventTypeProvider = injector.get('eventTypeProvider')
+armyService = injector.get('armyService')
 math = require('helper/math')
 
 /**
@@ -39,6 +40,7 @@ function AutoFarm (settings = {}) {
      */
     this.defaults = {
         radius: 10,
+        maxTravelTime: '01:00:00',
         interval: 1,
         presetName: '.farm',
         groupIgnore: '.ignore',
@@ -140,6 +142,7 @@ function AutoFarm (settings = {}) {
     this.updateIgnoredVillages()
     this.gameListeners()
     this.i18n()
+    this.getPresets(false)
 
     return this
 }
@@ -428,8 +431,8 @@ AutoFarm.prototype.on = function (type, handler) {
 }
 
 /**
- * Verifica se a aldeia que está tentando enviar um comando possui
- *     a quantidade de unidades minimas especificadas no preset.
+ * Obtem o preset que houver tropas sulficientes e que o tempo do
+ *     comando não seja maior do que o configurado.
  * @param {Function} villageUnits - Quantidade de unidades disponíveis
  *     na aldeia.
  */
@@ -443,12 +446,54 @@ AutoFarm.prototype.presetAvail = function (villageUnits) {
             }
         }
 
-        if (avail) {
+        if (avail && this.presetTimeAvail(preset)) {
             return preset
         }
     }
 
     return false
+}
+
+/**
+ * Verifica se o tempo de viagem do preset, da aldeia de origem até
+ *     a aldeia alvo não ultrapassa o tempo máximo.
+ * @param {Object} preset - Preset usado no calculo.
+ */
+AutoFarm.prototype.presetTimeAvail = function (preset) {
+    let maxTime = AutoFarm.time2seconds(this.settings.maxTravelTime)
+    let coords = this.selectedVillage.getPosition()
+    let target = {
+        x: this.selectedTarget.coords[0],
+        y: this.selectedTarget.coords[1]
+    }
+
+    let distance = math.actualDistance(coords, target)
+    let travelTime = armyService.calculateTravelTime(preset, {
+        barbarian: true
+    })
+    let totalTravelTime = armyService.getTravelTimeForDistance(
+        preset,
+        travelTime,
+        distance,
+        'attack'
+    )
+
+    return maxTime > totalTravelTime
+}
+
+/**
+ * Converte uma string com um tempo em segundos.
+ * @param {String} time - Tempo que será convertido (hh:mm:ss)
+ */
+AutoFarm.time2seconds = function (time) {
+    time = time.split(':')
+    time[0] = parseInt(time[0], 10) * 60 * 60
+    time[1] = parseInt(time[1], 10) * 60
+    time[2] = parseInt(time[2], 10)
+
+    return time.reduce((a, b) => {
+        return a + b
+    })
 }
 
 /**

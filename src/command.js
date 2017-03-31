@@ -1,3 +1,5 @@
+
+
 /**
  * Inicia o ciclo de comandos do script
  */
@@ -144,6 +146,7 @@ AutoFarm.prototype.commandVillageNoUnits = function (commands) {
 
 /**
  * Envia um comando
+ * @param {Object} preset - Preset a ser enviado.
  * @param {function} callback
  * @return {Boolean}
  */

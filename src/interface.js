@@ -43,6 +43,7 @@ AutoFarm.prototype.interface = function () {
             settings: self.lang.general.settings,
             events: self.lang.general.events,
             radius: self.lang.settings.radius,
+            maxTravelTime: self.lang.settings.maxTravelTime,
             interval: self.lang.settings.interval,
             currentOnly: self.lang.settings.currentOnly,
             presetName: self.lang.settings.presetName,
