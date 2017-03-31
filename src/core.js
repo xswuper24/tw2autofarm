@@ -49,26 +49,14 @@ function AutoFarm (settings = {}) {
      * Objeto com todas as configurações.
      * @type {Object}
      */
-    this.settings = {}
-
-    for (let item in this.defaults) {
-        this.settings[item] = settings[item] === void 0
-            ? this.defaults[item]
-            : settings[item]
-    }
+    this.settings = angular.merge({}, this.defaults, settings)
 
     /**
      * Objeto com todos os dados do jogador.
      * @type {Object}
      */
     this.player = modelDataService.getSelectedCharacter()
-    this.player.villages = []
-
-    let playerVillages = this.player.getVillages()
-
-    for (let id in playerVillages) {
-        this.player.villages.push(playerVillages[id])
-    }
+    this.player.villages = Object.values(this.player.data.villages)
 
     /**
      * Identifica o status do script.
