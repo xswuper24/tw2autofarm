@@ -10,6 +10,7 @@ AutoFarm.prototype.interface = function () {
 
     let $filter = injector.get('$filter')
     let windowDisplayService = injector.get('windowDisplayService')
+    let eventQueue = require('queues/EventQueue')
         
     function buildStyle () {
         let style = document.createElement('style')
@@ -21,6 +22,16 @@ AutoFarm.prototype.interface = function () {
     }
 
     function buildWindow () {
+        function closeWindow () {
+            $window.style.visibility = 'hidden'
+            $gameWrapper.classList.remove('window-open')
+
+            eventQueue.trigger(eventQueue.types.RESIZE, {
+                'instant': true,
+                'right': true
+            })
+        }
+
         $window = document.createElement('section')
         $window.id = 'autofarm-window'
         $window.className = 'autofarm-window twx-window screen left'
@@ -51,16 +62,12 @@ AutoFarm.prototype.interface = function () {
         bindTabs()
 
         let $close = document.querySelector('#autofarm-close')
+        
+        $close.addEventListener('click', closeWindow)
 
-        $close.addEventListener('click', function () {
-            $window.style.visibility = 'hidden'
-            $gameWrapper.classList.remove('window-open')
-        })
-
-        document.addEventListener('keydown', function (event) {
+        document.addEventListener('keydown', (event) => {
             if (event.keyCode === 27) {
-                $window.style.visibility = 'hidden'
-                $gameWrapper.classList.remove('window-open')
+                closeWindow()
             }
         })
     }
@@ -76,6 +83,11 @@ AutoFarm.prototype.interface = function () {
         button.addEventListener('click', function () {
             $window.style.visibility = 'visible'
             $gameWrapper.classList.add('window-open')
+
+            eventQueue.trigger(eventQueue.types.RESIZE, {
+                'instant': true,
+                'right': true
+            })
         })
     }
 
