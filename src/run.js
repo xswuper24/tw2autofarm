@@ -26,22 +26,20 @@ if (typeof autofarm === 'undefined') {
         })
     })
 
-    autofarm.ready(function () {
-        $start.addEventListener('click', function () {
-            if (autofarm.paused) {
-                if (!autofarm.presets.length) {
+    $start.addEventListener('click', function () {
+        if (autofarm.paused) {
+            if (!autofarm.presets.length) {
 
-                    $rootScope.$broadcast(eventTypeProvider.MESSAGE_ERROR, {
-                        message: autofarm.lang.events.presetFirst
-                    })
+                $rootScope.$broadcast(eventTypeProvider.MESSAGE_ERROR, {
+                    message: autofarm.lang.events.presetFirst
+                })
 
-                    return false
-                }
-
-                autofarm.start()
-            } else {
-                autofarm.pause()
+                return false
             }
-        })
+
+            autofarm.start()
+        } else {
+            autofarm.pause()
+        }
     })
 }

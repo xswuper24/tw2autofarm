@@ -220,21 +220,6 @@ AutoFarm.prototype.enableEvents = function () {
 }
 
 /**
- * Carrega todos todas necessários antes de iniciar os comandos.
- * @param {Function} callback
- * @return {Boolean}
- */
-AutoFarm.prototype.ready = function (callback) {
-    this.getPresets(() => {
-        if (!this.presets.length) {
-            this.event('noPreset')
-        }
-
-        callback()
-    })
-}
-
-/**
  * Seleciona o próximo alvo da aldeia.
  * @param {Boolean} _initial - Parametro interno usado na primeira execução
  *     e do script e após cada alteração entre as aldeias do jogador.
