@@ -5,7 +5,8 @@
             "info": "Informações",
             "settings": "Configurações",
             "events": "Eventos",
-            "start": "Iniciar"
+            "start": "Iniciar",
+            "pause": "Pausar"
         },
         "info": {
             "about": "Você pode encontrar informações sobre o script e suas configurações nesse link",
@@ -27,6 +28,7 @@
             "nextVillage": "Alternando para a aldeia {0}",
             "noUnitsNoCommands": "Nenhuma aldeia tem tropas nem ataques retornando.",
             "noPreset": "Nenhuma predefinição foi configurada.",
+            "presetFirst": "Configure uma predefinição primeiro!",
             "start": "AutoFarm iniciado.",
             "pause": "AutoFarm pausado.",
             "noVillages": "Nenhuma aldeia disponível, aguardando ataques retornarem.",

@@ -9,20 +9,20 @@ if (typeof autofarm === 'undefined') {
     let $start = document.querySelector('#autofarm-start')
 
     autofarm.on('start', function () {
-        $start.innerHTML = 'Pausar'
+        $start.innerHTML = autofarm.lang.general.pause
         $start.classList.remove('btn-green')
         $start.classList.add('btn-red')
 
         $rootScope.$broadcast(eventTypeProvider.MESSAGE_SUCCESS, {
-            message: 'AutoFarm iniciado.'
+            message: autofarm.lang.events.start
         })
     }).on('pause', function () {
-        $start.innerHTML = 'Iniciar'
+        $start.innerHTML = autofarm.lang.general.start
         $start.classList.remove('btn-red')
         $start.classList.add('btn-green')
 
         $rootScope.$broadcast(eventTypeProvider.MESSAGE_SUCCESS, {
-            message: 'AutoFarm pausado.'
+            message: autofarm.lang.events.pause
         })
     })
 
@@ -32,7 +32,7 @@ if (typeof autofarm === 'undefined') {
                 if (!autofarm.presets.length) {
 
                     $rootScope.$broadcast(eventTypeProvider.MESSAGE_ERROR, {
-                        message: 'Configure uma predefinição primeiro!'
+                        message: autofarm.lang.events.presetFirst
                     })
 
                     return false
