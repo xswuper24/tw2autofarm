@@ -6,7 +6,7 @@ module.exports = function (grunt) {
                 src: [
                     'src/core.js',
                     'src/command.js',
-                    'src/i18n/lang.js',
+                    'src/lang.js',
                     'src/interface.js',
                     'src/run.js'
                 ],
@@ -55,7 +55,8 @@ module.exports = function (grunt) {
                             button: '<%= grunt.file.read("dist/temp/button.html") %>',
                             event: '<%= grunt.file.read("dist/temp/event.html") %>',
                             style: '<%= grunt.file.read("dist/temp/style.css") %>',
-                            langs: '<%= grunt.file.read("src/i18n/langs.json") %>'
+                            'langs-pt_br': '<%= grunt.file.read("src/i18n/pt_br.json") %>',
+                            'langs-en_us': '<%= grunt.file.read("src/i18n/en_us.json") %>'
                         }
                     }]
                 },
@@ -86,16 +87,14 @@ module.exports = function (grunt) {
         }
     })
 
-    grunt.loadNpmTasks('grunt-eslint');
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-less');
-    grunt.loadNpmTasks('grunt-contrib-htmlmin');
-    grunt.loadNpmTasks('grunt-replace');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-clean');
-
-
-    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-eslint')
+    grunt.loadNpmTasks('grunt-contrib-concat')
+    grunt.loadNpmTasks('grunt-contrib-less')
+    grunt.loadNpmTasks('grunt-contrib-htmlmin')
+    grunt.loadNpmTasks('grunt-replace')
+    grunt.loadNpmTasks('grunt-contrib-uglify')
+    grunt.loadNpmTasks('grunt-contrib-clean')
+    grunt.loadNpmTasks('grunt-contrib-watch')
 
     grunt.registerTask('default', [
         'eslint',
@@ -105,5 +104,5 @@ module.exports = function (grunt) {
         'replace',
         'uglify',
         'clean'
-    ]);
+    ])
 }

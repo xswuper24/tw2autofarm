@@ -1,5 +1,8 @@
 AutoFarm.prototype.i18n = function () {
-    let locales = @@langs
+    let locales = {
+        pt_br: @@langs-pt_br,
+        en_us: @@langs-en_us
+    }
 
     let gameLang = require('conf/locale').LANGUAGE
 

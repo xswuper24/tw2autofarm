@@ -1,0 +1,36 @@
+{
+    "title": "Farmador Automático",
+    "general": {
+        "info": "Informações",
+        "settings": "Configurações",
+        "events": "Eventos",
+        "start": "Iniciar",
+        "pause": "Pausar"
+    },
+    "info": {
+        "about": "Você pode encontrar informações sobre o script e suas configurações nesse link",
+        "dev": "AutoFarm é desenvolvido com ❤ por",
+        "contact": "Contato"
+    },
+    "settings": {
+        "saved": "Configurações salvas!",
+        "save": "Salvar configurações",
+        "radius": "Dintância máxima",
+        "interval": "Intervalo entre cada ataque",
+        "currentOnly": "Usar apenas aldeia selecionada",
+        "presetName": "Nome da predefinição",
+        "groupIgnore": "Nome do grupo de ignorados"
+    },
+    "events": {
+        "nothingYet": "Nada por aqui ainda...",
+        "sendCommand": "{0} ataca {1}",
+        "nextVillage": "Alternando para a aldeia {0}",
+        "noUnitsNoCommands": "Nenhuma aldeia tem tropas nem ataques retornando.",
+        "noPreset": "Nenhuma predefinição foi configurada.",
+        "presetFirst": "Configure uma predefinição primeiro!",
+        "start": "AutoFarm iniciado.",
+        "pause": "AutoFarm pausado.",
+        "noVillages": "Nenhuma aldeia disponível, aguardando ataques retornarem.",
+        "commandLimit": "Limite de 50 ataques atingido, aguardando retorno."
+    }
+}
