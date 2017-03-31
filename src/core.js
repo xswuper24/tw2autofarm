@@ -572,6 +572,18 @@ AutoFarm.prototype.updateIgnoredVillages = function () {
  * para o funcionamento do AutoFarm.
  */
 AutoFarm.prototype.gameListeners = function () {
+    let updatePresets = () => {
+        this.getPresets(false)
+
+        if (!this.presets.length) {
+            this.event('noPreset')
+            
+            if (!this.paused) {
+                this.pause()
+            }
+        }
+    }
+
     // Detecta todos comandos enviados no jogo (não apenas pelo script)
     // e identifica os que foram enviados pelo script.
     // Por que isso?
@@ -587,19 +599,8 @@ AutoFarm.prototype.gameListeners = function () {
     })
 
     // Detecta alterações nas prédefinições
-    $rootScope.$on(eventTypeProvider.ARMY_PRESET_UPDATE, () => {
-        socketService.emit(routeProvider.GET_PRESETS, {}, (data) => {
-            this.getPresets(false, data.presets)
-
-            if (!this.presets.length) {
-                this.event('noPreset')
-                
-                if (!this.paused) {
-                    this.pause()
-                }
-            }
-        })
-    })
+    $rootScope.$on(eventTypeProvider.ARMY_PRESET_UPDATE, updatePresets)
+    $rootScope.$on(eventTypeProvider.ARMY_PRESET_DELETED, updatePresets)
 
     // Detecta alterações nos grupos de aldeias
     $rootScope.$on(eventTypeProvider.GROUPS_UPDATED, ($event, data) => {
