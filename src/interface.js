@@ -49,7 +49,7 @@ AutoFarmInterface.prototype.buildStyle = function () {
 AutoFarmInterface.prototype.buildWindow = function () {
     let closeWindow = () => {
         this.$window.style.visibility = 'hidden'
-        this.$gameWrapper.classList.remove('window-open')
+        this.$wrapper.removeClass('window-open')
 
         eventQueue.trigger(eventQueue.types.RESIZE, {
             'instant': true,
