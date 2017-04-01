@@ -36,25 +36,18 @@ AutoFarm.prototype.interface = function () {
         $window.id = 'autofarm-window'
         $window.className = 'autofarm-window twx-window screen left'
 
-        $window.innerHTML = replace({
-            version: self.version,
-            title: self.lang.title,
-            info: self.lang.general.info,
-            settings: self.lang.general.settings,
-            events: self.lang.general.events,
-            radius: self.lang.settings.radius,
-            maxTravelTime: self.lang.settings.maxTravelTime,
-            interval: self.lang.settings.interval,
-            currentOnly: self.lang.settings.currentOnly,
-            presetName: self.lang.settings.presetName,
-            groupIgnore: self.lang.settings.groupIgnore,
-            save: self.lang.settings.save,
-            nothingYet: self.lang.events.nothingYet,
-            start: self.lang.general.start,
-            dev: self.lang.info.dev,
-            contact: self.lang.info.contact,
-            about: self.lang.info.about
-        }, '@@window')
+        let replaces = angular.merge(
+            {
+                title: self.lang.title,
+                version: self.version
+            },
+            self.lang.general,
+            self.lang.settings,
+            self.lang.events,
+            self.lang.info
+        )
+
+        $window.innerHTML = replace(replaces, '@@window')
 
         let container = document.querySelector('#toolbar-right')
         container.parentNode.insertBefore($window, container.nextSibling)
@@ -330,7 +323,7 @@ AutoFarm.prototype.interface = function () {
     }
 
     function replace (values, template) {
-        let rkey = /\{\{ ([a-zA-Z0-9]+) \}\}/g
+        let rkey = /\{\{ ([a-zA-Z0-9\-\_]+) \}\}/g
 
         template = template.replace(rkey, function (match, key) {
             return values[key]

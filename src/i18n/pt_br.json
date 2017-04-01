@@ -8,8 +8,26 @@
         "pause": "Pausar"
     },
     "info": {
-        "about": "Você pode encontrar informações sobre o script e suas configurações nesse link",
-        "dev": "AutoFarm é desenvolvido com ❤ por",
+        "presets": "Predefinições",
+        "presets_1": "O AutoFarm utiliza predefinições para enviar os ataques, então é preciso que a conta tenha pelo menos uma predefinição nomeada <em>.farm</em> para que os ataques iniciem.",
+        "presets_2": "<strong>É recomendável</strong> alterar o nome da predefinição na aba de configurações do script.",
+        "presets_3": "Não é preciso ter a predefinição ativada nas aldeias para funcionar.",
+        "presets_4": "Serão usados apenas o número de tropas especificados na predefinição, <strong>oficiais não serão utilizados</strong>.",
+        "presets_5": "É possível alterar a quantidade de tropas na predefinição enquanto o farmador estiver ativado enviando os ataques. Os novos ataques serão enviandos com a nova quantidade especificada.",
+        "presets_6": "É possível utilizar mais de uma predefinição, <strong>desde que tenham o mesmo nome</strong>. O script sempre tentará enviar a primeira da lista, se a aldeia não tiver o mínimo exigido, então irá tentar a próxima.",
+        "ignore": "Ignorando aldeias",
+        "ignore_1": "Qualquer aldeia que houver atribuido um grupo chamado <em>.ignore</em> serão ignorados pelo AutoFarm. <strong>O grupo serve tanto para os alvos quanto para suas aldeias</strong>.",
+        "ignore_2": "Assim como a predefinição, é <strong>recomendável</strong> customizar o nome do grupo.",
+        "interval": "Intervalo entre ataques",
+        "interval_1": "Você pode especificar um intervalo mínimo entre cada ataque enviado pelo script. Note que a velocidade da sua internet irá influenciar nesse valor.",
+        "selected": "Apenas selecionada",
+        "selected_1": "Ao ativar essa opção, apenas a aldeia que está atualmente selecionada será usada para enviar os ataques, impedindo o script de selecionar a próxima aldeia.",
+        "selected_2": "Quando esta opção estiver ativa e o script executando, mesmo que você selecione outra aldeia, os ataques continuarão enviando a partir da mesma aldeia. Ao menos que você pause e inicie o script novamente.",
+        "notes": "Observações",
+        "notes_1": "Os ataques iniciarão a partir da aldeia que estava selecionada no momento da execução do script.",
+        "development": "Desenvolvimento",
+        "development_by": "AutoFarm é desenvolvido com ❤ por",
+        "development_open": "AutoFarm é um software de <a href='https://github.com/mafrazz/tw2autofarm'>código aberto</a>.",
         "contact": "Contato"
     },
     "settings": {

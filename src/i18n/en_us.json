@@ -7,8 +7,26 @@
         "start": "Start"
     },
     "info": {
-        "about": "You can find more informations about the script and the settings in this link",
-        "dev": "AutoFarm is developed with ❤ by",
+        "presets": "Presets",
+        "presets_1": "The AutoFarm use presets to send attacks, so the account need at least one preset with the name <em>.farm</em>",
+        "presets_2": "<strong>It is recommended</strong> change the name of preset on the settings tab.",
+        "presets_3": "You don't need to activate the preset in every village.",
+        "presets_4": "Only the units specified in preset will be used, <strong>officers will be ignored</strong>.",
+        "presets_5": "It is possible change the amount of units while the farm is active. New attacks will be sent with the new specified units.",
+        "presets_6": "It is possible to have more than one preset, <strong>since it has the same name</strong>. The script will try to send the first preset of list, if the village hasn't enough units, the script will try the next preset.",
+        "ignore": "Ignoring Village",
+        "ignore_1": "Any village that has a group called <em>.ignore</em> will be ignored by the script. <strong>The group works on targets and your own villages as well</strong>.",
+        "ignore_2": "Just like the preset, it is <strong>recommended</strong> change the name of group.",
+        "interval": "Interval between attacks",
+        "interval_1": "You can specify a minimum interval between each attack sent by the script. Note that your internet speed will influence in this value.",
+        "selected": "Selected only",
+        "selected_1": "With this option activated, only the village that has actually selected will be used to sent attacks, blocking the script to select other villages.",
+        "selected_2": "Even if you select another village, the attacks will keep been send by the same village. Unless you pause and start the script again.",
+        "notes": "Notes",
+        "notes_1": "The attacks will start from the village that was selected when you run the script.",
+        "development": "Development",
+        "development_by": "AutoFarm is developed with ❤ by",
+        "development_open": "AutoFarm is a <a href='https://github.com/mafrazz/tw2autofarm'>open source</a> software.",
         "contact": "Contact"
     },
     "settings": {
