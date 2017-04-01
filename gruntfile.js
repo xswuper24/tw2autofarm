@@ -4,8 +4,7 @@ module.exports = function (grunt) {
         concat: {
             build: {
                 src: [
-                    'src/core.js',
-                    'src/command.js',
+                    'src/autofarm.js',
                     'src/lang.js',
                     'src/interface.js',
                     'src/run.js'
