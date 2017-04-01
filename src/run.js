@@ -4,29 +4,31 @@ if (typeof autofarm === 'undefined') {
     settings = settings ? JSON.parse(settings) : {}
 
     autofarm = new AutoFarm(settings)
-    autofarm.interface()
+    autofarmInterface = new AutoFarmInterface(autofarm)
 
-    let $start = document.querySelector('#autofarm-start')
+    let $start = $('#autofarm-start')
 
     autofarm.on('start', function () {
-        $start.innerHTML = autofarm.lang.general.pause
-        $start.classList.remove('btn-green')
-        $start.classList.add('btn-red')
+        $start.html(autofarm.lang.general.pause)
+        $start.removeClass('btn-green')
+        $start.addClass('btn-red')
 
         $rootScope.$broadcast(eventTypeProvider.MESSAGE_SUCCESS, {
             message: autofarm.lang.events.start
         })
-    }).on('pause', function () {
-        $start.innerHTML = autofarm.lang.general.start
-        $start.classList.remove('btn-red')
-        $start.classList.add('btn-green')
+    })
+
+    autofarm.on('pause', function () {
+        $start.html(autofarm.lang.general.start)
+        $start.removeClass('btn-red')
+        $start.addClass('btn-green')
 
         $rootScope.$broadcast(eventTypeProvider.MESSAGE_SUCCESS, {
             message: autofarm.lang.events.pause
         })
     })
 
-    $start.addEventListener('click', function () {
+    $start.on('click', function () {
         if (autofarm.paused) {
             if (!autofarm.presets.length) {
 
