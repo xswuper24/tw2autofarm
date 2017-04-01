@@ -255,14 +255,14 @@ AutoFarm.prototype.interface = function () {
         self.on('start', function () {
             addEvent({
                 icon: 'info',
-                text: self.lang.events.start
+                text: self.lang.events.started
             })
         })
 
         self.on('pause', function () {
             addEvent({
                 icon: 'info',
-                text: self.lang.events.pause
+                text: self.lang.events.paused
             })
         })
 

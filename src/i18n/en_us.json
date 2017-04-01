@@ -45,8 +45,8 @@
         "nextVillage": "Changing to village {0}",
         "noUnitsNoCommands": "No villages has units or commands returning.",
         "noPreset": "No presets have been set.",
-        "start": "AutoFarm started.",
-        "pause": "AutoFarm paused.",
+        "started": "AutoFarm started.",
+        "paused": "AutoFarm paused.",
         "noVillages": "No villages avaliable, waiting attacks return.",
         "commandLimit": "Limit of 50 attacks reached, waiting return."
     }
