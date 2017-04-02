@@ -806,18 +806,20 @@ AutoFarm.prototype.commandVillageNoUnits = function (commands) {
  * @return {Boolean}
  */
 AutoFarm.prototype.sendCommand = function (preset, callback) {
-    socketService.emit(routeProvider.SEND_CUSTOM_ARMY, {
-        start_village: this.selectedVillage.getId(),
-        target_village: this.selectedTarget.id,
-        type: 'attack',
-        units: preset.units,
-        catapult_target: 'headquarter',
-        officers: {},
-        icon: 0
-    })
+    this.simulate(() => {
+        socketService.emit(routeProvider.SEND_CUSTOM_ARMY, {
+            start_village: this.selectedVillage.getId(),
+            target_village: this.selectedTarget.id,
+            type: 'attack',
+            units: preset.units,
+            catapult_target: 'headquarter',
+            officers: {},
+            icon: 0
+        })
 
-    this.commandProgressId = this.selectedTarget.id
-    this.commandProgressCallback = callback
+        this.commandProgressId = this.selectedTarget.id
+        this.commandProgressCallback = callback  
+    })
 
     return true
 }
@@ -888,17 +890,49 @@ AutoFarm.prototype.getNeabyCommand = function (commands) {
     return Math.round((timers[0] * 1000) + 5000)
 }
 
-AutoFarm.prototype.randomSeconds = function (base, range) {
+/**
+ * Gera um número aleatório aproximado da base.
+ * @param {Number} base - Número base para o calculo.
+ * @param {Number} [_range] - Range maxímo e minimo de aleatoriedade.
+ */
+AutoFarm.prototype.randomSeconds = function (base, _range) {
     let max
     let min
 
-    if (range) {
-        max = base + range
-        min = base - range
+    if (_range) {
+        max = base + _range
+        min = base - _range
     } else {
         max = base + (base / 2)
         min = base - (base / 2)
     }
 
     return Math.round(Math.random() * (max - min) + min)
+}
+
+/**
+ * Simula algumas requisições feita pelo jogo quando é enviado
+ *     comandos manualmente.
+ * @param {Object} callback
+ */
+AutoFarm.prototype.simulate = function (callback) {
+    let random = this.randomSeconds(1)
+
+    let attackingFactor = () => {
+        socketService.emit(routeProvider.GET_ATTACKING_FACTOR, {
+            target_id: this.selectedTarget.id
+        })
+    }
+
+    let shopOffers = () => {
+        socketService.emit(routeProvider.PREMIUM_LIST_SHOP_OFFERS, {})
+    }
+
+    attackingFactor()
+    shopOffers()
+
+    setTimeout(() => {
+        attackingFactor()
+        callback()
+    }, random * 1000)
 }
