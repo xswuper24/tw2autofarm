@@ -359,7 +359,7 @@ AutoFarm.prototype.nextVillage = function (_loop = 0) {
     this.selectedVillage =
         typeof this.player.villages[nextIndex] !== 'undefined'
             ? this.player.villages[nextIndex]
-            : this.selectedVillage = this.player.villages[0]
+            : this.player.villages[0]
 
     if (this.ignoredVillages.includes(this.selectedVillage.getId())) {
         return this.nextVillage(++_loop)
@@ -437,7 +437,7 @@ AutoFarm.prototype.on = function (type, handler) {
  *     na aldeia.
  */
 AutoFarm.prototype.presetAvail = function (villageUnits) {
-    for (let preset of autofarm.presets) {
+    for (let preset of this.presets) {
         let avail = true
 
         for (let unit in preset.units) {
