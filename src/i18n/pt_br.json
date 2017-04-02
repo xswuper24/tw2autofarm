@@ -5,7 +5,8 @@
         "settings": "Configurações",
         "events": "Eventos",
         "start": "Iniciar",
-        "pause": "Pausar"
+        "pause": "Pausar",
+        "none": "Nenhum"
     },
     "info": {
         "presets": "Predefinições",
@@ -50,6 +51,10 @@
         "started": "AutoFarm iniciado.",
         "paused": "AutoFarm pausado.",
         "noVillages": "Nenhuma aldeia disponível, aguardando ataques retornarem.",
-        "commandLimit": "Limite de 50 ataques atingido, aguardando retorno."
+        "commandLimit": "Limite de 50 ataques atingido, aguardando retorno.",
+        "status": "Status",
+        "selectedVillage": "Aldeia selecionada",
+        "lastAttack": "Último ataque",
+        "attacking": "Atacando..."
     }
 }

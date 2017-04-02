@@ -121,7 +121,33 @@
         </div>
         <div class="box-paper footer has-footer-upper autofarm-content-log">
             <div class="screen-tribe-news rich-text">
-                <table ng-hide="log.length == 0" class="tbl-border-light tbl-news tbl-big-header">
+                <table class="tbl-border-light tbl-news tbl-big-header">
+                    <colgroup>
+                        <col width="140px">
+                        <col width="*">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th colspan="2">{{ status }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="list-item">
+                            <td>{{ status }}</td>
+                            <td id="autofarm-status">{{ paused }}</td>
+                        </tr>
+                        <tr class="list-item">
+                            <td>{{ selectedVillage }}</td>
+                            <td id="autofarm-selectedVillage"></td>
+                        </tr>
+                        <tr class="list-item">
+                            <td>{{ lastAttack }}</td>
+                            <td id="autofarm-last">{{ none }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="tbl-border-light tbl-news tbl-big-header">
                     <colgroup>
                         <col width="140px">
                         <col width="*">

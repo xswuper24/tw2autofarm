@@ -15,6 +15,9 @@ function AutoFarmInterface (autofarm) {
     this.$button = null
     this.$scrollbar = null
     this.$events = null
+    this.$status = null
+    this.$selected = null
+    this.$last = null
 
     this.newSettings = {}
     this.activeTab = 'info'
@@ -27,6 +30,14 @@ function AutoFarmInterface (autofarm) {
     this.buildButton()
     this.bindSettings()
     this.bindEvents()
+
+    let selectedVillage = AutoFarmInterface.createButtonLink(
+        'village',
+        autofarm.selectedVillage.getName(),
+        autofarm.selectedVillage.getId()
+    )
+
+    this.$selected.append(selectedVillage.elem)
 
     return this
 }
@@ -86,6 +97,9 @@ AutoFarmInterface.prototype.buildWindow = function () {
     this.$scrollbar = jsScrollbar(this.$window.querySelector('.win-main'))
     this.$events = $('#autofarm-events')
     this.$settings = $('#autofarm-settings')
+    this.$status = $('#autofarm-status')
+    this.$selected = $('#autofarm-selectedVillage')
+    this.$last = $('#autofarm-last')
 }
 
 /**
@@ -227,17 +241,17 @@ AutoFarmInterface.prototype.addEvent = function (options) {
         this.$events.find('tr:last-child').remove()
     }
 
-    let htmlLinks = []
+    let links = []
 
     if (options.links) {
         for (let i = 0; i < options.links.length; i++) {
-            htmlLinks.push(AutoFarmInterface.createButtonLink(
+            links.push(AutoFarmInterface.createButtonLink(
                 options.links[i].type,
                 options.links[i].name
             ))
         }
 
-        options.text = AutoFarmInterface.sprintf(options.text, htmlLinks)
+        options.text = AutoFarmInterface.sprintf(options.text, links)
     }
 
     let $tr = document.createElement('tr')
@@ -250,8 +264,8 @@ AutoFarmInterface.prototype.addEvent = function (options) {
     }, '@@event')
 
     if (options.links) {
-        for (let i = 0; i < htmlLinks.length; i++) {
-            options.links[i].elem = $tr.querySelector('#' + htmlLinks[i].id)
+        for (let i = 0; i < links.length; i++) {
+            options.links[i].elem = $tr.querySelector('#' + links[i].id)
             options.links[i].elem.addEventListener('click', function () {
                 windowDisplayService.openVillageInfo(options.links[i].id)
             })
@@ -276,6 +290,9 @@ AutoFarmInterface.prototype.bindEvents = function () {
             text: this.autofarm.lang.events.sendCommand,
             icon: 'attack'
         })
+
+        this.$last.html($filter('readableDateFilter')(Date.now()))
+        this.$status.html(this.autofarm.lang.events.attacking)
     })
 
     this.autofarm.on('nextVillage', (next) => {
@@ -286,13 +303,15 @@ AutoFarmInterface.prototype.bindEvents = function () {
             icon: 'village',
             text: this.autofarm.lang.events.nextVillage
         })
-    })
 
-    this.autofarm.on('noUnitsNoCommands', () => {
-        this.addEvent({
-            icon: 'info',
-            text: this.autofarm.lang.events.noUnitsNoCommands
-        })
+        let selectedVillage = AutoFarmInterface.createButtonLink(
+            'village',
+            next.getName(),
+            next.getId()
+        )
+
+        this.$selected.html('')
+        this.$selected.append(selectedVillage.elem)
     })
 
     this.autofarm.on('noPreset', () => {
@@ -300,34 +319,24 @@ AutoFarmInterface.prototype.bindEvents = function () {
             icon: 'info',
             text: this.autofarm.lang.events.noPreset
         })
+
+        this.$status.html(this.autofarm.lang.events.paused)
+    })
+
+    this.autofarm.on('noUnitsNoCommands', () => {
+        this.$status.html(this.autofarm.lang.events.noUnitsNoCommands)
     })
 
     this.autofarm.on('start', () => {
-        this.addEvent({
-            icon: 'info',
-            text: this.autofarm.lang.events.started
-        })
+        this.$status.html(this.autofarm.lang.events.attacking)
     })
 
     this.autofarm.on('pause', () => {
-        this.addEvent({
-            icon: 'info',
-            text: this.autofarm.lang.events.paused
-        })
+        this.$status.html(this.autofarm.lang.events.paused)
     })
 
     this.autofarm.on('noVillages', () => {
-        this.addEvent({
-            icon: 'info',
-            text: this.autofarm.lang.events.noVillages
-        })
-    })
-
-    this.autofarm.on('commandLimit', (village) => {
-        this.addEvent({
-            icon: 'info',
-            text: this.autofarm.lang.events.commandLimit
-        })
+        this.$status.html(this.autofarm.lang.events.noVillages)
     })
 }
 
@@ -335,8 +344,9 @@ AutoFarmInterface.prototype.bindEvents = function () {
  * Cria um botão com um icone e link (player, village, ...).
  * @param {String} icon - Icone do botão.
  * @param {String} text - Texto dentro do botão.
+ * @param {Number} vid - ID da aldeia
  */
-AutoFarmInterface.createButtonLink = function (icon, text) {
+AutoFarmInterface.createButtonLink = function (icon, text, vid) {
     let id = Math.round(Math.random() * 1e5)
     let template = '<a id="l{{ id }}" class="img-link icon-20x20-' + 
         '{{ icon }} btn btn-orange padded">{{ text }}</a>'
@@ -347,9 +357,18 @@ AutoFarmInterface.createButtonLink = function (icon, text) {
         id: id
     }, template)
 
+    let elem = document.createElement('div')
+    elem.innerHTML = html
+    elem = elem.firstChild
+
+    elem.addEventListener('click', function () {
+        windowDisplayService.openVillageInfo(vid)
+    })
+
     return {
         html: html,
-        id: 'l' + id
+        id: 'l' + id,
+        elem: elem
     }
 }
 

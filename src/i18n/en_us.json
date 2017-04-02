@@ -4,7 +4,8 @@
         "info": "Information",
         "settings": "Settings",
         "events": "Events",
-        "start": "Start"
+        "start": "Start",
+        "none": "None"
     },
     "info": {
         "presets": "Presets",
@@ -48,6 +49,10 @@
         "started": "AutoFarm started.",
         "paused": "AutoFarm paused.",
         "noVillages": "No villages avaliable, waiting attacks return.",
-        "commandLimit": "Limit of 50 attacks reached, waiting return."
+        "commandLimit": "Limit of 50 attacks reached, waiting return.",
+        "status": "Status",
+        "selectedVillage": "Village selected",
+        "lastAttack": "Last attack",
+        "attacking": "Attacking..."
     }
 }
