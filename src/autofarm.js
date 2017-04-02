@@ -16,6 +16,8 @@ eventTypeProvider = injector.get('eventTypeProvider')
 armyService = injector.get('armyService')
 math = require('helper/math')
 
+__debug = true
+
 /**
  * @class
  * @param {Object} [settings] - Configurações básicas.
@@ -398,6 +400,10 @@ AutoFarm.prototype.selectVillage = function (vid) {
  * @param {Array} data - Lista de dados.
  */
 AutoFarm.prototype.event = function (type, data) {
+    if (__debug) {
+        console.log(type, data)
+    }
+
     if (!this.eventsEnabled) {
         return this
     }
