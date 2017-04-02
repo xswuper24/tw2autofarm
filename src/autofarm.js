@@ -538,6 +538,9 @@ AutoFarm.prototype.getPresets = function (callback, presets) {
 
         for (let id in presets) {
             if (presets[id].name === this.settings.presetName) {
+                presets[id].units =
+                    AutoFarm.cleanPresetUnits(presets[id].units)
+
                 this.presets.push(presets[id])
             }
         }
@@ -557,6 +560,23 @@ AutoFarm.prototype.getPresets = function (callback, presets) {
     socketService.emit(routeProvider.GET_PRESETS, {}, (data) => {
         this.getPresets(callback, data.presets)
     })
+}
+
+/**
+ * Remove todas propriedades que tiverem valor zero.
+ * @param {Object} units - Unidades do preset a serem filtradas.
+ * @return {Object}
+ */
+AutoFarm.cleanPresetUnits = function (units) {
+    let pure = {}
+
+    for (let unit in units) {
+        if (units[unit] > 0) {
+            pure[unit] = units[unit]
+        }
+    }
+
+    return pure
 }
 
 /**
@@ -715,12 +735,13 @@ AutoFarm.prototype.commandInit = function () {
                     this.nextTarget()
 
                     let interval = this.randomSeconds(this.settings.interval)
+                    interval *= 1000
 
                     this.timerId = setTimeout(() => {
                         this.commandInit()
-                    }, interval * 1000)
+                    }, interval)
 
-                    this.event('nextCommandIn', [time])
+                    this.event('nextCommandIn', [interval])
                 })
             } else {
                 this.event('noUnits', [this.selectedVillage])
@@ -790,7 +811,7 @@ AutoFarm.prototype.sendCommand = function (preset, callback) {
         target_village: this.selectedTarget.id,
         type: 'attack',
         units: preset.units,
-        catapult_target: '',
+        catapult_target: 'headquarter',
         officers: {},
         icon: 0
     })
