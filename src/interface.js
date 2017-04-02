@@ -31,14 +31,6 @@ function AutoFarmInterface (autofarm) {
     this.bindSettings()
     this.bindEvents()
 
-    let selectedVillage = AutoFarmInterface.createButtonLink(
-        'village',
-        autofarm.selectedVillage.getName(),
-        autofarm.selectedVillage.getId()
-    )
-
-    this.$selected.append(selectedVillage.elem)
-
     return this
 }
 
@@ -100,6 +92,15 @@ AutoFarmInterface.prototype.buildWindow = function () {
     this.$status = $('#autofarm-status')
     this.$selected = $('#autofarm-selectedVillage')
     this.$last = $('#autofarm-last')
+
+    let selected = this.autofarm.selectedVillage
+    let selectedVillage = AutoFarmInterface.createButtonLink(
+        'village',
+        `${selected.getName()} (${selected.getX()}|${selected.getY()})`,
+        this.autofarm.selectedVillage.getId()
+    )
+
+    this.$selected.append(selectedVillage.elem)
 }
 
 /**
@@ -282,10 +283,13 @@ AutoFarmInterface.prototype.addEvent = function (options) {
  */
 AutoFarmInterface.prototype.bindEvents = function () {
     this.autofarm.on('sendCommand', (from, to) => {
+        let fromText = `${from.getName()} (${from.getX()}|${from.getY()})`
+        let toText = `${to.name} (${to.coords[0]}|${to.coords[1]})`
+
         this.addEvent({
             links: [
-                { type: 'village', name: from.getName(), id: from.getId() },
-                { type: 'village', name: to.name, id: to.id }
+                { type: 'village', name: fromText, id: from.getId() },
+                { type: 'village', name: toText, id: to.id }
             ],
             text: this.autofarm.lang.events.sendCommand,
             icon: 'attack'
@@ -296,9 +300,11 @@ AutoFarmInterface.prototype.bindEvents = function () {
     })
 
     this.autofarm.on('nextVillage', (next) => {
+        let nextText = `${next.getName()} (${next.getX()}|${next.getY()})`
+
         this.addEvent({
             links: [
-                { type: 'village', name: next.getName(), id: next.getId() }
+                { type: 'village', name: nextText, id: next.getId() }
             ],
             icon: 'village',
             text: this.autofarm.lang.events.nextVillage
@@ -306,7 +312,7 @@ AutoFarmInterface.prototype.bindEvents = function () {
 
         let selectedVillage = AutoFarmInterface.createButtonLink(
             'village',
-            next.getName(),
+            nextText,
             next.getId()
         )
 
