@@ -690,10 +690,11 @@ AutoFarm.prototype.commandInit = function () {
             // reinicia a função.
             if (this.uniqueVillage || this.settings.currentOnly) {
                 let backTime = this.villagesNextReturn[sid]
+                let randomTime = this.randomSeconds(5) * 1000
 
                 this.timerId = setTimeout(() => {
                     this.commandInit()
-                }, backTime)
+                }, backTime + randomTime)
             } else {
                 this.commandInit()
             }
@@ -713,11 +714,11 @@ AutoFarm.prototype.commandInit = function () {
                     
                     this.nextTarget()
 
-                    let time = this.settings.interval * 1000
+                    let interval = this.randomSeconds(this.settings.interval)
 
                     this.timerId = setTimeout(() => {
                         this.commandInit()
-                    }, time)
+                    }, interval * 1000)
 
                     this.event('nextCommandIn', [time])
                 })
@@ -864,4 +865,19 @@ AutoFarm.prototype.getNeabyCommand = function (commands) {
     timers.sort((a, b) => a - b)
 
     return Math.round((timers[0] * 1000) + 5000)
+}
+
+AutoFarm.prototype.randomSeconds = function (base, range) {
+    let max
+    let min
+
+    if (range) {
+        max = base + range
+        min = base - range
+    } else {
+        max = base + (base / 2)
+        min = base - (base / 2)
+    }
+
+    return Math.round(Math.random() * (max - min) + min)
 }
