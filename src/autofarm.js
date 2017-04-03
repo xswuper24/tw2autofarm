@@ -733,10 +733,12 @@ AutoFarm.prototype.commandInit = function () {
 
     // Caso a aldeia selecionada seja adicionada na lista
     // de aldeias ignoradas no meio da execução.
-
-    // TODO: verificar se o script continua funcionando depois disso
     if (this.ignoredVillages.includes(sid)) {
-        return this.nextVillage()
+        if (this.nextVillage()) {
+            this.commandInit()
+        }
+
+        return false
     }
 
     this.getVillageCommands((commands) => {
