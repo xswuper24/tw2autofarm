@@ -753,7 +753,7 @@ AutoFarm.prototype.commandInit = function () {
             // reinicia a função.
             if (this.uniqueVillage || this.settings.currentOnly) {
                 let backTime = this.villagesNextReturn[sid]
-                let randomTime = this.randomSeconds(5) * 1000
+                let randomTime = AutoFarm.randomSeconds(5) * 1000
 
                 this.timerId = setTimeout(() => {
                     this.commandInit()
@@ -777,7 +777,7 @@ AutoFarm.prototype.commandInit = function () {
                     
                     this.nextTarget()
 
-                    let interval = this.randomSeconds(this.settings.randomBase)
+                    let interval = AutoFarm.randomSeconds(this.settings.randomBase)
                     interval *= 1000
 
                     this.timerId = setTimeout(() => {
@@ -950,7 +950,7 @@ AutoFarm.prototype.getNeabyCommand = function (commands) {
  * @param {Number} base - Número base para o calculo.
  * @param {Number} [_range] - Range maxímo e minimo de aleatoriedade.
  */
-AutoFarm.prototype.randomSeconds = function (base, _range) {
+AutoFarm.randomSeconds = function (base, _range) {
     let max
     let min
 
@@ -973,7 +973,7 @@ AutoFarm.prototype.randomSeconds = function (base, _range) {
 AutoFarm.prototype.simulate = function (callback) {
     __debug && console.log('.simulate()', arguments)
 
-    let random = this.randomSeconds(1)
+    let random = AutoFarm.randomSeconds(1)
 
     let attackingFactor = () => {
         socketService.emit(routeProvider.GET_ATTACKING_FACTOR, {
