@@ -180,66 +180,70 @@ AutoFarmInterface.prototype.buildButton = function () {
 }
 
 /**
- * Listeners das para alteração das configurações do AutoFarm.
+ * Loop em todas configurações do AutoFarm
+ * @param {Function} callback
  */
-AutoFarmInterface.prototype.bindSettings = function () {
+AutoFarmInterface.prototype.eachSetting = function (callback) {
     for (let key in this.autofarm.settings) {
-        this.newSettings[key] = this.autofarm.settings[key]
+        let $input = $(`[name="${key}"]`, this.$window)
 
-        let $input = this.$window.querySelector(`[name="${key}"]`)
-
-        if (!$input) {
+        if (!$input.length) {
             continue
         }
 
-        switch ($input.type) {
-        case 'text':
-        case 'number':
-        case 'select-one':
-            if ($input.type !== 'select-one') {
-                $input.value = this.autofarm.settings[key]
-            }
-
-            $input.addEventListener('change', () => {
-                this.newSettings[key] = /^\d+$/.test($input.value)
-                    ? parseInt($input.value, 10)
-                    : $input.value
-            })
-            break
-        case 'checkbox':
-            let change = this.autofarm.settings[key] ? 'add' : 'remove'
-
-            if (this.autofarm.settings[key]) {
-                $input.setAttribute('checked', true)
-            }
-
-            $input.parentNode.classList[change](
-                'icon-26x26-checkbox-checked'
-            )
-
-            $input.addEventListener('click', () => {
-                this.newSettings[key] = $input.checked
-                change = $input.checked ? 'add' : 'remove'
-                $input.parentNode.classList[change](
-                    'icon-26x26-checkbox-checked'
-                )
-            })
-            break
-        }
+        callback($input)
     }
+}
 
-    this.$settings.on('submit', (event) => {
-        event.preventDefault()
+/**
+ * Listeners das para alteração das configurações do AutoFarm.
+ */
+AutoFarmInterface.prototype.bindSettings = function () {
+    let checkedClass = 'icon-26x26-checkbox-checked'
+    let playerId = this.autofarm.player.getId()
+
+    // Insere os valores nas entradas
+    this.eachSetting(($input) => {
+        let type = $input[0].type
+        let name = $input[0].name
+
+        if (type === 'select-one') {
+            return
+        }
+
+        if (type === 'checkbox') {
+            if (this.autofarm.settings[name]) {
+                $input[0].checked = true
+                $input.parent().addClass(checkedClass)
+            }
+
+            $input.on('click', () => {
+                $input.parent().toggleClass(checkedClass)
+            })
+
+            return
+        }
+
+        $input.val(this.autofarm.settings[name])
     })
 
-    let pid = modelDataService.getSelectedCharacter().getId()
+    // Quarda os valores quando salvos
+    this.$settings.on('submit', (event) => {
+        event.preventDefault()
 
-    $('#autofarm-save').on('click', (event) => {
         if (this.$settings[0].checkValidity()) {
-            this.autofarm.updateSettings(this.newSettings)
+            let settings = {}
 
-            let json = JSON.stringify(this.newSettings)
-            localStorage.setItem(`${pid}_autofarm`, json)
+            this.eachSetting(($input) => {
+                let name = $input[0].name
+
+                settings[name] = $input.val()
+            })
+
+            this.autofarm.updateSettings(settings)
+
+            let jsonSettings = JSON.stringify(settings)
+            localStorage[`${playerId}_autofarm`] = jsonSettings
 
             $rootScope.$broadcast(eventTypeProvider.MESSAGE_SUCCESS, {
                 message: this.autofarm.lang.settings.saved
