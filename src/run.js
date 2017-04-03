@@ -4,14 +4,12 @@ if (typeof autofarm === 'undefined') {
     settings = settings ? JSON.parse(settings) : {}
 
     autofarm = new AutoFarm(settings)
-    autofarmInterface = new AutoFarmInterface(autofarm)
-
-    let $start = $('#autofarm-start')
+    interface = new AutoFarmInterface(autofarm)
 
     autofarm.on('start', function () {
-        $start.html(autofarm.lang.general.pause)
-        $start.removeClass('btn-green')
-        $start.addClass('btn-red')
+        interface.$start.html(autofarm.lang.general.pause)
+        interface.$start.removeClass('btn-green')
+        interface.$start.addClass('btn-red')
 
         $rootScope.$broadcast(eventTypeProvider.MESSAGE_SUCCESS, {
             message: autofarm.lang.events.start
@@ -19,16 +17,16 @@ if (typeof autofarm === 'undefined') {
     })
 
     autofarm.on('pause', function () {
-        $start.html(autofarm.lang.general.start)
-        $start.removeClass('btn-red')
-        $start.addClass('btn-green')
+        interface.$start.html(autofarm.lang.general.start)
+        interface.$start.removeClass('btn-red')
+        interface.$start.addClass('btn-green')
 
         $rootScope.$broadcast(eventTypeProvider.MESSAGE_SUCCESS, {
             message: autofarm.lang.events.pause
         })
     })
 
-    $start.on('click', function () {
+    interface.$start.on('click', function () {
         if (autofarm.paused) {
             if (!autofarm.presets.length) {
 
@@ -43,5 +41,13 @@ if (typeof autofarm === 'undefined') {
         } else {
             autofarm.pause()
         }
+    })
+
+    autofarm.on('presetsChange', () => {
+        interface.updatePresetList()
+    })
+
+    autofarm.on('groupsChanged', () => {
+        interface.updateGroupList()
     })
 }

@@ -18,6 +18,8 @@ function AutoFarmInterface (autofarm) {
     this.$status = null
     this.$selected = null
     this.$last = null
+    this.$preset = null
+    this.$groupIgnore = null
 
     this.newSettings = {}
     this.activeTab = 'info'
@@ -30,6 +32,9 @@ function AutoFarmInterface (autofarm) {
     this.buildButton()
     this.bindSettings()
     this.bindEvents()
+
+    autofarm.getPresets(() => this.updatePresetList())
+    this.updateGroupList()
 
     return this
 }
@@ -92,6 +97,9 @@ AutoFarmInterface.prototype.buildWindow = function () {
     this.$status = $('#autofarm-status')
     this.$selected = $('#autofarm-selectedVillage')
     this.$last = $('#autofarm-last')
+    this.$start = $('#autofarm-start')
+    this.$preset = $('#presetName')
+    this.$groupIgnore = $('#groupIgnore')
 
     let selected = this.autofarm.selectedVillage
     let selectedVillage = AutoFarmInterface.createButtonLink(
@@ -178,12 +186,19 @@ AutoFarmInterface.prototype.bindSettings = function () {
     for (let key in this.autofarm.settings) {
         this.newSettings[key] = this.autofarm.settings[key]
 
-        let $input = this.$window.querySelector(`input[name="${key}"]`)
+        let $input = this.$window.querySelector(`[name="${key}"]`)
+
+        if (!$input) {
+            continue
+        }
 
         switch ($input.type) {
         case 'text':
         case 'number':
-            $input.value = this.autofarm.settings[key]
+        case 'select-one':
+            if ($input.type !== 'select-one') {
+                $input.value = this.autofarm.settings[key]
+            }
 
             $input.addEventListener('change', () => {
                 this.newSettings[key] = /^\d+$/.test($input.value)
@@ -191,7 +206,7 @@ AutoFarmInterface.prototype.bindSettings = function () {
                     : $input.value
             })
             break
-        default:
+        case 'checkbox':
             let change = this.autofarm.settings[key] ? 'add' : 'remove'
 
             if (this.autofarm.settings[key]) {
@@ -276,6 +291,59 @@ AutoFarmInterface.prototype.addEvent = function (options) {
     this.$events.prepend($tr)
     this.$scrollbar.recalc()
     this.eventCount++
+}
+
+/**
+ * Atualiza a lista de presets na aba de configurações.
+ */
+AutoFarmInterface.prototype.updatePresetList = function () {
+    let loaded = {}
+    let presets = modelDataService.getPresetList().presets
+
+    this.$preset.html(
+        `<option value="none">${this.autofarm.lang.general.none}</option>`
+    )
+
+    for (let id in presets) {
+        let name = presets[id].name
+
+        if (name in loaded) {
+            continue
+        }
+
+        let selected = this.autofarm.settings.presetName === name
+            ? 'selected'
+            : ''
+
+        this.$preset.append(
+            `<option value="${name}" ${selected}>${name}</option>`
+        )
+
+        loaded[name] = true
+    }
+}
+
+/**
+ * Atualiza a lista de grupos na aba de configurações.
+ */
+AutoFarmInterface.prototype.updateGroupList = function () {
+    let groups = modelDataService.getGroupList().getGroups()
+
+    this.$groupIgnore.html(
+        `<option value="none">${this.autofarm.lang.general.none}</option>`
+    )
+
+    for (let id in groups) {
+        let name = groups[id].name
+
+        let selected = this.autofarm.settings.groupIgnore === name
+            ? 'selected'
+            : ''
+
+        this.$groupIgnore.append(
+            `<option value="${name}" ${selected}>${name}</option>`
+        )
+    }
 }
 
 /**
