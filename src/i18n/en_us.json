@@ -9,8 +9,7 @@
     },
     "info": {
         "presets": "Presets",
-        "presets_1": "The AutoFarm use presets to send attacks, so the account need at least one preset with the name <em>.farm</em>",
-        "presets_2": "<strong>It is recommended</strong> change the name of preset on the settings tab.",
+        "presets_1": "The AutoFarm use presets to send attacks, then you need to select one in the settings tab.",
         "presets_3": "You don't need to activate the preset in every village.",
         "presets_4": "Only the units specified in preset will be used, <strong>officers will be ignored</strong>.",
         "presets_5": "It is possible change the amount of units while the farm is active. New attacks will be sent with the new specified units.",

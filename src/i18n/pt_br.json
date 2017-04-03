@@ -10,8 +10,7 @@
     },
     "info": {
         "presets": "Predefinições",
-        "presets_1": "O AutoFarm utiliza predefinições para enviar os ataques, então é preciso que a conta tenha pelo menos uma predefinição nomeada <em>.farm</em> para que os ataques iniciem.",
-        "presets_2": "<strong>É recomendável</strong> alterar o nome da predefinição na aba de configurações do script.",
+        "presets_1": "O AutoFarm utiliza predefinições para enviar os ataques, então é preciso que você selecione uma na aba de configurações.",
         "presets_3": "Não é preciso ter a predefinição ativada nas aldeias para funcionar.",
         "presets_4": "Serão usados apenas o número de tropas especificados na predefinição, <strong>oficiais não serão utilizados</strong>.",
         "presets_5": "É possível alterar a quantidade de tropas na predefinição enquanto o farmador estiver ativado enviando os ataques. Os novos ataques serão enviandos com a nova quantidade especificada.",
