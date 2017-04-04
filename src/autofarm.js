@@ -45,8 +45,8 @@ function AutoFarm (settings = {}) {
         radius: 10,
         maxTravelTime: '01:00:00',
         randomBase: 3,
-        presetName: '.farm',
-        groupIgnore: '.ignore',
+        presetName: '',
+        groupIgnore: '',
         currentOnly: false
     }
 
