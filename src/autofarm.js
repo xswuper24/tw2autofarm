@@ -187,34 +187,55 @@ AutoFarm.prototype.pause = function () {
 /**
  * Atualiza as novas configurações passados pelo usuário e as fazem
  *     ter efeito caso o farm esteja em funcionamento.
- * @param {Object} newSettings - Novas configurações.
+ * @param {Object} changes - Novas configurações.
  */
-AutoFarm.prototype.updateSettings = function (newSettings) {
+AutoFarm.prototype.updateSettings = function (changes) {
     this.disableEvents()
 
     let restart = false
+    let update = {}
 
     if (!this.paused) {
         restart = true
         this.pause()
     }
 
-    for (let key in newSettings) {
-        this.settings[key] = newSettings[key]
+    if (changes.groupIgnore !== this.settings.groupIgnore) {
+        update.group = true
     }
 
-    this.updateGroupIgnore()
-    this.updateIgnoredVillages()
+    if (changes.presetName !== this.settings.presetName) {
+        update.preset = true
+    }
 
-    this.getPresets(() => {
-        if (this.presets.length && restart) {
-            this.start()
-        }
-    })
+    if (changes.minDistance !== this.settings.minDistance) {
+        update.targets = true
+    }
 
-    // Reseta a lista de alvos caso as configurações de distância
-    // sejam alteradas.
-    this.targetList = {}
+    if (changes.maxDistance !== this.settings.maxDistance) {
+        update.targets = true
+    }
+
+    for (let key in changes) {
+        this.settings[key] = changes[key]
+    }
+
+    if (update.group) {
+        this.updateGroupIgnore()
+        this.updateIgnoredVillages()
+    }
+
+    if (update.preset) {
+        this.getPresets()
+    }
+
+    if (update.targets) {
+        this.targetList = {}
+    }
+
+    if (restart && this.presets.length) {
+        this.start()
+    }
 
     this.enableEvents()
 }
