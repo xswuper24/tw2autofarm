@@ -1042,6 +1042,8 @@ AutoFarm.prototype.getNeabyCommand = function (commands) {
  * @param {Number} [_range] - Range maxímo e minimo de aleatoriedade.
  */
 AutoFarm.randomSeconds = function (base, _range) {
+    base = parseInt(base, 10)
+    
     let max
     let min
 
