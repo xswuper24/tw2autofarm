@@ -212,6 +212,10 @@ AutoFarm.prototype.updateSettings = function (newSettings) {
         }
     })
 
+    // Reseta a lista de alvos caso as configurações de distância
+    // sejam alteradas.
+    this.targetList = {}
+
     this.enableEvents()
 }
 
