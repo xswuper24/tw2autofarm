@@ -233,7 +233,7 @@ AutoFarm.prototype.updateSettings = function (changes) {
         this.targetList = {}
     }
 
-    if (restart && this.presets.length) {
+    if (restart) {
         this.start()
     }
 
