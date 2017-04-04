@@ -913,6 +913,13 @@ AutoFarm.prototype.sendCommand = function (preset, callback) {
     __debug && console.log('.sendCommand()', arguments)
 
     this.simulate(() => {
+        // Algumas vezes o script é parado depois de .commandInit ter
+        // iniciado, então uma verificação no final da função pode parar
+        // um ataque indesejado.
+        if (this.paused) {
+            return false
+        }
+
         this.emit(routeProvider.SEND_CUSTOM_ARMY, {
             start_village: this.selectedVillage.getId(),
             target_village: this.selectedTarget.id,
