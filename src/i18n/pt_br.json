@@ -30,7 +30,8 @@
     "settings": {
         "saved": "Configurações salvas!",
         "save": "Salvar configurações",
-        "radius": "Dintância máxima",
+        "maxDistance": "Distância máxima (campos)",
+        "minDistance": "Distância mínima (campos)",
         "maxTravelTime": "Tempo máximo de viagem (ida)",
         "randomBase": "Base do intervalo aleatório",
         "currentOnly": "Usar apenas aldeia selecionada",

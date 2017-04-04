@@ -30,7 +30,8 @@
     "settings": {
         "saved": "Settings saved!",
         "save": "Save settings",
-        "radius": "Maximum distance",
+        "maxDistance": "Maximum distance (filds)",
+        "minDistance": "Minimum distance (filds)",
         "maxTravelTime": "Maximum travel time (going)",
         "randomBase": "Random interval base",
         "currentOnly": "Use only the selected village",

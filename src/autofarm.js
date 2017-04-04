@@ -21,7 +21,10 @@ __debug = true
 /**
  * @class
  * @param {Object} [settings] - Configurações básicas.
- * @param {Number} settings.radius - Distáncia máxima que os alvos podem estar. 
+ * @param {Number} settings.maxDistance - Distáncia máxima que os alvos
+ *     podem estar.
+ * @param {Number} settings.minDistance - Distáncia mínima que os alvos
+ *     podem estar.
  * @param {Number} settings.randomBase - Intervalo que será  entre
  *     alterado entre cada ataque com base nesse valor (segundos).
  * @param {Number} settings.presetName - Nome do preset usado para os comandos.
@@ -42,7 +45,8 @@ function AutoFarm (settings = {}) {
      * @type {Object}
      */
     this.defaults = {
-        radius: 10,
+        maxDistance: 10,
+        minDistance: 0,
         maxTravelTime: '01:00:00',
         randomBase: 3,
         presetName: '',
@@ -295,7 +299,7 @@ AutoFarm.prototype.getTargets = function (callback) {
         return callback()
     }
 
-    let size = this.settings.radius
+    let size = this.settings.maxDistance
 
     socketService.emit(routeProvider.MAP_GETVILLAGES, {
         x: coords.x - size,
@@ -316,14 +320,20 @@ AutoFarm.prototype.getTargets = function (callback) {
 
             let distance = math.actualDistance(coords, target)
 
-            if (distance <= this.settings.radius) {
-                nearby.push({
-                    coords: [target.x, target.y],
-                    distance: distance,
-                    id: target.id,
-                    name: target.name
-                })
+            if (distance < this.settings.minDistance) {
+                continue
             }
+
+            if (distance > this.settings.maxDistance) {
+                continue
+            }
+
+            nearby.push({
+                coords: [target.x, target.y],
+                distance: distance,
+                id: target.id,
+                name: target.name
+            })
         }
 
         if (nearby.length === 0) {
