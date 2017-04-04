@@ -4,3 +4,4 @@ test
 cert.pem
 key.pem
 TODO.md
+npm-debug.log
