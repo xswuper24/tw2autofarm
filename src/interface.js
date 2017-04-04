@@ -1,4 +1,5 @@
 windowDisplayService = injector.get('windowDisplayService')
+windowManagerService = injector.get('windowManagerService')
 eventQueue = require('queues/EventQueue')
 $filter = injector.get('$filter')
 
@@ -169,6 +170,8 @@ AutoFarmInterface.prototype.buildButton = function () {
     $('#toolbar-left').prepend(this.$button)
 
     $(this.$button).on('click', () => {
+        windowManagerService.closeAll()
+        
         this.$window.style.visibility = 'visible'
         this.$wrapper.addClass('window-open')
 
