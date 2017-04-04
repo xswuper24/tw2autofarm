@@ -1,5 +1,9 @@
 # History
 
+## 0.10.1 - 04/04/2017
+- [Fix] Base aleatória calculando fora do normal.
+- [Fix] Aldeias fora do limite de tempo causavam problemas na continuação dos ataques.
+
 ## 0.10.0 - 03/04/2017
 
 - [New] Deixando os ataques automáticos similiares aos ataques manuais.
