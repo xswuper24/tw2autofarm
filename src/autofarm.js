@@ -508,9 +508,15 @@ AutoFarm.prototype.on = function (type, handler) {
  *     comando não seja maior do que o configurado.
  * @param {Function} villageUnits - Quantidade de unidades disponíveis
  *     na aldeia.
+ *
+ * @return {Number} Retorna 0 caso o preset não tenha enviado por causa
+ *     de limite de tempo de viagem ou 1 se não tiver nenhum preser com
+ *     tropas sulficientes.
  */
 AutoFarm.prototype.presetAvail = function (villageUnits) {
     __debug && console.log('.presetAvail()', arguments)
+
+    let timeLimit = false
 
     for (let preset of this.presets) {
         let avail = true
@@ -521,12 +527,18 @@ AutoFarm.prototype.presetAvail = function (villageUnits) {
             }
         }
 
-        if (avail && this.presetTimeAvail(preset)) {
-            return preset
+        if (avail) {
+            if (this.presetTimeAvail(preset)) {
+                return preset
+            } else {
+                timeLimit = true
+
+                continue
+            }
         }
     }
 
-    return false
+    return timeLimit ? 0 : 1
 }
 
 /**
@@ -823,31 +835,42 @@ AutoFarm.prototype.commandInit = function () {
         }
 
         this.getVillageUnits((villageUnits) => {
-            let presetAvail = this.presetAvail(villageUnits)
+            let preset = this.presetAvail(villageUnits)
 
-            if (presetAvail) {
-                this.sendCommand(presetAvail, () => {
-                    this.event('sendCommand', [
-                        this.selectedVillage,
-                        this.selectedTarget
-                    ])
-                    
-                    this.nextTarget()
+            // Limite de tempo. Apenas troca o alvo e continua.
+            if (preset === 0) {
+                this.nextTarget()
+                this.commandInit()
 
-                    let interval = AutoFarm.randomSeconds(this.settings.randomBase)
-                    interval *= 1000
+                return false
+            }
 
-                    this.timerId = setTimeout(() => {
-                        this.commandInit()
-                    }, interval)
-
-                    this.event('nextCommandIn', [interval])
-                })
-            } else {
+            // Nenhum preset esta presente na aldeia. Troca de aldeia.
+            if (preset === 1) {
                 this.event('noUnits', [this.selectedVillage])
                 this.getNextReturn(commands)
                 this.commandVillageNoUnits(commands)
+
+                return false
             }
+
+            this.sendCommand(preset, () => {
+                this.event('sendCommand', [
+                    this.selectedVillage,
+                    this.selectedTarget
+                ])
+                
+                this.nextTarget()
+
+                let interval = AutoFarm.randomSeconds(this.settings.randomBase)
+                interval *= 1000
+
+                this.timerId = setTimeout(() => {
+                    this.commandInit()
+                }, interval)
+
+                this.event('nextCommandIn', [interval])
+            })
         })
     })
 }
@@ -1042,6 +1065,8 @@ AutoFarm.prototype.getNeabyCommand = function (commands) {
  * @param {Number} [_range] - Range maxímo e minimo de aleatoriedade.
  */
 AutoFarm.randomSeconds = function (base, _range) {
+    base = parseInt(base, 10)
+    
     let max
     let min
 
