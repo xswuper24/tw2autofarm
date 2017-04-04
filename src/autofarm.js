@@ -45,10 +45,10 @@ function AutoFarm (settings = {}) {
      * @type {Object}
      */
     this.defaults = {
-        maxDistance: 10,
-        minDistance: 0,
+        maxDistance: '10',
+        minDistance: '0',
         maxTravelTime: '01:00:00',
-        randomBase: 3,
+        randomBase: '3',
         presetName: '',
         groupIgnore: '',
         currentOnly: false
