@@ -775,26 +775,35 @@ AutoFarm.prototype.commandInit = function () {
 
     // Se aldeia ainda não tiver obtido a lista de alvos, obtem
     // os alvos e executa o comando novamente para dar continuidade.
-    if (!this.targetList[sid]) {
-        return this.getTargets(() => {
-            if (this.selectFirstTarget()) {
-                this.commandInit()
-            } else {
+    let targetsLoaded = this.targetList.hasOwnProperty(sid)
+
+    if (!targetsLoaded) {
+        this.getTargets(() => {
+            let hasTargets = this.selectFirstTarget()
+
+            if (!hasTargets) {
                 this.nextVillage()
-                this.commandInit()
             }
+
+            this.commandInit()
         })
+
+        return false
     }
 
     this.selectFirstTarget()
     
-    // Se a aldeia estiver no limite de 50 comandos ou não tem unidades
-    // sulficientes para enviar o comando.
-    if (sid in this.villagesNextReturn) {
-        if (!this.nextVillage()) {
-            this.commandNextReturn()
-        } else {
+    // Verifica se a aldeia esta na lista de espera por limite de 50 comandos
+    // ou não ter unidades sulficientes.
+    let isWaiting = this.villagesNextReturn.hasOwnProperty(sid)
+
+    if (isWaiting) {
+        let hasVillages = this.nextVillage()
+
+        if (hasVillages) {
             this.commandInit()
+        } else {
+            this.commandNextReturn()
         }
 
         return false
@@ -803,7 +812,9 @@ AutoFarm.prototype.commandInit = function () {
     // Caso a aldeia selecionada seja adicionada na lista
     // de aldeias ignoradas no meio da execução.
     if (this.ignoredVillages.includes(sid)) {
-        if (this.nextVillage()) {
+        let hasVillages = this.nextVillage()
+
+        if (hasVillages) {
             this.commandInit()
         }
 
@@ -813,7 +824,9 @@ AutoFarm.prototype.commandInit = function () {
     this.getVillageCommands((commands) => {
         // Quando o limite de comandos for atingido, a aldeia será colocada
         // na lista de de espera (villagesNextReturn)
-        if (commands.length >= 50) {
+        console.info('this.getVillageCommands', commands.length)
+
+        if (commands.length === 50) {
             this.event('commandLimit', [this.selectedVillage])
             this.getNextReturn(commands)
 
@@ -862,7 +875,9 @@ AutoFarm.prototype.commandInit = function () {
                 
                 this.nextTarget()
 
-                let interval = AutoFarm.randomSeconds(this.settings.randomBase)
+                let interval
+
+                interval = AutoFarm.randomSeconds(this.settings.randomBase)
                 interval *= 1000
 
                 this.timerId = setTimeout(() => {
@@ -960,6 +975,9 @@ AutoFarm.prototype.sendCommand = function (preset, callback) {
     return true
 }
 
+/**
+ * Wrapper do .emit nativo do jogo para poder lidar com timeouts.
+ */
 AutoFarm.prototype.emit = function (route, data, callback) {
     let self = this
 
@@ -1011,18 +1029,18 @@ AutoFarm.prototype.commandNextReturn = function () {
 AutoFarm.prototype.nextVillageUnits = function () {
     __debug && console.log('.nextVillageUnits()', arguments)
 
-    let sortable = []
+    let villages = []
 
     for (let vid in this.villagesNextReturn) {
-        sortable.push({
+        villages.push({
             vid: vid,
             time: this.villagesNextReturn[vid]
         })
     }
 
-    sortable.sort((a, b) => a.time - b.time)
+    villages.sort((a, b) => a.time - b.time)
 
-    return sortable[0]
+    return villages[0]
 }
 
 /**
