@@ -26,7 +26,15 @@ if (typeof autofarm === 'undefined') {
         })
     })
 
-    interface.$start.on('click', function () {
+    autofarm.on('presetsChange', () => {
+        interface.updatePresetList()
+    })
+
+    autofarm.on('groupsChanged', () => {
+        interface.updateGroupList()
+    })
+
+    let startFarm = function () {
         if (autofarm.paused) {
             if (!autofarm.presets.length) {
 
@@ -41,13 +49,8 @@ if (typeof autofarm === 'undefined') {
         } else {
             autofarm.pause()
         }
-    })
+    }
 
-    autofarm.on('presetsChange', () => {
-        interface.updatePresetList()
-    })
-
-    autofarm.on('groupsChanged', () => {
-        interface.updateGroupList()
-    })
+    interface.$start.on('click', startFarm)
+    Mousetrap.bind('shift+f', startFarm)
 }
