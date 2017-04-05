@@ -48,6 +48,7 @@
         "paused": "AutoFarm paused.",
         "noVillages": "No villages avaliable, waiting attacks return.",
         "commandLimit": "Limit of 50 attacks reached, waiting return.",
+        "noUnits": "No units avaliable in village, waiting attacks return.",
         "status": "Status",
         "selectedVillage": "Village selected",
         "lastAttack": "Last attack",

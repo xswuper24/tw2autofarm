@@ -49,6 +49,7 @@
         "paused": "AutoFarm pausado.",
         "noVillages": "Nenhuma aldeia disponível, aguardando ataques retornarem.",
         "commandLimit": "Limite de 50 ataques atingido, aguardando retorno.",
+        "noUnits": "Sem unidades na aldeia, aguardando ataques retornarem.",
         "status": "Status",
         "selectedVillage": "Aldeia selecionada",
         "lastAttack": "Último ataque",

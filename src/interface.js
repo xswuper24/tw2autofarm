@@ -404,6 +404,18 @@ AutoFarmInterface.prototype.bindEvents = function () {
         this.$status.html(this.autofarm.lang.events.paused)
     })
 
+    this.autofarm.on('commandLimit', () => {
+        if (this.autofarm.uniqueVillage || this.autofarm.settings.currentOnly) {
+            this.$status.html(this.autofarm.lang.events.commandLimit)
+        }
+    })
+
+    this.autofarm.on('noUnits', () => {
+        if (this.autofarm.uniqueVillage || this.autofarm.settings.currentOnly) {
+            this.$status.html(this.autofarm.lang.events.noUnits)
+        }
+    })
+
     this.autofarm.on('noUnitsNoCommands', () => {
         this.$status.html(this.autofarm.lang.events.noUnitsNoCommands)
     })
