@@ -145,20 +145,6 @@ function AutoFarm (settings = {}) {
      */
     this.ignoredVillages = null
 
-    /**
-     * Lista de timeouts gerados para lidar com erros de conexão
-     * @type {Object}
-     */
-    this.emitTimeouts = {}
-
-    /**
-     * Contagem de timeouts gerados. Cada timeout precisa ser devidamente
-     * finalizado, por isso precisam ser armazenados individualmente
-     * em this.emitTimeouts
-     * @type {Number}
-     */
-    this.emitTimeoutsIndex = 0
-
     this.updateGroupIgnore()
     this.updateIgnoredVillages()
     this.gameListeners()
@@ -195,10 +181,6 @@ AutoFarm.prototype.pause = function () {
     this.event('pause')
 
     clearTimeout(this.timerId)
-    
-    for (let id in this.emitTimeouts) {
-        clearTimeout(this.emitTimeouts[id])
-    }
 
     return true
 }
@@ -345,7 +327,7 @@ AutoFarm.prototype.getTargets = function (callback) {
 
     let size = this.settings.maxDistance
 
-    this.emit(routeProvider.MAP_GETVILLAGES, {
+    socketService.emit(routeProvider.MAP_GETVILLAGES, {
         x: coords.x - size,
         y: coords.y - size,
         width: size * 2,
@@ -592,7 +574,7 @@ AutoFarm.time2seconds = function (time) {
 AutoFarm.prototype.getVillageCommands = function (callback) {
     __debug && console.log('.getVillageCommands()', arguments)
 
-    this.emit(routeProvider.GET_OWN_COMMANDS, {
+    socketService.emit(routeProvider.GET_OWN_COMMANDS, {
         village_id: this.selectedVillage.getId()
     }, (data) => {
         callback(data.commands)
@@ -606,7 +588,7 @@ AutoFarm.prototype.getVillageCommands = function (callback) {
 AutoFarm.prototype.getVillageUnits = function (callback) {
     __debug && console.log('.getVillageUnits()', arguments)
 
-    this.emit(routeProvider.VILLAGE_UNIT_INFO, {
+    socketService.emit(routeProvider.VILLAGE_UNIT_INFO, {
         village_id: this.selectedVillage.getId()
     }, (data) => {
         callback(data.available_units)
@@ -646,7 +628,7 @@ AutoFarm.prototype.getPresets = function (callback, presets) {
             modelDataService.getPresetList().presets)
     }
 
-    this.emit(routeProvider.GET_PRESETS, {}, (data) => {
+    socketService.emit(routeProvider.GET_PRESETS, {}, (data) => {
         this.getPresets(callback, data.presets)
     })
 }
@@ -734,9 +716,6 @@ AutoFarm.prototype.gameListeners = function () {
 
     let continueCommand = ($event, data) => {
         if (this.commandProgressId === data.target.id) {
-            clearTimeout(this.emitTimeouts.command)
-            delete this.emitTimeouts.command
-
             this.commandProgressCallback(data)
             this.commandProgressCallback = null
             this.commandProgressId = null
@@ -824,8 +803,6 @@ AutoFarm.prototype.commandInit = function () {
     this.getVillageCommands((commands) => {
         // Quando o limite de comandos for atingido, a aldeia será colocada
         // na lista de de espera (villagesNextReturn)
-        console.info('this.getVillageCommands', commands.length)
-
         if (commands.length === 50) {
             this.event('commandLimit', [this.selectedVillage])
             this.getNextReturn(commands)
@@ -958,7 +935,7 @@ AutoFarm.prototype.sendCommand = function (preset, callback) {
             return false
         }
 
-        this.emit(routeProvider.SEND_CUSTOM_ARMY, {
+        socketService.emit(routeProvider.SEND_CUSTOM_ARMY, {
             start_village: this.selectedVillage.getId(),
             target_village: this.selectedTarget.id,
             type: 'attack',
@@ -973,36 +950,6 @@ AutoFarm.prototype.sendCommand = function (preset, callback) {
     })
 
     return true
-}
-
-/**
- * Wrapper do .emit nativo do jogo para poder lidar com timeouts.
- */
-AutoFarm.prototype.emit = function (route, data, callback) {
-    let self = this
-
-    if (route.type === 'Command/sendCustomArmy') {
-        socketService.emit(route, data)
-
-        this.emitTimeouts.command = setTimeout(() => {
-            this.emit(route, data)
-        }, 12000)
-    } else {
-        let id = this.emitTimeoutsIndex++
-
-        socketService.emit(route, data, function () {
-            clearTimeout(self.emitTimeouts[id])
-            delete self.emitTimeouts[id]
-            
-            if (callback) {
-                callback.apply(self, arguments)
-            }
-        })
-
-        this.emitTimeouts[id] = setTimeout(() => {
-            this.emit(route, data, callback)
-        }, 12000)
-    }
 }
 
 /**
@@ -1110,13 +1057,13 @@ AutoFarm.prototype.simulate = function (callback) {
     let random = AutoFarm.randomSeconds(1)
 
     let attackingFactor = () => {
-        this.emit(routeProvider.GET_ATTACKING_FACTOR, {
+        socketService.emit(routeProvider.GET_ATTACKING_FACTOR, {
             target_id: this.selectedTarget.id
         })
     }
 
     let shopOffers = () => {
-        this.emit(routeProvider.PREMIUM_LIST_SHOP_OFFERS, {})
+        socketService.emit(routeProvider.PREMIUM_LIST_SHOP_OFFERS, {})
     }
 
     attackingFactor()
