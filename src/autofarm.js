@@ -744,7 +744,11 @@ AutoFarm.prototype.gameListeners = function () {
  * Inicia o ciclo de comandos do script
  */
 AutoFarm.prototype.commandInit = function () {
-    __debug && console.log('.commandInit()', arguments)
+    if (__debug) {
+        console.groupEnd('AutoFarm.command')
+        console.group('AutoFarm.command')
+        console.log('.commandInit()', arguments)
+    }
 
     if (this.paused) {
         return false
