@@ -1,5 +1,12 @@
 # History
 
+## 0.10.2 07/04/2017
+- [New] Esquema para manter o script rodando mesmo após ocorrer erros internos no jogo.
+- [New] Ataque para abrir janela do script e inicar. (Z & Shift+Z)
+- [Fix] Janela do script agora se comporta como as outras janelas do jogo.
+- [Fix] Notificações de inicio/pausa não apareciam algumas vezes.
+- [Fix] Alguns eventos só faziam sentido para jogadores que possuiam mais de uma aldeia.
+
 ## 0.10.1 - 04/04/2017
 - [Fix] Base aleatória calculando fora do normal.
 - [Fix] Aldeias fora do limite de tempo causavam problemas na continuação dos ataques.
