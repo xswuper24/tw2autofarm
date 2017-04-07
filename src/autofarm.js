@@ -572,7 +572,14 @@ AutoFarm.prototype.getVillageCommands = function (callback) {
 
     socketService.emit(routeProvider.GET_OWN_COMMANDS, {
         village_id: this.selectedVillage.getId()
-    }, (data) => {
+    }, (data, event) => {
+        // Internal fucked up code, INNOGAMES?
+        if (event === 'Exception/DbException') {
+            this.getVillageCommands(callback)
+
+            return false
+        }
+
         callback(data.commands)
     })
 }
