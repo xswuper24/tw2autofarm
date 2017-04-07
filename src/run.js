@@ -52,5 +52,5 @@ if (typeof autofarm === 'undefined') {
     }
 
     interface.$start.on('click', startFarm)
-    Mousetrap.bind('shift+f', startFarm)
+    hotkeys.add('shift+z', startFarm)
 }

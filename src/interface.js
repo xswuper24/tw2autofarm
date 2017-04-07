@@ -38,6 +38,10 @@ function AutoFarmInterface (autofarm) {
         this.closeWindow()
     }, ['INPUT', 'SELECT', 'TEXTAREA'])
 
+    hotkeys.add('z', () => {
+        this.openWindow()
+    })
+
     return this
 }
 
