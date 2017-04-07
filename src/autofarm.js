@@ -264,7 +264,7 @@ AutoFarm.prototype.enableEvents = function () {
  * @return {Boolean}
  */
 AutoFarm.prototype.nextTarget = function (_initial, _noTargets = 0) {
-    __debug && console.log('.nextTarget()', arguments)
+    __debug && console.log('.nextTarget()')
 
     let sid = this.selectedVillage.getId()
     let targets = this.targetList[sid]
@@ -305,7 +305,7 @@ AutoFarm.prototype.nextTarget = function (_initial, _noTargets = 0) {
  * Apenas um atalho para facilitar a leitura
  */
 AutoFarm.prototype.selectFirstTarget = function () {
-    __debug && console.log('.selectFirstTarget()', arguments)
+    __debug && console.log('.selectFirstTarget()')
 
     return this.nextTarget(true)
 }
@@ -316,7 +316,7 @@ AutoFarm.prototype.selectFirstTarget = function () {
  * @return {Boolean}
  */
 AutoFarm.prototype.getTargets = function (callback) {
-    __debug && console.log('.getTargets()', arguments)
+    __debug && console.log('.getTargets()')
 
     let coords = this.selectedVillage.getPosition()
     let sid = this.selectedVillage.getId()
@@ -389,7 +389,7 @@ AutoFarm.prototype.getTargets = function (callback) {
  * @return {Boolean}
  */
 AutoFarm.prototype.nextVillage = function (_loop = 0) {
-    __debug && console.log('.nextVillage()', arguments)
+    __debug && console.log('.nextVillage()')
 
     if (this.uniqueVillage || this.settings.currentOnly) {
         return false
@@ -427,7 +427,7 @@ AutoFarm.prototype.nextVillage = function (_loop = 0) {
  * @return {Boolean}
  */
 AutoFarm.prototype.selectVillage = function (vid) {
-    __debug && console.log('.selectVillage()', arguments)
+    __debug && console.log('.selectVillage()')
 
     for (let i = 0; i < this.player.villages.length; i++) {
         if (this.player.villages[i].getId() === vid) {
@@ -447,9 +447,7 @@ AutoFarm.prototype.selectVillage = function (vid) {
  * @param {Array} data - Lista de dados.
  */
 AutoFarm.prototype.event = function (type, data) {
-    if (__debug) {
-        console.info('event.' + type, data)
-    }
+    __debug && console.info('event.' + type)
 
     if (!this.eventsEnabled) {
         return this
@@ -472,8 +470,6 @@ AutoFarm.prototype.event = function (type, data) {
  * @param {Function} handler - Função chamada quando o evento for disparado.
  */
 AutoFarm.prototype.on = function (type, handler) {
-    __debug && console.log('.on()', arguments)
-
     if (typeof handler === 'function') {
         if (!(type in this.eventListeners)) {
             this.eventListeners[type] = []
@@ -496,7 +492,7 @@ AutoFarm.prototype.on = function (type, handler) {
  *     tropas sulficientes.
  */
 AutoFarm.prototype.presetAvail = function (villageUnits) {
-    __debug && console.log('.presetAvail()', arguments)
+    __debug && console.log('.presetAvail()')
 
     let timeLimit = false
 
@@ -529,7 +525,7 @@ AutoFarm.prototype.presetAvail = function (villageUnits) {
  * @param {Object} preset - Preset usado no calculo.
  */
 AutoFarm.prototype.presetTimeAvail = function (preset) {
-    __debug && console.log('.presetTimeAvail()', arguments)
+    __debug && console.log('.presetTimeAvail()')
 
     let maxTime = AutoFarm.time2seconds(this.settings.maxTravelTime)
     let coords = this.selectedVillage.getPosition()
@@ -564,7 +560,7 @@ AutoFarm.time2seconds = function (time) {
 
     return time.reduce((a, b) => {
         return a + b
-    })
+    })  
 }
 
 /**
@@ -572,7 +568,7 @@ AutoFarm.time2seconds = function (time) {
  * @param {Function} callback
  */
 AutoFarm.prototype.getVillageCommands = function (callback) {
-    __debug && console.log('.getVillageCommands()', arguments)
+    __debug && console.log('.getVillageCommands()')
 
     socketService.emit(routeProvider.GET_OWN_COMMANDS, {
         village_id: this.selectedVillage.getId()
@@ -586,7 +582,7 @@ AutoFarm.prototype.getVillageCommands = function (callback) {
  * @param {Function} callback
  */
 AutoFarm.prototype.getVillageUnits = function (callback) {
-    __debug && console.log('.getVillageUnits()', arguments)
+    __debug && console.log('.getVillageUnits()')
 
     socketService.emit(routeProvider.VILLAGE_UNIT_INFO, {
         village_id: this.selectedVillage.getId()
@@ -602,7 +598,7 @@ AutoFarm.prototype.getVillageUnits = function (callback) {
  *     repetição de código.
  */
 AutoFarm.prototype.getPresets = function (callback, presets) {
-    __debug && console.log('.getPresets()', arguments)
+    __debug && console.log('.getPresets()')
 
     if (presets) {
         this.presets = []
@@ -654,7 +650,7 @@ AutoFarm.cleanPresetUnits = function (units) {
  * Atualiza o grupo de referência para ignorar aldeias
  */
 AutoFarm.prototype.updateGroupIgnore = function () {
-    __debug && console.log('.updateGroupIgnore()', arguments)
+    __debug && console.log('.updateGroupIgnore()')
 
     let groups = modelDataService.getGroupList().getGroups()
 
@@ -676,7 +672,7 @@ AutoFarm.prototype.updateGroupIgnore = function () {
  * Atualiza a lista de aldeias ignoradas
  */
 AutoFarm.prototype.updateIgnoredVillages = function () {
-    __debug && console.log('.updateIgnoredVillages()', arguments)
+    __debug && console.log('.updateIgnoredVillages()')
 
     if (!this.groupIgnore) {
         return this.ignoredVillages = []
@@ -691,7 +687,7 @@ AutoFarm.prototype.updateIgnoredVillages = function () {
  * para o funcionamento do AutoFarm.
  */
 AutoFarm.prototype.gameListeners = function () {
-    __debug && console.log('.gameListeners()', arguments)
+    __debug && console.log('.gameListeners()')
 
     let updatePresets = () => {
         this.getPresets(false)
@@ -747,7 +743,7 @@ AutoFarm.prototype.commandInit = function () {
     if (__debug) {
         console.groupEnd('AutoFarm.command')
         console.group('AutoFarm.command')
-        console.log('.commandInit()', arguments)
+        console.log('.commandInit()')
     }
 
     if (this.paused) {
@@ -878,7 +874,7 @@ AutoFarm.prototype.commandInit = function () {
  * @return {Boolean}
  */
 AutoFarm.prototype.getNextReturn = function (commands) {
-    __debug && console.log('.getNextReturn()', arguments)
+    __debug && console.log('.getNextReturn()')
 
     let vid = this.selectedVillage.getId()
     let backIn = this.getNeabyCommand(commands)
@@ -901,7 +897,7 @@ AutoFarm.prototype.getNextReturn = function (commands) {
  * @return {Boolean}
  */
 AutoFarm.prototype.commandVillageNoUnits = function (commands) {
-    __debug && console.log('.commandVillageNoUnits()', arguments)
+    __debug && console.log('.commandVillageNoUnits()')
 
     if (this.uniqueVillage || this.settings.currentOnly) {
         if (!commands.length) {
@@ -929,7 +925,7 @@ AutoFarm.prototype.commandVillageNoUnits = function (commands) {
  * @return {Boolean}
  */
 AutoFarm.prototype.sendCommand = function (preset, callback) {
-    __debug && console.log('.sendCommand()', arguments)
+    __debug && console.log('.sendCommand()')
 
     this.simulate(() => {
         // Algumas vezes o script é parado depois de .commandInit ter
@@ -960,7 +956,7 @@ AutoFarm.prototype.sendCommand = function (preset, callback) {
  * Recomeça os comandos quando o próximo comando returnar
  */
 AutoFarm.prototype.commandNextReturn = function () {
-    __debug && console.log('.commandNextReturn()', arguments)
+    __debug && console.log('.commandNextReturn()')
 
     let next = this.nextVillageUnits()
 
@@ -978,7 +974,7 @@ AutoFarm.prototype.commandNextReturn = function () {
  * @return {Object}
  */
 AutoFarm.prototype.nextVillageUnits = function () {
-    __debug && console.log('.nextVillageUnits()', arguments)
+    __debug && console.log('.nextVillageUnits()')
 
     let villages = []
 
@@ -1001,7 +997,7 @@ AutoFarm.prototype.nextVillageUnits = function () {
  * @return {Number}
  */
 AutoFarm.prototype.getNeabyCommand = function (commands) {
-    __debug && console.log('.getNeabyCommand()', arguments)
+    __debug && console.log('.getNeabyCommand()')
 
     let now = new Date().getTime() / 1000
     let timers = []
@@ -1056,7 +1052,7 @@ AutoFarm.randomSeconds = function (base, _range) {
  * @param {Object} callback
  */
 AutoFarm.prototype.simulate = function (callback) {
-    __debug && console.log('.simulate()', arguments)
+    __debug && console.log('.simulate()')
 
     let random = AutoFarm.randomSeconds(1)
 
