@@ -169,6 +169,8 @@ AutoFarm.prototype.start = function () {
     this.event('start')
     this.commandInit()
 
+    this.keepRunning()
+
     return true
 }
 
@@ -181,8 +183,29 @@ AutoFarm.prototype.pause = function () {
     this.event('pause')
 
     clearTimeout(this.timerId)
+    clearTimeout(this.keepRunningId)
 
     return true
+}
+
+/**
+ * Mantém o script enviando ataques mesmo quando ele para
+ * misteriosamente (Problemas de conexão, internos do game..).
+ * É executado a cada 5 minutos (caso não tenha um timeout
+ * aguardando já).
+ */
+AutoFarm.prototype.keepRunning = function () {
+    __debug && console.log('.keepRunning()')
+
+    clearTimeout(this.keepRunningId)
+
+    this.keepRunningId = setTimeout(() => {
+        if (this.timerId) {
+            this.keepRunning()
+        } else {
+            this.commandInit()
+        }
+    }, 1000 * 60 * 5)
 }
 
 /**
@@ -968,6 +991,8 @@ AutoFarm.prototype.commandNextReturn = function () {
     let next = this.nextVillageUnits()
 
     this.timerId = setTimeout(() => {
+        this.timerId = false
+        
         this.selectVillage(next.vid)
         this.commandInit()
     }, next.time)
