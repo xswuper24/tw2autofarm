@@ -2,6 +2,7 @@ windowDisplayService = injector.get('windowDisplayService')
 windowManagerService = injector.get('windowManagerService')
 eventQueue = require('queues/EventQueue')
 $filter = injector.get('$filter')
+hotkeys = injector.get('hotkeys')
 
 /**
  * @class
@@ -9,19 +10,6 @@ $filter = injector.get('$filter')
  */
 function AutoFarmInterface (autofarm) {
     this.autofarm = autofarm
-
-    this.$wrapper = $('#wrapper')
-    this.$window = null
-    this.$tabs = null
-    this.$button = null
-    this.$scrollbar = null
-    this.$events = null
-    this.$status = null
-    this.$selected = null
-    this.$last = null
-    this.$preset = null
-    this.$groupIgnore = null
-
     this.newSettings = {}
     this.activeTab = 'info'
     this.eventsLimit = 20
@@ -30,12 +18,25 @@ function AutoFarmInterface (autofarm) {
     this.buildStyle()
     this.buildWindow()
     this.bindTabs()
-    this.buildButton()
     this.bindSettings()
     this.bindEvents()
-
-    autofarm.getPresets(() => this.updatePresetList())
     this.updateGroupList()
+
+    autofarm.getPresets(() => {
+        this.updatePresetList()
+    })
+
+    $(this.$button).on('click', () => {
+        this.openWindow()
+    })
+
+    this.$close.on('click', () => {
+        this.closeWindow()
+    })
+
+    hotkeys.add('esc', () => {
+        this.closeWindow()
+    }, ['INPUT', 'SELECT', 'TEXTAREA'])
 
     return this
 }
@@ -56,16 +57,6 @@ AutoFarmInterface.prototype.buildStyle = function () {
  * Injeta a estrutura.
  */
 AutoFarmInterface.prototype.buildWindow = function () {
-    let closeWindow = () => {
-        this.$window.style.visibility = 'hidden'
-        this.$wrapper.removeClass('window-open')
-
-        eventQueue.trigger(eventQueue.types.RESIZE, {
-            'instant': true,
-            'right': true
-        })
-    }
-
     this.$window = document.createElement('section')
     this.$window.id = 'autofarm-window'
     this.$window.className = 'autofarm-window twx-window screen left'
@@ -81,16 +72,16 @@ AutoFarmInterface.prototype.buildWindow = function () {
         this.autofarm.lang.info
     )
 
+    this.$wrapper = $('#wrapper')
+
     this.$window.innerHTML = AutoFarmInterface.replace(replaces, '@@window')
     this.$wrapper.append(this.$window)
 
-    $('#autofarm-close').on('click', () => closeWindow())
+    this.$button = document.createElement('div')
+    this.$button.id = 'interface-autofarm'
+    this.$button.innerHTML = '@@button'
 
-    $(document).on('keydown', (event) => {
-        if (event.keyCode === 27) {
-            closeWindow()
-        }
-    })
+    $('#toolbar-left').prepend(this.$button)
 
     this.$scrollbar = jsScrollbar(this.$window.querySelector('.win-main'))
     this.$events = $('#autofarm-events')
@@ -99,6 +90,7 @@ AutoFarmInterface.prototype.buildWindow = function () {
     this.$selected = $('#autofarm-selectedVillage')
     this.$last = $('#autofarm-last')
     this.$start = $('#autofarm-start')
+    this.$close = $('#autofarm-close')
     this.$preset = $('#presetName')
     this.$groupIgnore = $('#groupIgnore')
 
@@ -110,6 +102,34 @@ AutoFarmInterface.prototype.buildWindow = function () {
     )
 
     this.$selected.append(selectedVillage.elem)
+}
+
+/**
+ * Abrir janela.
+ */
+AutoFarmInterface.prototype.openWindow = function () {
+    windowManagerService.closeAll()
+    
+    this.$window.style.visibility = 'visible'
+    this.$wrapper.addClass('window-open')
+
+    eventQueue.trigger(eventQueue.types.RESIZE, {
+        'instant': true,
+        'right': true
+    })
+}
+
+/**
+ * Fecha janela.
+ */
+AutoFarmInterface.prototype.closeWindow = function () {
+    this.$window.style.visibility = 'hidden'
+    this.$wrapper.removeClass('window-open')
+
+    eventQueue.trigger(eventQueue.types.RESIZE, {
+        'instant': true,
+        'right': true
+    })
 }
 
 /**
@@ -157,29 +177,6 @@ AutoFarmInterface.prototype.bindTabs = function () {
     }
 
     this.tabsState()
-}
-
-/**
- * Injeta o botão para abrir a janela.
- */
-AutoFarmInterface.prototype.buildButton = function () {
-    this.$button = document.createElement('div')
-    this.$button.id = 'interface-autofarm'
-    this.$button.innerHTML = '@@button'
-
-    $('#toolbar-left').prepend(this.$button)
-
-    $(this.$button).on('click', () => {
-        windowManagerService.closeAll()
-        
-        this.$window.style.visibility = 'visible'
-        this.$wrapper.addClass('window-open')
-
-        eventQueue.trigger(eventQueue.types.RESIZE, {
-            'instant': true,
-            'right': true
-        })
-    })
 }
 
 /**
