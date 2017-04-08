@@ -12,7 +12,7 @@ if (typeof autofarm === 'undefined') {
         interface.$start.addClass('btn-red')
 
         $rootScope.$broadcast(eventTypeProvider.MESSAGE_SUCCESS, {
-            message: autofarm.lang.events.started
+            message: autofarm.lang.general.started
         })
     })
 
@@ -22,7 +22,7 @@ if (typeof autofarm === 'undefined') {
         interface.$start.addClass('btn-green')
 
         $rootScope.$broadcast(eventTypeProvider.MESSAGE_SUCCESS, {
-            message: autofarm.lang.events.paused
+            message: autofarm.lang.general.paused
         })
     })
 

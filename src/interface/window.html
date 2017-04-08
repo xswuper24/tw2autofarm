@@ -54,27 +54,19 @@
 
             <h5 class="twx-section">{{ development }}</h5>
             <div class="text-center">
-                <p>{{ development_by }} <a href="https://github.com/mafrazz/">Rafael Mafra</a>.</p>
+                <p>{{ development_by }} <a href="https://github.com/mafrazz/">Rafael Mafra</a> &lt;mafrazzrafael@gmail.com&gt;</p>
                 <p>{{ development_open }}</p>
-            </div>
-
-            <h5 class="twx-section">{{ contact }}</h5>
-            <div class="text-center">
-                <p>mafrazzrafael@gmail.com</p>
             </div>
         </div>
         <div class="box-paper footer has-footer-upper autofarm-content-settings">
             <form id="autofarm-settings">
+                <h5 class="twx-section">{{ basicSettings }}</h5>
+
                 <table class="tbl-border-light tbl-striped">
                     <colgroup>
                         <col width="50%">
                         <col>
                     </colgroup>
-                    <thead>
-                        <tr>
-                            <th colspan="2">{{ settings }}</th>
-                        </tr>
-                    </thead>
                     <tbody>
                         <tr>
                             <td><span class="ff-cell-fix">{{ presetName }}</span></td>
@@ -124,20 +116,16 @@
         </div>
         <div class="box-paper footer has-footer-upper autofarm-content-log">
             <div class="screen-tribe-news rich-text">
+                <h5 class="twx-section">{{ status }}</h5>
+
                 <table class="tbl-border-light tbl-news tbl-big-header">
                     <colgroup>
                         <col width="140px">
                         <col width="*">
                     </colgroup>
-                    <thead>
-                        <tr>
-                            <th colspan="2">{{ status }}</th>
-                        </tr>
-                    </thead>
                     <tbody>
                         <tr class="list-item">
-                            <td>{{ status }}</td>
-                            <td id="autofarm-status">{{ paused }}</td>
+                            <td id="autofarm-status" colspan="2" class="cell-center">{{ paused }}</td>
                         </tr>
                         <tr class="list-item">
                             <td>{{ selectedVillage }}</td>
@@ -150,16 +138,13 @@
                     </tbody>
                 </table>
 
+                <h5 class="twx-section">{{ events }}</h5>
+
                 <table class="tbl-border-light tbl-news tbl-big-header">
                     <colgroup>
                         <col width="140px">
                         <col width="*">
                     </colgroup>
-                    <thead>
-                        <tr>
-                            <th colspan="2">{{ events }}</th>
-                        </tr>
-                    </thead>
                     <tbody id="autofarm-events">
                         <tr class="list-item">
                             <td class="tribe-event-detail" colspan="2">

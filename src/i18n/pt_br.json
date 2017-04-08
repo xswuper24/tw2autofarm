@@ -6,7 +6,9 @@
         "events": "Eventos",
         "start": "Iniciar",
         "pause": "Pausar",
-        "none": "Nenhum"
+        "none": "Nenhum",
+        "started": "AutoFarm iniciado.",
+        "paused": "AutoFarm pausado."
     },
     "info": {
         "presets": "Configurando unidades com predefinições",
@@ -23,11 +25,12 @@
         "selected_1": "Você pode ativar a opção \"Apenas selecionada\" para usar apenas a aldeia que está atualmente selecionada será usada para enviar os ataques, impedindo o script de selecionar a próxima aldeia.",
         "selected_2": "Quando esta opção estiver ativa e o script executando, mesmo que você selecione outra aldeia, os ataques continuarão enviando a partir da mesma aldeia. Ao menos que você pause e inicie o script novamente.",
         "development": "Desenvolvimento",
-        "development_by": "AutoFarm é desenvolvido com ❤ por",
+        "development_by": "AutoFarm é desenvolvido com <span style='color:#ad0202'>❤</span> por",
         "development_open": "AutoFarm é um software de <a href='https://github.com/mafrazz/tw2autofarm'>código aberto</a>.",
         "contact": "Contato"
     },
     "settings": {
+        "basicSettings": "Configurações Básicas",
         "saved": "Configurações salvas!",
         "save": "Salvar configurações",
         "maxDistance": "Distância máxima (campos)",
@@ -45,14 +48,13 @@
         "noUnitsNoCommands": "Nenhuma aldeia tem tropas nem ataques retornando.",
         "noPreset": "Nenhuma predefinição foi configurada.",
         "presetFirst": "Configure uma predefinição primeiro!",
-        "started": "AutoFarm iniciado.",
-        "paused": "AutoFarm pausado.",
+        "paused": "Pausado.",
         "noVillages": "Nenhuma aldeia disponível, aguardando ataques retornarem.",
         "commandLimit": "Limite de 50 ataques atingido, aguardando retorno.",
         "noUnits": "Sem unidades na aldeia, aguardando ataques retornarem.",
         "status": "Status",
         "selectedVillage": "Aldeia selecionada",
         "lastAttack": "Último ataque",
-        "attacking": "Atacando..."
+        "attacking": "Atacando."
     }
 }
