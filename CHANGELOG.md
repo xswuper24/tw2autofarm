@@ -1,5 +1,10 @@
 # History
 
+## 0.11.0beta 08/04/2017
+- [New] Opção para incluir alvos de jogadores a partir de grupos.
+- [Fix] Problema com funcionamento continuo arrumado.
+- [Change] Melhoras na interface.
+
 ## 0.10.3 08/04/2017
 - [New] Último ataque agora é salvo localmente, mostrando em futuras execuções do script.
 - [Change] Interface aperfeiçoada.
