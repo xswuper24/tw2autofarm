@@ -848,6 +848,8 @@ AutoFarm.prototype.commandInit = function () {
                 let randomTime = AutoFarm.randomSeconds(5) * 1000
 
                 this.timerId = setTimeout(() => {
+                    this.timerId = false
+
                     this.commandInit()
                 }, backTime + randomTime)
             } else {
@@ -891,6 +893,8 @@ AutoFarm.prototype.commandInit = function () {
                 interval *= 1000
 
                 this.timerId = setTimeout(() => {
+                    this.timerId = false
+
                     this.commandInit()
                 }, interval)
 
@@ -940,6 +944,8 @@ AutoFarm.prototype.commandVillageNoUnits = function (commands) {
         let backTime = this.getNeabyCommand(commands)
 
         this.timerId = setTimeout(() => {
+            this.timerId = false
+
             this.commandInit()
         }, backTime)
     } else {
