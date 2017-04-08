@@ -33,7 +33,7 @@ function AutoFarmInterface (autofarm) {
         this.closeWindow()
     }, ['INPUT', 'SELECT', 'TEXTAREA'])
 
-    $rootScope.$on(eventTypeProvider.WINDOW_CLOSED, function () {
+    $rootScope.$on(eventTypeProvider.WINDOW_CLOSED, () => {
         this.closeWindow()
     })
 
