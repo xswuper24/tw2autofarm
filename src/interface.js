@@ -12,7 +12,6 @@ function AutoFarmInterface (autofarm) {
     this.autofarm = autofarm
     this.newSettings = {}
     this.activeTab = 'info'
-    this.eventsLimit = 20
     this.eventCount = 1
 
     this.buildStyle()
@@ -261,7 +260,7 @@ AutoFarmInterface.prototype.bindSettings = function () {
  * @param {Object} options - Opções do evento.
  */
 AutoFarmInterface.prototype.addEvent = function (options) {
-    if (this.eventCount >= this.eventsLimit) {
+    if (this.eventCount >= this.autofarm.settings.eventsLimit) {
         this.$events.find('tr:last-child').remove()
     }
 

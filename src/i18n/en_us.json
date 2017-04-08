@@ -5,6 +5,7 @@
         "settings": "Settings",
         "events": "Events",
         "start": "Start",
+        "pause": "Pause",
         "none": "None",
         "started": "AutoFarm started.",
         "paused": "AutoFarm paused."
@@ -18,7 +19,6 @@
         "presets_5": "It is possible to have more than one preset, <strong>since it has the same name</strong>. The script will try to send the first preset of list, if the village hasn't enough units, the script will try the next preset.",
         "ignore": "Ignoring Village with group",
         "ignore_1": "You can select a group in the settings that all villages assigned to that group will be ignored by the script. <strong>The group works on targets and your own villages as well</strong>.",
-        "ignore_2": "Just like the preset, it is <strong>recommended</strong> change the name of group.",
         "randomBase": "Random interval base",
         "randomBase_1": "That interval is used to generate a random time between each attack avoiding the script to be detected by the game. <strong>The bigger the better</strong>.",
         "selected": "Selected only",
@@ -39,7 +39,8 @@
         "randomBase": "Random interval base",
         "currentOnly": "Use only the selected village",
         "presetName": "Name of the preset",
-        "groupIgnore": "Name of the ignore group"
+        "groupIgnore": "Name of the ignore group",
+        "eventsLimit": "Maximum length of events"
     },
     "events": {
         "nothingYet": "Nothing here yet...",
@@ -47,6 +48,7 @@
         "nextVillage": "Changing to village {0}",
         "noUnitsNoCommands": "No villages has units or commands returning.",
         "noPreset": "No presets have been set.",
+        "presetFirst": "Set a preset first!",
         "paused": "Paused.",
         "noVillages": "No villages avaliable, waiting attacks return.",
         "commandLimit": "Limit of 50 attacks reached, waiting return.",

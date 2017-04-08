@@ -39,7 +39,8 @@
         "randomBase": "Base do intervalo aleatório",
         "currentOnly": "Usar apenas aldeia selecionada",
         "presetName": "Nome da predefinição",
-        "groupIgnore": "Nome do grupo de ignorados"
+        "groupIgnore": "Nome do grupo de ignorados",
+        "eventsLimit": "Número máximo de registros"
     },
     "events": {
         "nothingYet": "Nada por aqui ainda...",
