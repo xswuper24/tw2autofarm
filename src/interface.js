@@ -25,10 +25,6 @@ function AutoFarmInterface (autofarm) {
         this.updatePresetList()
     })
 
-    $(this.$button).on('click', () => {
-        this.openWindow()
-    })
-
     this.$close.on('click', () => {
         this.closeWindow()
     })
@@ -36,6 +32,14 @@ function AutoFarmInterface (autofarm) {
     hotkeys.add('esc', () => {
         this.closeWindow()
     }, ['INPUT', 'SELECT', 'TEXTAREA'])
+
+    $rootScope.$on(eventTypeProvider.WINDOW_CLOSED, function () {
+        this.closeWindow()
+    })
+
+    $(this.$button).on('click', () => {
+        this.openWindow()
+    })
 
     hotkeys.add('z', () => {
         this.openWindow()

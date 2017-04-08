@@ -454,7 +454,7 @@ AutoFarm.prototype.selectVillage = function (vid) {
     __debug && console.log('.selectVillage()')
 
     for (let i = 0; i < this.player.villages.length; i++) {
-        if (this.player.villages[i].getId() === vid) {
+        if (this.player.villages[i] === vid) {
             this.selectedVillage = this.player.villages[i]
             this.firstFirstTarget()
             
