@@ -1,5 +1,10 @@
 # History
 
+## 0.10.3 08/04/2017
+- [New] Último ataque agora é salvo localmente, mostrando em futuras execuções do script.
+- [Change] Interface aperfeiçoada.
+- [Fix] Erro ao selecionar aldeias especificas quando o script é executado com múltiplas aldeias.
+
 ## 0.10.2 07/04/2017
 - [New] Esquema para manter o script rodando mesmo após ocorrer erros internos no jogo.
 - [New] Ataque para abrir janela do script e inicar. (Z & Shift+Z)
