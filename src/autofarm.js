@@ -15,6 +15,7 @@ routeProvider = injector.get('routeProvider')
 eventTypeProvider = injector.get('eventTypeProvider')
 armyService = injector.get('armyService')
 math = require('helper/math')
+pid = modelDataService.getSelectedCharacter().getId()
 
 __debug = true
 
@@ -52,7 +53,8 @@ function AutoFarm (settings = {}) {
         presetName: '',
         groupIgnore: '',
         currentOnly: false,
-        eventsLimit: '20'
+        eventsLimit: '20',
+        _lastAttack: ''
     }
 
     /**

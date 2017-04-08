@@ -109,6 +109,13 @@ AutoFarmInterface.prototype.buildWindow = function () {
     )
 
     this.$selected.append(selectedVillage.elem)
+
+    let lastAttack = localStorage[`${pid}_autofarm_lastAttack`]
+
+    if (lastAttack) {
+        lastAttack = parseInt(lastAttack, 10)
+        this.$last.html($filter('readableDateFilter')(lastAttack))
+    }
 }
 
 /**
@@ -374,8 +381,12 @@ AutoFarmInterface.prototype.bindEvents = function () {
             icon: 'attack-small'
         })
 
-        this.$last.html($filter('readableDateFilter')(Date.now()))
+        let now = Date.now()
+
+        this.$last.html($filter('readableDateFilter')(now))
         this.$status.html(this.autofarm.lang.events.attacking)
+
+        localStorage[`${pid}_autofarm_lastAttack`] = now
     })
 
     this.autofarm.on('nextVillage', (next) => {
