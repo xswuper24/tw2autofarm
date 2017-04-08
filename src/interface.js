@@ -100,6 +100,7 @@ AutoFarmInterface.prototype.buildWindow = function () {
     this.$close = $('#autofarm-close')
     this.$preset = $('#presetName')
     this.$groupIgnore = $('#groupIgnore')
+    this.$groupInclude = $('#groupInclude')
 
     let selected = this.autofarm.selectedVillage
     let selectedVillage = AutoFarmInterface.createButtonLink(
@@ -319,7 +320,7 @@ AutoFarmInterface.prototype.updatePresetList = function () {
     let presets = modelDataService.getPresetList().presets
 
     this.$preset.html(
-        `<option value="none">${this.autofarm.lang.general.none}</option>`
+        `<option value="">${this.autofarm.lang.general.none}</option>`
     )
 
     for (let id in presets) {
@@ -348,18 +349,30 @@ AutoFarmInterface.prototype.updateGroupList = function () {
     let groups = modelDataService.getGroupList().getGroups()
 
     this.$groupIgnore.html(
-        `<option value="none">${this.autofarm.lang.general.none}</option>`
+        `<option value="">${this.autofarm.lang.general.none}</option>`
+    )
+
+    this.$groupInclude.html(
+        `<option value="">${this.autofarm.lang.general.none}</option>`
     )
 
     for (let id in groups) {
         let name = groups[id].name
 
-        let selected = this.autofarm.settings.groupIgnore === name
+        let ignoreSelected = this.autofarm.settings.groupIgnore === name
+            ? 'selected'
+            : ''
+
+        let includeSelected = this.autofarm.settings.groupInclude === name
             ? 'selected'
             : ''
 
         this.$groupIgnore.append(
-            `<option value="${name}" ${selected}>${name}</option>`
+            `<option value="${name}" ${ignoreSelected}>${name}</option>`
+        )
+
+        this.$groupInclude.append(
+            `<option value="${name}" ${includeSelected}>${name}</option>`
         )
     }
 }

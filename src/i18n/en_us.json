@@ -40,7 +40,8 @@
         "currentOnly": "Use only the selected village",
         "presetName": "Name of the preset",
         "groupIgnore": "Name of the ignore group",
-        "eventsLimit": "Maximum length of events"
+        "eventsLimit": "Maximum length of events",
+        "groupInclude": "Include targets from group"
     },
     "events": {
         "nothingYet": "Nothing here yet...",

@@ -40,7 +40,8 @@
         "currentOnly": "Usar apenas aldeia selecionada",
         "presetName": "Nome da predefinição",
         "groupIgnore": "Nome do grupo de ignorados",
-        "eventsLimit": "Número máximo de registros"
+        "eventsLimit": "Número máximo de registros",
+        "groupInclude": "Incluir alvos do grupo"
     },
     "events": {
         "nothingYet": "Nada por aqui ainda...",

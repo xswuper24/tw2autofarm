@@ -28,11 +28,14 @@ __debug = true
  *     podem estar.
  * @param {Number} settings.randomBase - Intervalo que será  entre
  *     alterado entre cada ataque com base nesse valor (segundos).
- * @param {Number} settings.presetName - Nome do preset usado para os comandos.
- * @param {Number} settings.groupIgnore - Nome do grupo usado nas aldeias a
+ * @param {String} settings.presetName - Nome do preset usado para os comandos.
+ * @param {String} settings.groupIgnore - Nome do grupo usado nas aldeias a
  *     serem ignoradas.
  * @param {Boolean} settings.currentOnly - Apenas a aldeia selecionada será
  *     usada para enviar comandos.
+ * @param {Number} settings.eventsLimit - Limite de registros na aba Eventos.
+ * @param {String} settings.groupInclude - Nome do grupo que permite alvos
+ *     que não sejam abandonadas sejam atacados.
  */
 function AutoFarm (settings = {}) {
     /**
@@ -54,7 +57,7 @@ function AutoFarm (settings = {}) {
         groupIgnore: '',
         currentOnly: false,
         eventsLimit: '20',
-        _lastAttack: ''
+        groupInclude: ''
     }
 
     /**
@@ -105,14 +108,14 @@ function AutoFarm (settings = {}) {
     /**
      * Armazena o id do comando que está sendo enviado
      * no momento pelo script.
-     * @type {Object}
+     * @type {Number}
      */
     this.commandProgressId = null
     
     /**
      * Armazena o callback do comando que está sendo enviado
      * no momento pelo script.
-     * @type {Object}
+     * @type {Function}
      */
     this.commandProgressCallback = null
 
@@ -146,10 +149,23 @@ function AutoFarm (settings = {}) {
      * Lista de aldeias ignoradas
      * @type {Array}
      */
-    this.ignoredVillages = null
+    this.ignoredVillages = []
 
-    this.updateGroupIgnore()
-    this.updateIgnoredVillages()
+    /**
+     * Objeto do group de referência para incluir alvos.
+     * Contém ID e nome do grupo.
+     * @type {Object}
+     */
+    this.groupInclude = null
+
+    /**
+     * Lista de aldeias incluidas
+     * @type {Array}
+     */
+    this.includedVillages = []
+
+    this.updateExceptionGroups()
+    this.updateExceptionVillages()
     this.gameListeners()
     this.i18n()
     this.getPresets(false)
@@ -228,7 +244,12 @@ AutoFarm.prototype.updateSettings = function (changes) {
     }
 
     if (changes.groupIgnore !== this.settings.groupIgnore) {
-        update.group = true
+        update.groupIgnore = true
+    }
+
+    if (changes.groupInclude !== this.settings.groupInclude) {
+        update.groupInclude = true
+        update.targets = true
     }
 
     if (changes.presetName !== this.settings.presetName) {
@@ -247,9 +268,9 @@ AutoFarm.prototype.updateSettings = function (changes) {
         this.settings[key] = changes[key]
     }
 
-    if (update.group) {
-        this.updateGroupIgnore()
-        this.updateIgnoredVillages()
+    if (update.groupIgnore || update.groupInclude) {
+        this.updateExceptionGroups()
+        this.updateExceptionVillages()
     }
 
     if (update.preset) {
@@ -366,8 +387,16 @@ AutoFarm.prototype.getTargets = function (callback) {
         while (i--) {
             let target = villages[i]
 
-            if (target.id === sid || target.character_id) {
+            if (target.id === sid) {
                 continue
+            }
+
+            // Se a aldeia estiver na lista do grupo de incluidas
+            // a verificação se a aldeia é abandonada não é utilizada.
+            if (!this.includedVillages.includes(target.id)) {
+                if (target.character_id) {
+                    continue
+                }
             }
 
             let distance = math.actualDistance(coords, target)
@@ -680,39 +709,70 @@ AutoFarm.cleanPresetUnits = function (units) {
 }
 
 /**
- * Atualiza o grupo de referência para ignorar aldeias
+ * Atualiza o grupo de referência para ignorar aldeias e incluir alvos
  */
-AutoFarm.prototype.updateGroupIgnore = function () {
-    __debug && console.log('.updateGroupIgnore()')
+AutoFarm.prototype.updateExceptionGroups = function () {
+    __debug && console.log('.updateExceptionGroups()')
+
+    let ignoreUpdated = false
+    let includeUpdated = false
 
     let groups = modelDataService.getGroupList().getGroups()
 
     for (let id in groups) {
-        if (groups[id].name === this.settings.groupIgnore) {
-            this.groupIgnore = {
-                id: id,
-                name: groups[id].name
-            }
+        if (!ignoreUpdated) {
+            if (groups[id].name === this.settings.groupIgnore) {
+                this.groupIgnore = {
+                    id: id,
+                    name: groups[id].name
+                }
 
-            return
+                ignoreUpdated = true
+            }
+        }
+
+        if (!includeUpdated) {
+            if (groups[id].name === this.settings.groupInclude) {
+                this.groupInclude = {
+                    id: id,
+                    name: groups[id].name
+                }
+
+                includeUpdated = true
+            }
         }
     }
 
-    this.groupIgnore = null
+    if (!ignoreUpdated) {
+        this.groupIgnore = null
+    }
+
+    if (!includeUpdated) {
+        this.groupInclude = null
+    }
 }
 
 /**
- * Atualiza a lista de aldeias ignoradas
+ * Atualiza a lista de aldeias ignoradas e incluidas
  */
-AutoFarm.prototype.updateIgnoredVillages = function () {
-    __debug && console.log('.updateIgnoredVillages()')
+AutoFarm.prototype.updateExceptionVillages = function () {
+    __debug && console.log('.updateExceptionVillages()')
 
-    if (!this.groupIgnore) {
-        return this.ignoredVillages = []
+    let groupList = modelDataService.getGroupList()
+
+    if (this.groupIgnore) {
+        this.ignoredVillages =
+            groupList.getGroupVillageIds(this.groupIgnore.id)   
+    } else {
+        this.ignoredVillages = []
     }
 
-    this.ignoredVillages =
-        modelDataService.getGroupList().getGroupVillageIds(this.groupIgnore.id)
+    if (this.groupInclude) {
+        this.includedVillages =
+            groupList.getGroupVillageIds(this.groupInclude.id)
+    } else {
+        this.includedVillages = []
+    }
 }
 
 /**
@@ -737,8 +797,8 @@ AutoFarm.prototype.gameListeners = function () {
     }
 
     let updateGroups = ($event, data) => {
-        this.updateGroupIgnore()
-        this.updateIgnoredVillages()
+        this.updateExceptionGroups()
+        this.updateExceptionVillages()
 
         this.event('groupsChanged')
     }
