@@ -71,7 +71,7 @@ function AutoFarm (settings = {}) {
      * @type {Object}
      */
     this.player = modelDataService.getSelectedCharacter()
-    this.player.villages = this.player.getReadyVillages()
+    this.player.villages = Object.values(this.player.data.villages)
 
     /**
      * Identifica o status do script.
