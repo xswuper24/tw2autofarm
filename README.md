@@ -8,7 +8,7 @@ Leia [aqui](https://github.com/mafrazz/tw2autofarm/wiki/Settings) os detalhes so
 
 ```bash
 git clone https://github.com/mafrazz/tw2autofarm.git
-cd tw2autofar
+cd tw2autofarm
 npm install
 npm install -g grunt-cli
 grunt
