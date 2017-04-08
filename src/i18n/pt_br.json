@@ -19,6 +19,8 @@
         "presets_5": "É possível utilizar mais de uma predefinição, <strong>desde que tenham o mesmo nome</strong>. O script sempre tentará enviar a primeira da lista, se a aldeia não tiver o mínimo exigido, então irá tentar a próxima.",
         "ignore": "Ignorando aldeias com grupo",
         "ignore_1": "Você pode selecionar um grupo nas configurações para que todas aldeias atribuidas a esse grupo sejam ignorados pelo AutoFarm. <strong>O grupo serve tanto para os alvos quanto para suas aldeias</strong>.",
+        "include": "Incluindo alvos com grupo",
+        "include_1": "Assim como ignorar aldeias, você pode incluir como alvos aldeias de jogadores. Todas aldeias do grupo que estiverem fora da distância máxima não seram incluidas.",
         "randomBase": "Base do intervalo aleatório",
         "randomBase_1": "Esse intervalo é usado para gerar um tempo aleatório entre cada ataque evitando o script ser detectado. <strong>Quanto maior melhor</strong>.",
         "selected": "Usando apenas uma aldeia para atacar",
