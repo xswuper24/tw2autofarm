@@ -40,10 +40,10 @@
         "maxTravelTime": "Maximum travel time (going)",
         "randomBase": "Random interval base",
         "currentOnly": "Use only the selected village",
-        "presetName": "Name of the preset",
-        "groupIgnore": "Name of the ignore group",
-        "eventsLimit": "Maximum length of events",
-        "groupInclude": "Include targets from group"
+        "presetName": "Preset of troops",
+        "groupIgnore": "Ignore villages from group",
+        "groupInclude": "Include targets from group",
+        "eventsLimit": "Maximum length of events"
     },
     "events": {
         "nothingYet": "Nothing here yet...",

@@ -40,10 +40,10 @@
         "maxTravelTime": "Tempo máximo de viagem (ida)",
         "randomBase": "Base do intervalo aleatório",
         "currentOnly": "Usar apenas aldeia selecionada",
-        "presetName": "Nome da predefinição",
-        "groupIgnore": "Nome do grupo de ignorados",
-        "eventsLimit": "Número máximo de registros",
-        "groupInclude": "Incluir alvos do grupo"
+        "presetName": "Predefinição das tropas",
+        "groupIgnore": "Ignorar aldeias do grupo",
+        "groupInclude": "Incluir alvos do grupo",
+        "eventsLimit": "Número máximo de registros"
     },
     "events": {
         "nothingYet": "Nada por aqui ainda...",
