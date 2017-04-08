@@ -279,7 +279,7 @@ AutoFarmInterface.prototype.addEvent = function (options) {
 
     let $tr = document.createElement('tr')
 
-    $tr.className = 'list-item'
+    $tr.className = 'reduced'
     $tr.innerHTML = AutoFarmInterface.replace({
         date: $filter('readableDateFilter')(Date.now()),
         icon: options.icon,
@@ -367,7 +367,7 @@ AutoFarmInterface.prototype.bindEvents = function () {
                 { type: 'village', name: toText, id: to.id }
             ],
             text: this.autofarm.lang.events.sendCommand,
-            icon: 'attack'
+            icon: 'attack-small'
         })
 
         this.$last.html($filter('readableDateFilter')(Date.now()))
