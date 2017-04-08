@@ -453,13 +453,13 @@ AutoFarm.prototype.nextVillage = function (_loop = 0) {
 AutoFarm.prototype.selectVillage = function (vid) {
     __debug && console.log('.selectVillage()')
 
-    for (let i = 0; i < this.player.villages.length; i++) {
-        if (this.player.villages[i] === vid) {
-            this.selectedVillage = this.player.villages[i]
-            this.firstFirstTarget()
-            
-            return true
-        }
+    let i = this.player.villages.indexOf(vid)
+
+    if (i !== -1) {
+        this.selectedVillage = this.player.villages[i]
+        this.firstFirstTarget()
+
+        return true
     }
 
     return false
